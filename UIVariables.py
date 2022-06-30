@@ -1,12 +1,13 @@
 #Program that contains global variables used in the UI.
 #
 #Author: Jacob Duffy
-#Version: 6/29/2022
+#Version: 6/30/2022
 
 FileArray = []
 DownloadFilePath = None
 ManInputs = False
 FileInputs = False
+KeepFile = False
 
 #Production variables
 BaseQ = None
