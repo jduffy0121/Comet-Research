@@ -10,7 +10,7 @@ import FileRunner
 import FileCreator
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QListWidget
-from PyQt5.QtWidgets import QLineEdit, QMessageBox, QLabel, QCheckBox, QFileDialog, QScrollBar, QScrollArea
+from PyQt5.QtWidgets import QLineEdit, QMessageBox, QLabel, QCheckBox, QFileDialog, QScrollBar
 from PyQt5.QtGui import QFont
 
 #Class to give a pop up window with the results from FileRunner.py
@@ -28,12 +28,23 @@ class ResultsWindow(QWidget):
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
-        self.text = QLabel(f"{FileRunner.singleFileRun('pyvectorial.yaml')}", self)
-        if(UIVariables.KeepFile == False):
-            FileCreator.removeFile('pyvectorial.yaml')
-        self.text.resize(1400,1400)
-        self.text.move(0,0)
-        self.show()
+
+        #UI results for a manual input
+        if(UIVariables.ManInputs == True):
+            self.text = QLabel(f"{FileRunner.singleFileRun('pyvectorial.yaml')}", self)
+            self.text.move(0,0)
+            if(UIVariables.KeepFile == False):
+                FileCreator.removeFile('pyvectorial.yaml')
+            self.show()
+            return
+        
+        #UI results for a file input
+        if(UIVariables.FileInputs == True):
+            self.text1 = QLabel("File Results", self)
+            self.text1.move(500,500)
+            self.show()
+            return
+        
 
 #Class to give a new pop up window to the user more info about proper usage of the Main UI.
 class MoreWindow(QWidget):
@@ -386,6 +397,8 @@ class App(QMainWindow):
     
     #Run Program
     def runProg(self):
+        UIVariables.ManInputs = False
+        UIVariables.FileInputs = False
 
         #Manual input runner
         #Test proper user input and assigns the proper results to global variables in UIVariables.py
@@ -493,6 +506,8 @@ class App(QMainWindow):
             UIVariables.FileInputs = True
             FileRunner.runFileProgram()
             self.successRun()
+            self.Win = ResultsWindow()
+            self.Win.show()
             return
 
         #Throws an exception if there is no input type selected
