@@ -2,20 +2,39 @@
 #to get results for the vectorial model.
 #
 #Author: Jacob Duffy
-#Version: 6/29/2022
+#Version: 6/30/2022
 
+import FileCreator
 import UIVariables
-import numpy as np
 
+#Method def for converting between km and astro units
+def unitConvert(dataIn):
+    return
+
+#Method def for getting the output results for the vectorial model
 def singleFileRun(fileName):
     file = open(fileName, 'r')
-    print(file.read())
+    result = str(file.read())
+    file.close()
+    return result
 
+#Method def for taking an array of .yaml files and getting the output results
 def multiFileRun(fileArray):
     if (UIVariables.FileInputs == False):
         return
-    fileArray = UIVariables.np.copy()
+    fileArray = []
+    fileArray = UIVariables.FileArray
     index = 0
     while(index < len(fileArray)):
         singleFileRun(fileArray[index])
         index += 1
+
+#Method def for running the program manually (ie: all input is done by user)
+def runManualProgram():
+    FileCreator.createDictionary()
+    FileCreator.newFile()
+    singleFileRun('pyvectorial.yaml')
+
+#Method def for running the program with file inputs
+def runFileProgram():
+    multiFileRun(UIVariables.FileArray)
