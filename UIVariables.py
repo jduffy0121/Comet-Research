@@ -3,6 +3,7 @@
 #Author: Jacob Duffy
 #Version: 6/29/2022
 
+FileArray = []
 DownloadFilePath = None
 ManInputs = False
 FileInputs = False
@@ -29,7 +30,7 @@ TauTFragment = None
 
 #Comet variables
 CometName = None
-RH = None
+Rh = None
 CometDelta = None
 TransformMethod = None
 ApplyTransforMethod = False
