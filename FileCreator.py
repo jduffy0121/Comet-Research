@@ -2,7 +2,7 @@
 #Uses a nested dict data type to write the file.
 #
 #Author: Jacob Duffy
-#Version: 6/29/2022
+#Version: 6/30/2022
 
 import UIVariables
 import yaml
@@ -34,7 +34,7 @@ def createDictionary():
     'tau_T' : UIVariables.TauTParent}
 
     #Creates the comet dictionary
-    comet = {'name' : UIVariables.CometName, 'rh' : UIVariables.RH, 
+    comet = {'name' : UIVariables.CometName, 'rh' : UIVariables.Rh, 
     'delta' : UIVariables.CometDelta, 
     'transform_method' : UIVariables.TransformMethod, 
     'transform_applied' : UIVariables.ApplyTransforMethod}
@@ -67,7 +67,7 @@ def createDictionary():
 
 #Creates a new .yaml file called data.yaml based on the return val of createDictionary()
 def newFile():
-    with open(r'data.yaml', 'w') as file:
+    with open(r'pyvectorial.yaml', 'w') as file:
         documents = yaml.dump(createDictionary(), file)
 
 #Deletes a file named fileName
