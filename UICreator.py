@@ -24,7 +24,7 @@ class ResultsWindow(QWidget):
         self.height = 1000
         self.initUI()
 
-     #Defines the UI Interface
+    #Defines the UI Interface
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
