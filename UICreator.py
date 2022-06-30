@@ -3,27 +3,37 @@
 #This work is based on a pvvectorial repository created by sjoset.
 #
 #Author: Jacob Duffy
-#Version: 6/29/2022
+#Version: 6/30/2022
 
 import UIVariables
-import FileCreator
 import FileRunner
+import FileCreator
 import sys
-import os.path
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QAction, QLineEdit, QMessageBox, QLabel, QCheckBox, QVBoxLayout, QFileDialog, QListWidget, QListWidgetItem, QScrollBar
-from PyQt5.QtGui import QIcon, QFont
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QListWidget
+from PyQt5.QtWidgets import QLineEdit, QMessageBox, QLabel, QCheckBox, QFileDialog, QScrollBar, QScrollArea
+from PyQt5.QtGui import QFont
 
-#Method def for running the program manually (ie: all input is done by user)
-def runManualProgram():
-    FileCreator.createDictionary()
-    FileCreator.newFile()
-    FileRunner.singleFileRun('data.yaml')
-    #FileCreator.removeFile('data.yaml')
+#Class to give a pop up window with the results from FileRunner.py
+class ResultsWindow(QWidget):
+    def __init__(self,parent=None):
+        super().__init__(parent)
+        self.title = 'Results'
+        self.left = 10
+        self.top = 10
+        self.width = 1000
+        self.height = 1000
+        self.initUI()
 
-#Method def for running the program with file inputs
-def runFileProgram():
-    return None
+     #Defines the UI Interface
+    def initUI(self):
+        self.setWindowTitle(self.title)
+        self.setGeometry(self.left, self.top, self.width, self.height)
+        self.text = QLabel(f"{FileRunner.singleFileRun('pyvectorial.yaml')}", self)
+        if(UIVariables.KeepFile == False):
+            FileCreator.removeFile('pyvectorial.yaml')
+        self.text.resize(1400,1400)
+        self.text.move(0,0)
+        self.show()
 
 #Class to give a new pop up window to the user more info about proper usage of the Main UI.
 class MoreWindow(QWidget):
@@ -87,36 +97,36 @@ class App(QMainWindow):
         self.textPro.setFont((QFont('Arial', 12)))
         self.textPro.move(50,160)
         self.textPro.resize(400,40)
-        BaseQText = QLabel("Input Base Q: ", self)
-        BaseQText.move(20,220)
-        BaseQText.resize(180,40)
+        self.BaseQText = QLabel("Input Base Q: ", self)
+        self.BaseQText.move(20,220)
+        self.BaseQText.resize(180,40)
         self.BaseQBox = QLineEdit(self)
         self.BaseQBox.move(200,220)
         self.BaseQBox.resize(180,40)
-        BaseQUnits = QLabel("prod/sec", self)
-        BaseQUnits.move(400,220)
-        BaseQUnits.resize(180,40)
-        TimeTVText = QLabel("*Input Time Variation Type: ", self)
-        TimeTVText.move(20,280)
-        TimeTVText.resize(400,40)
+        self.BaseQUnits = QLabel("prod/sec", self)
+        self.BaseQUnits.move(400,220)
+        self.BaseQUnits.resize(180,40)
+        self.TimeTVText = QLabel("*Input Time Variation Type: ", self)
+        self.TimeTVText.move(20,280)
+        self.TimeTVText.resize(400,40)
         self.TimeTVBox = QLineEdit(self)
         self.TimeTVBox.move(360,280)
         self.TimeTVBox.resize(180,40)
-        AmpText = QLabel("Input Amplitude: ", self)
-        AmpText.move(20,340)
-        AmpText.resize(400,40)
+        self.AmpText = QLabel("Input Amplitude: ", self)
+        self.AmpText.move(20,340)
+        self.AmpText.resize(400,40)
         self.AmpBox = QLineEdit(self)
         self.AmpBox.move(240,340)
         self.AmpBox.resize(180,40)
-        ParamDeltaText = QLabel("Input Delta: ", self)
-        ParamDeltaText.move(20,400)
-        ParamDeltaText.resize(400,40)
+        self.ParamDeltaText = QLabel("Input Delta: ", self)
+        self.ParamDeltaText.move(20,400)
+        self.ParamDeltaText.resize(400,40)
         self.ParamDeltaBox = QLineEdit(self)
         self.ParamDeltaBox.move(180,400)
         self.ParamDeltaBox.resize(180,40)
-        PeriodText = QLabel("Input Period: ", self)
-        PeriodText.move(20,460)
-        PeriodText.resize(400,40)
+        self.PeriodText = QLabel("Input Period: ", self)
+        self.PeriodText.move(20,460)
+        self.PeriodText.resize(400,40)
         self.PeriodBox = QLineEdit(self)
         self.PeriodBox.move(190,460)
         self.PeriodBox.resize(180,40)
@@ -126,39 +136,39 @@ class App(QMainWindow):
         self.textPar.setFont((QFont('Arial', 12)))
         self.textPar.move(50,560)
         self.textPar.resize(400,40)
-        ParNameText = QLabel("Input Parent Name: ", self)
-        ParNameText.move(20,620)
-        ParNameText.resize(300,40)
+        self.ParNameText = QLabel("Input Parent Name: ", self)
+        self.ParNameText.move(20,620)
+        self.ParNameText.resize(300,40)
         self.ParNameBox = QLineEdit(self)
         self.ParNameBox.move(260,620)
         self.ParNameBox.resize(180,40)
-        OutVText = QLabel("Input Outflow Velocity: ", self)
-        OutVText.move(20,680)
-        OutVText.resize(300,40)
+        self.OutVText = QLabel("Input Outflow Velocity: ", self)
+        self.OutVText.move(20,680)
+        self.OutVText.resize(300,40)
         self.OutVBox = QLineEdit(self)
         self.OutVBox.move(300,680)
         self.OutVBox.resize(180,40)
-        TauDText = QLabel("Input Tau_D: ", self)
-        TauDText.move(20,740)
-        TauDText.resize(300,40)
+        self.TauDText = QLabel("Input Tau_D: ", self)
+        self.TauDText.move(20,740)
+        self.TauDText.resize(300,40)
         self.TauDBox = QLineEdit(self)
         self.TauDBox.move(185,740)
         self.TauDBox.resize(180,40)
-        TauTParText = QLabel("Input Tau_T: ", self)
-        TauTParText.move(20,800)
-        TauTParText.resize(300,40)
+        self.TauTParText = QLabel("Input Tau_T: ", self)
+        self.TauTParText.move(20,800)
+        self.TauTParText.resize(300,40)
         self.TauTParBox = QLineEdit(self)
         self.TauTParBox.move(185,800)
         self.TauTParBox.resize(180,40)
-        SigmaText = QLabel("Input Sigma: ", self)
-        SigmaText.move(20,860)
-        SigmaText.resize(300,40)
+        self.SigmaText = QLabel("Input Sigma: ", self)
+        self.SigmaText.move(20,860)
+        self.SigmaText.resize(300,40)
         self.SigmaBox = QLineEdit(self)
         self.SigmaBox.move(185,860)
         self.SigmaBox.resize(180,40)
-        T_DText = QLabel("Input T to D Ratio: ", self)
-        T_DText.move(20,920)
-        T_DText.resize(300,40)
+        self.T_DText = QLabel("Input T to D Ratio: ", self)
+        self.T_DText.move(20,920)
+        self.T_DText.resize(300,40)
         self.T_DBox = QLineEdit(self)
         self.T_DBox.move(250,920)
         self.T_DBox.resize(180,40) 
@@ -168,21 +178,21 @@ class App(QMainWindow):
         self.textFrag.setFont((QFont('Arial', 12)))
         self.textFrag.move(50,1020)
         self.textFrag.resize(400,40) 
-        FragNameText = QLabel("Input Fragment Name: ", self)
-        FragNameText.move(20,1080)
-        FragNameText.resize(300,40)
+        self.FragNameText = QLabel("Input Fragment Name: ", self)
+        self.FragNameText.move(20,1080)
+        self.FragNameText.resize(300,40)
         self.FragNameBox = QLineEdit(self)
         self.FragNameBox.move(300,1080)
         self.FragNameBox.resize(180,40)  
-        VPhotoText = QLabel("Input VPhoto: ", self)
-        VPhotoText.move(20,1140)
-        VPhotoText.resize(300,40)
+        self.VPhotoText = QLabel("Input VPhoto: ", self)
+        self.VPhotoText.move(20,1140)
+        self.VPhotoText.resize(300,40)
         self.VPhotoBox = QLineEdit(self)
         self.VPhotoBox.move(190,1140)
         self.VPhotoBox.resize(180,40)
-        TauTFragText = QLabel("Input Tau_T: ", self)
-        TauTFragText.move(20,1200)
-        TauTFragText.resize(300,40)
+        self.TauTFragText = QLabel("Input Tau_T: ", self)
+        self.TauTFragText.move(20,1200)
+        self.TauTFragText.resize(300,40)
         self.TauTFragBox = QLineEdit(self)
         self.TauTFragBox.move(185,1200)
         self.TauTFragBox.resize(180,40)    
@@ -192,27 +202,27 @@ class App(QMainWindow):
         self.textPar.setFont((QFont('Arial', 12)))
         self.textPar.move(880,160)
         self.textPar.resize(400,40)
-        CometNameText = QLabel("Input Comet Name: ", self)
-        CometNameText.move(850,220)
-        CometNameText.resize(300,40)
+        self.CometNameText = QLabel("Input Comet Name: ", self)
+        self.CometNameText.move(850,220)
+        self.CometNameText.resize(300,40)
         self.CometNameBox = QLineEdit(self)
         self.CometNameBox.move(1100,220)
         self.CometNameBox.resize(180,40) 
-        RHText = QLabel("Input RH: ", self)
-        RHText.move(850,280)
-        RHText.resize(300,40)
+        self.RHText = QLabel("Input RH: ", self)
+        self.RHText.move(850,280)
+        self.RHText.resize(300,40)
         self.RHBox = QLineEdit(self)
         self.RHBox.move(980,280)
         self.RHBox.resize(180,40)
-        DeltaComText = QLabel("Input Delta: ", self)
-        DeltaComText.move(850,340)
-        DeltaComText.resize(300,40)
+        self.DeltaComText = QLabel("Input Delta: ", self)
+        self.DeltaComText.move(850,340)
+        self.DeltaComText.resize(300,40)
         self.DeltaComBox = QLineEdit(self)
         self.DeltaComBox.move(1000,340)
         self.DeltaComBox.resize(180,40)
-        TFMethText = QLabel("*Input Transformation Method: ", self)
-        TFMethText.move(850,400)
-        TFMethText.resize(450,40)
+        self.TFMethText = QLabel("*Input Transformation Method: ", self)
+        self.TFMethText.move(850,400)
+        self.TFMethText.resize(450,40)
         self.TFMethBox = QLineEdit(self)
         self.TFMethBox.move(1230,400)
         self.TFMethBox.resize(180,40)
@@ -226,21 +236,21 @@ class App(QMainWindow):
         self.textGrid.setFont((QFont('Arial', 12)))
         self.textGrid.move(880,560)
         self.textGrid.resize(400,40)
-        APointsText = QLabel("Input Angular Points: ", self)
-        APointsText.move(850,620)
-        APointsText.resize(450,40)
+        self.APointsText = QLabel("Input Angular Points: ", self)
+        self.APointsText.move(850,620)
+        self.APointsText.resize(450,40)
         self.APointsBox = QLineEdit(self)
         self.APointsBox.move(1115,620)
         self.APointsBox.resize(180,40)
-        RadPointsText = QLabel("Input Radial Points: ", self)
-        RadPointsText.move(850,680)
-        RadPointsText.resize(450,40)
+        self.RadPointsText = QLabel("Input Radial Points: ", self)
+        self.RadPointsText.move(850,680)
+        self.RadPointsText.resize(450,40)
         self.RadPointsBox = QLineEdit(self)
         self.RadPointsBox.move(1110,680)
         self.RadPointsBox.resize(180,40)
-        RadSubText = QLabel("Input Radial Substeps: ", self)
-        RadSubText.move(850,740)
-        RadSubText.resize(450,40)
+        self.RadSubText = QLabel("Input Radial Substeps: ", self)
+        self.RadSubText.move(850,740)
+        self.RadSubText.resize(450,40)
         self.RadSubBox = QLineEdit(self)
         self.RadSubBox.move(1130,740)
         self.RadSubBox.resize(180,40)
@@ -308,12 +318,10 @@ class App(QMainWindow):
         self.DownInputBox.setChecked(False)
         self.DownInputBox.move(1620,1040)
         self.DownInputBox.resize(500,40)
-        DownText = QLabel("Input File Path for Downloads", self)
-        DownText.move(1620,1100)
-        DownText.resize(500,40)
-        self.DownTextBox = QLineEdit(self)
-        self.DownTextBox.move(1620,1160)
-        self.DownTextBox.resize(400,40)
+        self.KeepFile = QCheckBox("*Keep Created .yaml File", self)
+        self.KeepFile.setChecked(False)
+        self.KeepFile.move(850,840)
+        self.KeepFile.resize(500,40)
         self.button = QPushButton('Run Program', self)
         self.button.move(1700,1320)
         self.button.resize(400,40)
@@ -326,6 +334,13 @@ class App(QMainWindow):
         self.more.move(20,1320)
         self.more.resize(400,40)
         self.more.clicked.connect(self.moreInfo)
+        self.download = QPushButton('Select Download Folder', self)
+        self.download.move(1620,1100)
+        self.download.resize(400,40)
+        self.download.clicked.connect(self.downInp)
+        self.downloadOut = QListWidget(self)
+        self.downloadOut.setGeometry(60,400,400,60)
+        self.downloadOut.move(1620,1160)
         self.fileOut = QListWidget(self)
         self.fileOut.setGeometry(200, 400, 400, 200)
         self.fileOut.move(870,1160)
@@ -341,32 +356,24 @@ class App(QMainWindow):
         self.message = QMessageBox()
         self.message.setIcon(QMessageBox.Critical)
         self.message.setWindowTitle("Error")
-        self.message.setText("No input type selected.")
+        self.message.setText("No input type selected. Please try again")
         self.message.show()
     
     #Missing a critical text box entry
-    def emptyBox(self):
+    def emptyBox(self, input):
         self.message = QMessageBox()
         self.message.setIcon(QMessageBox.Critical)
         self.message.setWindowTitle("Error")
-        self.message.setText("Missing text box entry.")
+        self.message.setText(f"Missing text box entry for: \"{input}\". Please try again")
         self.message.show()
     
     #Gave an incorrect data type for the manual data entry (almost always string could not
     #be converted to a float/int)
-    def incorrectDataType(self):
+    def incorrectDataType(self, input):
         self.message = QMessageBox()
         self.message.setIcon(QMessageBox.Critical)
         self.message.setWindowTitle("Error")
-        self.message.setText("Incorrect manual data entry, check each input to make sure it has been entered properly.")
-        self.message.show()
-
-    #Gave an incorrect path for where the user wished to store the results of the program
-    def noPathFound(self):
-        self.message = QMessageBox()
-        self.message.setIcon(QMessageBox.Critical)
-        self.message.setWindowTitle("Error")
-        self.message.setText("No download path found, unable to download files.")
+        self.message.setText(f"Incorrect manual data entry for: \"{input}\". Please try again")
         self.message.show()
     
     #Program ran successfully, there should not be any errors
@@ -379,14 +386,6 @@ class App(QMainWindow):
     
     #Run Program
     def runProg(self):
-
-        #Sees if the user selected to have downloads and checks to confirm the path is correct.
-        if(self.DownInputBox.isChecked() == True):
-            if (os.path.isdir(self.DownTextBox.text()) == True):
-                UIVariables.DownloadFilePath = self.DownTextBox.text()
-            else:
-                self.noPathFound()
-                return
 
         #Manual input runner
         #Test proper user input and assigns the proper results to global variables in UIVariables.py
@@ -477,21 +476,39 @@ class App(QMainWindow):
                 UIVariables.ShowRadialPlots = True
             else:
                 UIVariables.ShowRadialPlots = False
+            if(self.KeepFile.isChecked() == True):
+                UIVariables.KeepFile = True
+            else:
+                UIVariables.KeepFile = False
 
             #Runs the program
-            runManualProgram()
+            FileRunner.runManualProgram()
             self.successRun()
+            self.Win = ResultsWindow()
+            self.Win.show()
             return
         
+        #File input runner
         if(self.FileInputBox.isChecked() == True):
             UIVariables.FileInputs = True
-            runFileProgram()
+            FileRunner.runFileProgram()
             self.successRun()
             return
+
+        #Throws an exception if there is no input type selected
         if(self.ManInputBox.isChecked() == False and self.FileInputBox.isChecked() == False):
             self.noInput()
             return
     
+    #Gets the path for where the user will download the results.
+    def downInp(self):
+        self.downloadOut.clear()
+        UIVariables.DownloadFilePath = None
+        path = QFileDialog.getExistingDirectory(self, 'Open directory')
+        self.downloadOut.addItem(path)
+        UIVariables.DownloadFilePath = path
+        return
+
     #File Input UI.
     #Creates an array of the user selected file names and copies it to UIVariables.py.
     def fileInp(self):
