@@ -2,10 +2,13 @@
 #to get results for the vectorial model.
 #
 #Author: Jacob Duffy
-#Version: 6/30/2022
+#Version: 7/1/2022
 
+import astropy.units as u
 import FileCreator
 import UIVariables
+from astropy.visualization import quantity_support
+import pyvectorial as pyv
 
 #Method def for converting between km and astro units
 def unitConvert(dataIn):
@@ -13,10 +16,12 @@ def unitConvert(dataIn):
 
 #Method def for getting the output results for the vectorial model
 def singleFileRun(fileName):
-    file = open(fileName, 'r')
-    result = str(file.read())
-    file.close()
-    return result
+    quantity_support()
+    vmc = pyv.vm_configs_from_yaml(fileName)
+    coma = pyv.run_vmodel(vmc)
+    vmr = pyv.get_result_from_coma(coma)
+    pyv.column_density_plots(vmc, vmr, u.km, 1/u.cm**2, True)
+    return
 
 #Method def for taking an array of .yaml files and getting the output results
 def multiFileRun(fileArray):
