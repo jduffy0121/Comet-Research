@@ -3,50 +3,104 @@
 #This work is based on a pvvectorial repository created by sjoset.
 #
 #Author: Jacob Duffy
-#Version: 7/1/2022
+#Version: 7/6/2022
 
 import UIVariables
 import FileRunner
 import sys
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QListWidget, QTabWidget
 from PyQt5.QtWidgets import QLineEdit, QMessageBox, QLabel, QCheckBox, QFileDialog, QScrollBar, QVBoxLayout
 from PyQt5.QtGui import QFont
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
+from matplotlib.figure import Figure
 
-#Class to give a pop up window with the results from FileRunner.py
+#Class that defines a MatPlotLib object that is used in ResultsWindow.
+class MatPlotLib(FigureCanvasQTAgg):
+    def __init__(self, parent=None, width=10, height=10, dpi=100):
+        plot = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = plot.add_subplot(111)
+        super(MatPlotLib, self).__init__(plot)
+
+#Results window.
+#Class to give a pop up window with the results from FileRunner.py using MatPlotLib.
 class ResultsWindow(QWidget):
+    #Intial UI Config
     def __init__(self,parent=None):
         super().__init__(parent)
         self.title = 'Result Plots'
         self.left = 10
         self.top = 10
-        self.width = 1000
-        self.height = 1000
+        self.width = 1200
+        self.height = 1200
         self.initUI()
 
     #Defines the UI Interface
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
-        self.layout = QVBoxLayout(self)
+        self.layout = QVBoxLayout()
         self.tabs = QTabWidget()
         self.FragSput = QWidget()
         self.Radial = QWidget()
         self.ColumD = QWidget()
         self.ColumD3 = QWidget()
+        self.ColumD3C = QWidget()
+
+        #Plots and displays the fragment sputter graph
         if(UIVariables.ShowFragmentSputter):
             self.tabs.addTab(self.FragSput, "Fragment Sputter")
             self.FragSput.layout = QVBoxLayout(self)
-            self.l = QLabel()
-            self.l.setText("This is the first tab")
-            self.FragSput.layout.addWidget(self.l)
+            self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
+            self.graph.axes.plot([0,1,2,3,4], [10,1,20,3,40])
+            self.toolbar = NavigationToolbar2QT(self.graph, self)
+            self.FragSput.layout.addWidget(self.graph)
+            self.FragSput.layout.addWidget(self.toolbar)
             self.FragSput.setLayout(self.FragSput.layout)
+        
+        #Plots and displays the radial plot graph
         if(UIVariables.ShowRadialPlots):
             self.tabs.addTab(self.Radial, "Radial")
+            self.Radial.layout = QVBoxLayout(self)
+            self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
+            self.graph.axes.plot([0,1,2,3,4], [-10,-1,-20,-3,-40])
+            self.toolbar = NavigationToolbar2QT(self.graph, self)
+            self.Radial.layout.addWidget(self.graph)
+            self.Radial.layout.addWidget(self.toolbar)
+            self.Radial.setLayout(self.Radial.layout)
+        
+        #Plots and displays the column density graph
         if(UIVariables.ShowColumnDensityPlots):
             self.tabs.addTab(self.ColumD, "Column Density")
-        if(UIVariables.Show3dColumnDensityOffCenter or UIVariables.Show3dColumnDensityOffCenter):
-            self.tabs.addTab(self.ColumD3, "Column Density (3D)")
+            self.ColumD.layout = QVBoxLayout(self)
+            self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
+            self.graph.axes.plot([0,1,2,3,4], [0,1,2,3,4])
+            self.toolbar = NavigationToolbar2QT(self.graph, self)
+            self.ColumD.layout.addWidget(self.graph)
+            self.ColumD.layout.addWidget(self.toolbar)
+            self.ColumD.setLayout(self.ColumD.layout)
+        
+        #Plots and displays the column density graph (off centered)
+        if(UIVariables.Show3dColumnDensityOffCenter):
+            self.tabs.addTab(self.ColumD3, "Column Density (3D Off Centered)")
+            self.ColumD3.layout = QVBoxLayout(self)
+            self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
+            self.graph.axes.plot([0,1,2,3,4], [0,-1,-2,-3,-4])
+            self.toolbar = NavigationToolbar2QT(self.graph, self)
+            self.ColumD3.layout.addWidget(self.graph)
+            self.ColumD3.layout.addWidget(self.toolbar)
+            self.ColumD3.setLayout(self.ColumD3.layout)
+        
+        #Plots and displays the column density graph (centered)
+        if(UIVariables.Show3dColumnDensityCentered):
+            self.tabs.addTab(self.ColumD3C, "Column Density (3D Centered)")
+            self.ColumD3C.layout = QVBoxLayout(self)
+            self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
+            self.graph.axes.plot([0,1,2,3,4], [100,10,200,30,400])
+            self.toolbar = NavigationToolbar2QT(self.graph, self)
+            self.ColumD3C.layout.addWidget(self.graph)
+            self.ColumD3C.layout.addWidget(self.toolbar)
+            self.ColumD3C.setLayout(self.ColumD3C.layout)
+        
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
         return
@@ -74,7 +128,7 @@ class MoreWindow(QWidget):
 
 #Main UI Window, Driver Class. 
 #Used to create/format the UI, read/test in all user data into UIVariables.py,
-#reference other child UI windows, run the program and create a new window with the results
+#reference other child UI windows, run the program and create a new window with the results.
 class App(QMainWindow):
     #Intial UI Config
     def __init__(self,parent=None):
@@ -88,6 +142,9 @@ class App(QMainWindow):
     
     #Defines the UI Interface
     def initUI(self):
+
+        ####################################UI Element creator####################################
+        
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
@@ -373,7 +430,7 @@ class App(QMainWindow):
         self.pickleOut.setGeometry(60,400,400,60)
         self.pickleOut.move(1610,830)
 
-        #Creates other UI elements such as certain check boxes/text UI stuff
+        #Creates other UI elements such as certain check boxes/text and other UI stuff
         self.FileInputBox = QCheckBox("*Select for File Inputs", self)
         self.FileInputBox.setChecked(False)
         self.FileInputBox.move(870,1040)
@@ -415,30 +472,10 @@ class App(QMainWindow):
         self.scrollBar = QScrollBar(self)
         self.fileOut.setVerticalScrollBar(self.scrollBar)
 
-        #Creates the UI
         self.show()
-    
-    def testFloat(self, input):
-        try:
-            float(input)
-            if(float(input) >= 0):
-                return True
-            else:
-                return False
-        except ValueError:
-            return False
-    
-    def testInt(self, input):
-        try:
-            int(input)
-            if(int(input) >= 0):
-                return True
-            else:
-                return True
-        except ValueError:
-            return False
 
-    #Error Throws
+    ####################################Error Throws####################################
+
     #No input type is selected by the user (either manual or file)
     def noInput(self):
         self.message = QMessageBox()
@@ -472,14 +509,130 @@ class App(QMainWindow):
         self.message.setText("Program run successful!")
         self.message.show()
     
-    #Run Program
+    #Test user input to see if it is a float
+    def testFloat(self, input):
+        try:
+            float(input)
+            if(float(input) >= 0):
+                return True
+            else:
+                return False
+        except ValueError:
+            return False
+    
+    #Test user input ot see if it is an int
+    def testInt(self, input):
+        try:
+            int(input)
+            if(int(input) >= 0):
+                return True
+            else:
+                return True
+        except ValueError:
+            return False
+
+
+    ####################################File Path References####################################
+
+    #Gets the path for where the user will download the results.
+    def downInp(self):
+        self.downloadOut.clear()
+        UIVariables.DownloadFilePath = None
+        path = QFileDialog.getExistingDirectory(self, 'Open directory')
+        self.downloadOut.addItem(path)
+        UIVariables.DownloadFilePath = path
+        return
+    
+    #Gets the name/file path of the pickle file.
+    def pickleInp(self):
+        self.pickleOut.clear()
+        UIVariables.PyvComaPickle = None
+        file = QFileDialog.getOpenFileNames(self, 'Open file', '', 'Yaml files (*.yaml)')[0]
+        i = 0
+        while i < len(file):
+            self.pickleOut.addItem(file[i])
+            UIVariables.PyvComaPickle = file[i]
+            i += 1
+        return
+
+    #Creates an array of the user selected file names and copies it to UIVariables.py.
+    def fileInp(self):
+        self.fileOut.clear()
+        UIVariables.FileArray = []
+        files = QFileDialog.getOpenFileNames(self, 'Open file', '', 'Yaml files (*.yaml)')[0]
+        i = 0
+        while i < len(files):
+            self.fileOut.addItem(files[i])
+            UIVariables.FileArray.append(files[i])
+            i += 1
+        return
+
+    ####################################Extra methods####################################
+    
+    #References the More() above when the More Infomation button is pressed.
+    def moreInfo(self, checked):
+        self.Win = MoreWindow()
+        self.Win.show()
+    
+    #Method to set the global variables in UIVariables.py for the "extra" catagory in the UI.
+    def extraDec(self):
+            if(self.BinTimesBox.isChecked()):
+                UIVariables.PrintBinnedTimes = True
+            else:
+                UIVariables.PrintBinnedTimes = False
+            if(self.ColumDBox.isChecked()):
+                UIVariables.PrintColumnDensity = True
+            else:
+                UIVariables.PrintColumnDensity = False
+            if(self.PrintPBox.isChecked()):
+                UIVariables.PrintProgress = True
+            else:
+                UIVariables.PrintProgress = False
+            if(self.PrintRadDBox.isChecked()):
+                UIVariables.PrintRadialDensity = True
+            else:
+                UIVariables.PrintRadialDensity = False
+            if(self.DCenterBox.isChecked()):
+                UIVariables.Show3dColumnDensityCentered = True
+            else:
+                UIVariables.Show3dColumnDensityCentered = False
+            if(self.DNotCenterBox.isChecked()):
+                UIVariables.Show3dColumnDensityOffCenter = True
+            else:
+                UIVariables.Show3dColumnDensityOffCenter = False
+            if(self.AgreeCheck.isChecked()):
+                UIVariables.ShowAgreementCheck = True
+            else:
+                UIVariables.ShowAgreementCheck = False
+            if(self.ApeCheck.isChecked()):
+                UIVariables.ShowApertureChecks = True
+            else:
+                UIVariables.ShowApertureChecks = False
+            if(self.ColumPlotBox.isChecked()):
+                UIVariables.ShowColumnDensityPlots = True
+            else:
+                UIVariables.ShowColumnDensityPlots = False
+            if(self.FragSputBox.isChecked()):
+                UIVariables.ShowFragmentSputter = True
+            else:
+                UIVariables.ShowFragmentSputter = False
+            if(self.RadPlotBox.isChecked()):
+                UIVariables.ShowRadialPlots = True
+            else:
+                UIVariables.ShowRadialPlots = False
+    
+
+    ####################################Program Runner####################################
+    
+    #Run Program button
     def runProg(self):
         UIVariables.ManInputs = False
         UIVariables.FileInputs = False
 
         #Manual input runner
-        #Test proper user input and assigns the proper results to global variables in UIVariables.py
-        if(self.ManInputBox.isChecked() == True):
+        #Test proper user input and assigns the results to global variables in UIVariables.py
+        #Throws errors if user input is not correct
+        if(self.ManInputBox.isChecked()):
             UIVariables.ManInputs = True
 
             #Param Declarations
@@ -611,58 +764,9 @@ class App(QMainWindow):
             else:
                 self.incorrectDataType("Radial Substeps")
                 return
-
-            #Extra Declarations
-            if(self.BinTimesBox.isChecked() == True):
-                UIVariables.PrintBinnedTimes = True
-            else:
-                UIVariables.PrintBinnedTimes = False
-            if(self.ColumDBox.isChecked() == True):
-                UIVariables.PrintColumnDensity = True
-            else:
-                UIVariables.PrintColumnDensity = False
-            if(self.PrintPBox.isChecked() == True):
-                UIVariables.PrintProgress = True
-            else:
-                UIVariables.PrintProgress = False
-            if(self.PrintRadDBox.isChecked() == True):
-                UIVariables.PrintRadialDensity = True
-            else:
-                UIVariables.PrintRadialDensity = False
-            if(self.DCenterBox.isChecked() == True):
-                UIVariables.Show3dColumnDensityCentered = True
-            else:
-                UIVariables.Show3dColumnDensityCentered = False
-            if(self.DNotCenterBox.isChecked() == True):
-                UIVariables.Show3dColumnDensityOffCenter = True
-            else:
-                UIVariables.Show3dColumnDensityOffCenter = False
-            if(self.AgreeCheck.isChecked() == True):
-                UIVariables.ShowAgreementCheck = True
-            else:
-                UIVariables.ShowAgreementCheck = False
-            if(self.ApeCheck.isChecked() == True):
-                UIVariables.ShowApertureChecks = True
-            else:
-                UIVariables.ShowApertureChecks = False
-            if(self.ColumPlotBox.isChecked() == True):
-                UIVariables.ShowColumnDensityPlots = True
-            else:
-                UIVariables.ShowColumnDensityPlots = False
-            if(self.FragSputBox.isChecked() == True):
-                UIVariables.ShowFragmentSputter = True
-            else:
-                UIVariables.ShowFragmentSputter = False
-            if(self.RadPlotBox.isChecked() == True):
-                UIVariables.ShowRadialPlots = True
-            else:
-                UIVariables.ShowRadialPlots = False
-            if(self.KeepFile.isChecked() == True):
-                UIVariables.KeepFile = True
-            else:
-                UIVariables.KeepFile = False
-
+            
             #Runs the program
+            self.extraDec()
             FileRunner.runManualProgram()
             self.successRun()
             if((UIVariables.ShowFragmentSputter == False)
@@ -676,8 +780,11 @@ class App(QMainWindow):
             return
         
         #File input runner
-        elif(self.FileInputBox.isChecked() == True):
+        elif(self.FileInputBox.isChecked()):
             UIVariables.FileInputs = True
+
+            #Runs the program
+            self.extraDec()
             FileRunner.runFileProgram()
             self.successRun()
             if((UIVariables.ShowFragmentSputter == False)
@@ -696,43 +803,6 @@ class App(QMainWindow):
             return
 
     
-    #Gets the path for where the user will download the results.
-    def downInp(self):
-        self.downloadOut.clear()
-        UIVariables.DownloadFilePath = None
-        path = QFileDialog.getExistingDirectory(self, 'Open directory')
-        self.downloadOut.addItem(path)
-        UIVariables.DownloadFilePath = path
-        return
-    
-    def pickleInp(self):
-        self.pickleOut.clear()
-        UIVariables.PyvComaPickle = None
-        file = QFileDialog.getOpenFileNames(self, 'Open file', '', 'Yaml files (*.yaml)')[0]
-        i = 0
-        while i < len(file):
-            self.pickleOut.addItem(file[i])
-            UIVariables.PyvComaPickle = file[i]
-            i += 1
-        return
-
-    #File Input UI.
-    #Creates an array of the user selected file names and copies it to UIVariables.py.
-    def fileInp(self):
-        self.fileOut.clear()
-        UIVariables.FileArray = []
-        files = QFileDialog.getOpenFileNames(self, 'Open file', '', 'Yaml files (*.yaml)')[0]
-        i = 0
-        while i < len(files):
-            self.fileOut.addItem(files[i])
-            UIVariables.FileArray.append(files[i])
-            i += 1
-        return
-    
-    #References the More() above when the More Infomation button is pressed.
-    def moreInfo(self, checked):
-        self.Win = MoreWindow()
-        self.Win.show()
     
 if __name__ == '__main__':
     app = QApplication(sys.argv)
