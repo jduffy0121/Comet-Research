@@ -3,7 +3,7 @@
 #This work is based on a pvvectorial repository created by sjoset.
 #
 #Author: Jacob Duffy
-#Version: 7/6/2022
+#Version: 7/7/2022
 
 import UIVariables
 import FileRunner
@@ -46,60 +46,126 @@ class ResultsWindow(QWidget):
         self.ColumD3 = QWidget()
         self.ColumD3C = QWidget()
 
-        #Plots and displays the fragment sputter graph
-        if(UIVariables.ShowFragmentSputter):
-            self.tabs.addTab(self.FragSput, "Fragment Sputter")
-            self.FragSput.layout = QVBoxLayout(self)
-            self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
-            self.graph.axes.plot([0,1,2,3,4], [10,1,20,3,40])
-            self.toolbar = NavigationToolbar2QT(self.graph, self)
-            self.FragSput.layout.addWidget(self.graph)
-            self.FragSput.layout.addWidget(self.toolbar)
-            self.FragSput.setLayout(self.FragSput.layout)
+        #Graphs and plots for manual inputs
+        if(UIVariables.ManInputs):
+
+            #Plots and displays the fragment sputter graph
+            if(UIVariables.ShowFragmentSputter):
+                self.tabs.addTab(self.FragSput, "Fragment Sputter")
+                self.FragSput.layout = QVBoxLayout(self)
+                self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
+                self.graph.axes.plot([0,1,2,3,4], [10,1,20,3,40])
+                self.toolbar = NavigationToolbar2QT(self.graph, self)
+                self.FragSput.layout.addWidget(self.graph)
+                self.FragSput.layout.addWidget(self.toolbar)
+                self.FragSput.setLayout(self.FragSput.layout)
         
-        #Plots and displays the radial plot graph
-        if(UIVariables.ShowRadialPlots):
-            self.tabs.addTab(self.Radial, "Radial")
-            self.Radial.layout = QVBoxLayout(self)
-            self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
-            self.graph.axes.plot([0,1,2,3,4], [-10,-1,-20,-3,-40])
-            self.toolbar = NavigationToolbar2QT(self.graph, self)
-            self.Radial.layout.addWidget(self.graph)
-            self.Radial.layout.addWidget(self.toolbar)
-            self.Radial.setLayout(self.Radial.layout)
+            #Plots and displays the radial plot graph
+            if(UIVariables.ShowRadialPlots):
+                self.tabs.addTab(self.Radial, "Radial")
+                self.Radial.layout = QVBoxLayout(self)
+                self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
+                self.graph.axes.plot([0,1,2,3,4], [-10,-1,-20,-3,-40])
+                self.toolbar = NavigationToolbar2QT(self.graph, self)
+                self.Radial.layout.addWidget(self.graph)
+                self.Radial.layout.addWidget(self.toolbar)
+                self.Radial.setLayout(self.Radial.layout)
         
-        #Plots and displays the column density graph
-        if(UIVariables.ShowColumnDensityPlots):
-            self.tabs.addTab(self.ColumD, "Column Density")
-            self.ColumD.layout = QVBoxLayout(self)
-            self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
-            self.graph.axes.plot([0,1,2,3,4], [0,1,2,3,4])
-            self.toolbar = NavigationToolbar2QT(self.graph, self)
-            self.ColumD.layout.addWidget(self.graph)
-            self.ColumD.layout.addWidget(self.toolbar)
-            self.ColumD.setLayout(self.ColumD.layout)
+            #Plots and displays the column density graph
+            if(UIVariables.ShowColumnDensityPlots):
+                self.tabs.addTab(self.ColumD, "Column Density")
+                self.ColumD.layout = QVBoxLayout(self)
+                self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
+                self.graph.axes.plot([0,1,2,3,4], [0,1,2,3,4])
+                self.toolbar = NavigationToolbar2QT(self.graph, self)
+                self.ColumD.layout.addWidget(self.graph)
+                self.ColumD.layout.addWidget(self.toolbar)
+                self.ColumD.setLayout(self.ColumD.layout)
         
-        #Plots and displays the column density graph (off centered)
-        if(UIVariables.Show3dColumnDensityOffCenter):
-            self.tabs.addTab(self.ColumD3, "Column Density (3D Off Centered)")
-            self.ColumD3.layout = QVBoxLayout(self)
-            self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
-            self.graph.axes.plot([0,1,2,3,4], [0,-1,-2,-3,-4])
-            self.toolbar = NavigationToolbar2QT(self.graph, self)
-            self.ColumD3.layout.addWidget(self.graph)
-            self.ColumD3.layout.addWidget(self.toolbar)
-            self.ColumD3.setLayout(self.ColumD3.layout)
+            #Plots and displays the column density graph (off centered)
+            if(UIVariables.Show3dColumnDensityOffCenter):
+                self.tabs.addTab(self.ColumD3, "Column Density (3D Off Centered)")
+                self.ColumD3.layout = QVBoxLayout(self)
+                self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
+                self.graph.axes.plot([0,1,2,3,4], [0,-1,-2,-3,-4])
+                self.toolbar = NavigationToolbar2QT(self.graph, self)
+                self.ColumD3.layout.addWidget(self.graph)
+                self.ColumD3.layout.addWidget(self.toolbar)
+                self.ColumD3.setLayout(self.ColumD3.layout)
         
-        #Plots and displays the column density graph (centered)
-        if(UIVariables.Show3dColumnDensityCentered):
-            self.tabs.addTab(self.ColumD3C, "Column Density (3D Centered)")
-            self.ColumD3C.layout = QVBoxLayout(self)
-            self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
-            self.graph.axes.plot([0,1,2,3,4], [100,10,200,30,400])
-            self.toolbar = NavigationToolbar2QT(self.graph, self)
-            self.ColumD3C.layout.addWidget(self.graph)
-            self.ColumD3C.layout.addWidget(self.toolbar)
-            self.ColumD3C.setLayout(self.ColumD3C.layout)
+            #Plots and displays the column density graph (centered)
+            if(UIVariables.Show3dColumnDensityCentered):
+                self.tabs.addTab(self.ColumD3C, "Column Density (3D Centered)")
+                self.ColumD3C.layout = QVBoxLayout(self)
+                self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
+                self.graph.axes.plot([0,1,2,3,4], [100,10,200,30,400])
+                self.toolbar = NavigationToolbar2QT(self.graph, self)
+                self.ColumD3C.layout.addWidget(self.graph)
+                self.ColumD3C.layout.addWidget(self.toolbar)
+                self.ColumD3C.setLayout(self.ColumD3C.layout)
+        
+        #Graph and plots for file input
+        elif(UIVariables.FileInputs):
+
+            #Plots and displays the fragment sputter graph
+            if(UIVariables.ShowFragmentSputter):
+                self.tabs.addTab(self.FragSput, "Fragment Sputter")
+                self.FragSput.layout = QVBoxLayout(self)
+                self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
+                self.graph.axes.plot([0,1,2,3,4], [10,1,20,3,40])
+                self.graph.axes.plot([0,1,2,3,4], [-10,-1,-20,-3,-40])
+                self.toolbar = NavigationToolbar2QT(self.graph, self)
+                self.FragSput.layout.addWidget(self.graph)
+                self.FragSput.layout.addWidget(self.toolbar)
+                self.FragSput.setLayout(self.FragSput.layout)
+        
+            #Plots and displays the radial plot graph
+            if(UIVariables.ShowRadialPlots):
+                self.tabs.addTab(self.Radial, "Radial")
+                self.Radial.layout = QVBoxLayout(self)
+                self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
+                self.graph.axes.plot([0,1,2,3,4], [0,1,2,3,4])
+                self.graph.axes.plot([0,1,2,3,4], [-10,-1,-20,-3,-40])
+                self.toolbar = NavigationToolbar2QT(self.graph, self)
+                self.Radial.layout.addWidget(self.graph)
+                self.Radial.layout.addWidget(self.toolbar)
+                self.Radial.setLayout(self.Radial.layout)
+        
+            #Plots and displays the column density graph
+            if(UIVariables.ShowColumnDensityPlots):
+                self.tabs.addTab(self.ColumD, "Column Density")
+                self.ColumD.layout = QVBoxLayout(self)
+                self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
+                self.graph.axes.plot([0,1,2,3,4], [0,1,2,3,4])
+                self.graph.axes.plot([0,1,2,3,4], [100,10,200,30,400])
+                self.toolbar = NavigationToolbar2QT(self.graph, self)
+                self.ColumD.layout.addWidget(self.graph)
+                self.ColumD.layout.addWidget(self.toolbar)
+                self.ColumD.setLayout(self.ColumD.layout)
+        
+            #Plots and displays the column density graph (off centered)
+            if(UIVariables.Show3dColumnDensityOffCenter):
+                self.tabs.addTab(self.ColumD3, "Column Density (3D Off Centered)")
+                self.ColumD3.layout = QVBoxLayout(self)
+                self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
+                self.graph.axes.plot([0,1,2,3,4], [10,1,20,3,40])
+                self.graph.axes.plot([0,1,2,3,4], [0,-1,-2,-3,-4])
+                self.toolbar = NavigationToolbar2QT(self.graph, self)
+                self.ColumD3.layout.addWidget(self.graph)
+                self.ColumD3.layout.addWidget(self.toolbar)
+                self.ColumD3.setLayout(self.ColumD3.layout)
+        
+            #Plots and displays the column density graph (centered)
+            if(UIVariables.Show3dColumnDensityCentered):
+                self.tabs.addTab(self.ColumD3C, "Column Density (3D Centered)")
+                self.ColumD3C.layout = QVBoxLayout(self)
+                self.graph = MatPlotLib(self, width=5, height=4, dpi=100)
+                self.graph.axes.plot([0,1,2,3,4], [0,-1,-2,-3,-4])
+                self.graph.axes.plot([0,1,2,3,4], [100,10,200,30,400])
+                self.toolbar = NavigationToolbar2QT(self.graph, self)
+                self.ColumD3C.layout.addWidget(self.graph)
+                self.ColumD3C.layout.addWidget(self.toolbar)
+                self.ColumD3C.setLayout(self.ColumD3C.layout)
         
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
@@ -115,15 +181,46 @@ class MoreWindow(QWidget):
         self.left = 10
         self.top = 10
         self.width = 1000
-        self.height = 1000
+        self.height = 900
         self.initUI()
 
     #Defines the UI Interface
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
-        self.text = QLabel("More info", self)
-        self.text.move(500,500)
+        self.label = QLabel("Inputs", self)
+        self.label.setFont((QFont('Arial', 18)))
+        self.label.move(450,20)
+        self.inputText1 = QLabel("---All name inputs (parent, fragment, and comet) are optional inputs.", self)
+        self.inputText1.move(20,100)
+        self.inputText2 = QLabel("---Delta under \"comet variables\" is optional as it does not influence the results.", self)
+        self.inputText2.move(20,150)
+        self.inputText2 = QLabel("---In using a manual input, a .yaml file is created, \"keeping the .yaml file\" will", self)
+        self.inputText2.move(20,200)
+        self.inputText3 = QLabel("save to your current directory named \"pyvectorial.yaml\".", self)
+        self.inputText3.move(20,230)
+        self.inputText4 = QLabel("---\"Transformation method\" and \"time variation type\"", self)
+        self.inputText4.move(20,280)
+        self.inputText5 = QLabel("can only have 1 applied max.", self)
+        self.inputText5.move(20,310)
+        self.inputText6 = QLabel("---All other manual inputs can only be floats (grid variables must be int).", self)
+        self.inputText6.move(20,360)
+        self.inputText7 = QLabel("---File inputs will only be able to be .yaml files formatted the proper way.", self)
+        self.inputText7.move(20,410)
+        self.inputText8 = QLabel("(look at a manually created .yaml file for this format).", self)
+        self.inputText8.move(20,440)
+        self.label1 = QLabel("Other Information", self)
+        self.label1.setFont((QFont('Arial', 18)))
+        self.label1.move(350,540)
+        self.otherText1 = QLabel("---In the running of the program, a .vmr file is created", self)
+        self.otherText1.move(20,640)
+        self.otherText2 = QLabel("and can be downloaded using the \"File Download\" selection box.", self)
+        self.otherText2.move(20,670)
+        self.otherText3 = QLabel("---The \"Pvy coma pickle\" is", self)
+        self.otherText3.move(20,720)
+        self.label2 = QLabel("*This program was created by Jacob Duffy at Auburn University Physics Department", self)
+        self.label2.setFont((QFont('Arial', 5)))
+        self.label2.move(500,880)
         self.show()
 
 #Main UI Window, Driver Class. 
@@ -143,8 +240,8 @@ class App(QMainWindow):
     #Defines the UI Interface
     def initUI(self):
 
-        ####################################UI Element creator####################################
-        
+        #UI Element creator
+
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
@@ -166,7 +263,7 @@ class App(QMainWindow):
         self.box4.setFont((QFont('Arial', 18)))
         self.box4.resize(550,60)
         
-        ##Creates manual input UI elements for the Production section
+        #Creates manual input UI elements for the Production section
         self.textPro = QLabel("Production Variables", self)
         self.textPro.setFont((QFont('Arial', 12)))
         self.textPro.move(50,160)
@@ -227,7 +324,7 @@ class App(QMainWindow):
         self.PeriodUnits.move(390,460)
         self.PeriodUnits.resize(400,40)
 
-        ##Creates manual input UI elements for the Parent section
+        #Creates manual input UI elements for the Parent section
         self.textPar = QLabel("Parent Variables", self)
         self.textPar.setFont((QFont('Arial', 12)))
         self.textPar.move(50,560)
@@ -281,7 +378,7 @@ class App(QMainWindow):
         self.T_DBox.move(250,920)
         self.T_DBox.resize(180,40) 
 
-        ##Creates manual input UI elements for the Fragment section  
+        #Creates manual input UI elements for the Fragment section  
         self.textFrag = QLabel("Fragment Variables", self)
         self.textFrag.setFont((QFont('Arial', 12)))
         self.textFrag.move(50,1020)
@@ -311,7 +408,7 @@ class App(QMainWindow):
         self.TauTFragUnits.move(385,1200)
         self.TauTFragUnits.resize(300,40)
 
-        ##Creates manual input UI elements for the Comet section
+        #Creates manual input UI elements for the Comet section
         self.textPar = QLabel("Comet Variables", self)
         self.textPar.setFont((QFont('Arial', 12)))
         self.textPar.move(880,160)
@@ -331,7 +428,7 @@ class App(QMainWindow):
         self.RHUnits = QLabel("AU", self)
         self.RHUnits.move(1180,280)
         self.RHUnits.resize(300,40)
-        self.DeltaComText = QLabel("Input Delta: ", self)
+        self.DeltaComText = QLabel("*Input Delta: ", self)
         self.DeltaComText.move(850,340)
         self.DeltaComText.resize(300,40)
         self.DeltaComBox = QLineEdit(self)
@@ -439,7 +536,7 @@ class App(QMainWindow):
         self.ManInputBox.setChecked(False)
         self.ManInputBox.move(540,100)
         self.ManInputBox.resize(500,40)
-        self.DownInputBox = QCheckBox("Select for File Downloads", self)
+        self.DownInputBox = QCheckBox("*Select for File Downloads", self)
         self.DownInputBox.setChecked(False)
         self.DownInputBox.move(1620,1040)
         self.DownInputBox.resize(500,40)
@@ -459,7 +556,7 @@ class App(QMainWindow):
         self.more.move(20,1320)
         self.more.resize(400,40)
         self.more.clicked.connect(self.moreInfo)
-        self.download = QPushButton('*Select Download Folder', self)
+        self.download = QPushButton('Select Download Folder', self)
         self.download.move(1620,1100)
         self.download.resize(400,40)
         self.download.clicked.connect(self.downInp)
@@ -474,7 +571,7 @@ class App(QMainWindow):
 
         self.show()
 
-    ####################################Error Throws####################################
+    #Error Throws
 
     #No input type is selected by the user (either manual or file)
     def noInput(self):
@@ -482,6 +579,22 @@ class App(QMainWindow):
         self.message.setIcon(QMessageBox.Critical)
         self.message.setWindowTitle("Error")
         self.message.setText("No input type selected. Please try again.")
+        self.message.show()
+    
+    #File input has a data type that throws an exception
+    def incorrectFile(self):
+        self.message = QMessageBox()
+        self.message.setIcon(QMessageBox.Critical)
+        self.message.setWindowTitle("Error")
+        self.message.setText("A .yaml file has an incorrect data entry. Please try again.")
+        self.message.show()
+    
+    #File input has a data type that throws an exception
+    def noFileUploaded(self):
+        self.message = QMessageBox()
+        self.message.setIcon(QMessageBox.Critical)
+        self.message.setWindowTitle("Error")
+        self.message.setText("A .yaml file has not been selected. Please try again.")
         self.message.show()
     
     #Gave an incorrect data type for the manual data entry (almost always string could not
@@ -532,7 +645,7 @@ class App(QMainWindow):
             return False
 
 
-    ####################################File Path References####################################
+    #File Path References
 
     #Gets the path for where the user will download the results.
     def downInp(self):
@@ -567,7 +680,7 @@ class App(QMainWindow):
             i += 1
         return
 
-    ####################################Extra methods####################################
+    #Extra methods
     
     #References the More() above when the More Infomation button is pressed.
     def moreInfo(self, checked):
@@ -620,10 +733,7 @@ class App(QMainWindow):
                 UIVariables.ShowRadialPlots = True
             else:
                 UIVariables.ShowRadialPlots = False
-    
-
-    ####################################Program Runner####################################
-    
+        
     #Run Program button
     def runProg(self):
         UIVariables.ManInputs = False
@@ -780,30 +890,40 @@ class App(QMainWindow):
             return
         
         #File input runner
+        #Test to see if there is at least 1 correct .yaml file uploaded and reads the files
+        #for correct format in FileRunner.py
+        #Throws an error if any of the 2 test fail
         elif(self.FileInputBox.isChecked()):
             UIVariables.FileInputs = True
 
-            #Runs the program
-            self.extraDec()
-            FileRunner.runFileProgram()
-            self.successRun()
-            if((UIVariables.ShowFragmentSputter == False)
-            and (UIVariables.Show3dColumnDensityCentered == False) 
-            and (UIVariables.Show3dColumnDensityOffCenter == False)
-            and (UIVariables.ShowRadialPlots == False)
-            and (UIVariables.ShowColumnDensityPlots == False)):
+            #Test to see if there had been a file uploaded
+            if (len(UIVariables.FileArray) == 0):
+                self.noFileUploaded()
                 return
-            self.Win = ResultsWindow()
-            self.Win.show()
+            
+            #Reads all files to see if they are all formatted properly        
+            if (FileRunner.fileTest()):
+                #Runs the program
+                self.extraDec()
+                FileRunner.runFileProgram()
+                self.successRun()
+                if((UIVariables.ShowFragmentSputter == False)
+                and (UIVariables.Show3dColumnDensityCentered == False) 
+                and (UIVariables.Show3dColumnDensityOffCenter == False)
+                and (UIVariables.ShowRadialPlots == False)
+                and (UIVariables.ShowColumnDensityPlots == False)):
+                    return
+                self.Win = ResultsWindow()
+                self.Win.show()
+            else:
+                self.incorrectFile()
             return
 
         #Throws an exception if there is no input type selected
         else:
             self.noInput()
             return
-
-    
-    
+   
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     Win = App()
