@@ -2,10 +2,11 @@
 #to get results for the vectorial model.
 #
 #Author: Jacob Duffy
-#Version: 7/6/2022
+#Version: 7/7/2022
 
-import FileCreator
 import UIVariables
+import FileCreator
+import yaml
 import astropy.units as u
 from astropy.visualization import quantity_support
 import pyvectorial as pyv
@@ -43,3 +44,12 @@ def runManualProgram():
 #Method def for running the program with file inputs
 def runFileProgram():
     multiFileRun(UIVariables.FileArray)
+
+#Method def for testing all input files with the correct results
+def fileTest():
+    i = 0
+    while i < len(UIVariables.FileArray):
+        with open(f"{UIVariables.FileArray[i]}", 'r') as file:
+            print(yaml.safe_load(file))
+        i += 1
+    return True
