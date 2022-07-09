@@ -1,20 +1,30 @@
 #Program that contains global variables used in the UI.
 #
 #Author: Jacob Duffy
-#Version: 6/30/2022
+#Version: 7/8/2022
 
-FileArray = []
-DownloadFilePath = None
+#UI manager variables
+FileName = None
+DownFile = None
 ManInputs = False
 FileInputs = False
+PickleInputs = False
 KeepFile = False
 
-#Production variables
+#Production variable
 BaseQ = None
+
+#Time Variation variables
 TimeVariationType = None
-Amplitude = None
-ParamDelta = None
-Period = None
+SinAmp = None
+SinPer = None
+SinDelta = None
+GausAmp = None
+GausSTD = None
+GausT_Max = None
+SquareAmp = None
+SquareDur = None
+SquareT_Start = None
 
 #Parent variables
 ParentName = None
@@ -46,7 +56,7 @@ PrintBinnedTimes = False
 PrintColumnDensity = False
 PrintProgress = False
 PrintRadialDensity = False
-PyvComaPickle = False
+PyvComaPickle = None
 PyvDateOfRun = None
 Show3dColumnDensityCentered = False
 Show3dColumnDensityOffCenter = False
