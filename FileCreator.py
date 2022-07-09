@@ -2,25 +2,37 @@
 #Uses a nested dict data type to write the file.
 #
 #Author: Jacob Duffy
-#Version: 6/30/2022
+#Version: 7/8/2022
 
 import UIVariables
 import yaml
 import os
 from datetime import datetime
+   
 
 #Method to create a dictionary based on the variables in UIVariables.py
 #Returns the completed dictionary
 def createDictionary():
 
-    #Creates the param sub dictionary used in the production dictory
-    params = {'amplitude' : UIVariables.Amplitude, 
-    'delta' : UIVariables.ParamDelta,
-    'period' : UIVariables.Period}
-
     #Creates the production dictionary
-    production = {'base_q' : UIVariables.BaseQ,
-    'time_variation_type' : UIVariables.TimeVariationType, 'params' : params}
+    if(UIVariables.TimeVariationType == 'sine wave'):
+        params = {'amplitude' : UIVariables.SinAmp, 'period' : UIVariables.SinPer,
+        'delta' : UIVariables.SinDelta}
+        production = {'base_q' : UIVariables.BaseQ,
+        'time_variation_type' : UIVariables.TimeVariationType, 'params' : params}
+    elif(UIVariables.TimeVariationType == 'gaussian'):
+        params = {'amplitude' : UIVariables.GausAmp, 'std_dev' : UIVariables.GausSTD,
+        't_max' : UIVariables.GausT_Max}
+        production = {'base_q' : UIVariables.BaseQ,
+        'time_variation_type' : UIVariables.TimeVariationType, 'params' : params}
+    elif(UIVariables.TimeVariationType == 'square pulse'):
+        params = {'amplitude' : UIVariables.SquareAmp, 'duration' : UIVariables.SquareDur,
+        't_start' : UIVariables.SquareT_Start}
+        production = {'base_q' : UIVariables.BaseQ,
+        'time_variation_type' : UIVariables.TimeVariationType, 'params' : params}
+    else:
+        production = {'base_q' : UIVariables.BaseQ,
+        'time_variation_type' : UIVariables.TimeVariationType}   
 
     #Creates the parent dictionary
     parent = {'name' : UIVariables.ParentName, 
