@@ -1,7 +1,7 @@
 #Program that contains global variables used in the UI.
 #
 #Author: Jacob Duffy
-#Version: 7/8/2022
+#Version: 7/14/2022
 
 #UI manager variables
 FileName = None
@@ -52,16 +52,6 @@ RadialPoints = None
 RadialSubsteps = None
 
 #Etc variables
-PrintBinnedTimes = False
-PrintColumnDensity = False
-PrintProgress = False
-PrintRadialDensity = False
 PyvComaPickle = None
 PyvDateOfRun = None
-Show3dColumnDensityCentered = False
-Show3dColumnDensityOffCenter = False
-ShowAgreementCheck = False
-ShowApertureChecks = False
-ShowColumnDensityPlots = False
-ShowFragmentSputter = False
-ShowRadialPlots = False
+ApertureChecks = None
