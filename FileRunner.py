@@ -6,13 +6,13 @@
 
 import UIVariables
 import FileCreator
+import pyvectorial as pyv
 import yaml
 import io
-from datetime import datetime
 import astropy.units as u
+from datetime import datetime
 from astropy.visualization import quantity_support
 from contextlib import redirect_stdout
-import pyvectorial as pyv
 
 #Method def for getting the output results for the vectorial model
 def singleFileRun(fileName):
