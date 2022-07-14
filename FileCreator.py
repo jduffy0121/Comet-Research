@@ -2,7 +2,7 @@
 #Uses a nested dict data type to write the file.
 #
 #Author: Jacob Duffy
-#Version: 7/8/2022
+#Version: 7/14/2022
 
 import UIVariables
 import yaml
@@ -57,19 +57,13 @@ def createDictionary():
     'radial_substeps' : UIVariables.RadialSubsteps}
 
     #Creates the etc dictionary
-    etc = {'print_binned_times' : UIVariables.PrintBinnedTimes, 
-    'print_column_density' : UIVariables.PrintColumnDensity, 
-    'print_progress' : UIVariables.PrintProgress, 
-    'print_radial_density' : UIVariables.PrintRadialDensity,
+    etc = {'print_binned_times' : True, 'print_column_density' : True, 
+    'print_progress' : True, 'print_radial_density' : True,
     'pyv_coma_pickle' : UIVariables.PyvComaPickle,
-    'pyv_date_of_run' : datetime.now(),
-    'show_3d_column_density_centered' : UIVariables.Show3dColumnDensityCentered,
-    'show_3d_column_density_off_center' : UIVariables.Show3dColumnDensityOffCenter,
-    'show_agreement_check' : UIVariables.ShowAgreementCheck,
-    'show_aperture_checks' : UIVariables.ShowApertureChecks,
-    'show_column_density_plots' : UIVariables.ShowColumnDensityPlots,
-    'show_fragment_sputter' : UIVariables.ShowFragmentSputter,
-    'show_radial_plots' : UIVariables.ShowRadialPlots}
+    'pyv_date_of_run' : datetime.now(), 'show_3d_column_density_centered' : True,
+    'show_3d_column_density_off_center' : True, 'show_agreement_check' : True,
+    'show_aperture_checks' : True, 'show_column_density_plots' : True,
+    'show_fragment_sputter' : True, 'show_radial_plots' : True}
 
     #Creates the final dictionary and returns it
     VectorialModelConfig = {'production' : production, 'parent' : parent, 'comet' : comet,
