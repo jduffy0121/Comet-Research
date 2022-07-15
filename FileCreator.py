@@ -2,13 +2,12 @@
 #Uses a nested dict data type to write the file.
 #
 #Author: Jacob Duffy
-#Version: 7/14/2022
+#Version: 7/15/2022
 
 import UIVariables
 import yaml
 import os
 from datetime import datetime
-   
 
 #Method to create a dictionary based on the variables in UIVariables.py
 #Returns the completed dictionary
