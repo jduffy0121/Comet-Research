@@ -55,18 +55,18 @@ class ExtraResults(QWidget):
     
     #Defines the UI Interface
     def initUI(self):
-        self.RadDensityResults = QLabel(f"{FileRunner.getPrintRadialDensity(self.vmr)}", self)
-        self.RadDensityResults.move(0,0)
-        self.ColumnDensityResults = QLabel(f"{FileRunner.getPrintColumnDensity(self.vmr)}", self)
-        self.ColumnDensityResults.move(600,30)
-        self.AgreementCheckResults = QLabel(f"{FileRunner.getAgreementCheck(self.vmr)}", self)
-        self.AgreementCheckResults.move(1200,30)
+        self.radDensityResults = QLabel(f"{FileRunner.getPrintRadialDensity(self.vmr)}", self)
+        self.radDensityResults.move(0,0)
+        self.columnDensityResults = QLabel(f"{FileRunner.getPrintColumnDensity(self.vmr)}", self)
+        self.columnDensityResults.move(600,30)
+        self.agreementCheckResults = QLabel(f"{FileRunner.getAgreementCheck(self.vmr)}", self)
+        self.agreementCheckResults.move(1200,30)
 
         #Test to see if pickle input was used as UIVariables.ApertureChecks == None if it was as
         #no coma object was created
         if (UIVariables.PickleInputs == False):
-            self.AgreementCheckResults = QLabel(f"{UIVariables.ApertureChecks}", self)
-            self.AgreementCheckResults.move(1200,200)
+            self.agreementCheckResults = QLabel(f"{UIVariables.ApertureChecks}", self)
+            self.agreementCheckResults.move(1200,200)
 
 #Results window.
 #Class to give a pop up window with the results from FileRunner.py using PlotGraphs().
@@ -89,56 +89,56 @@ class ResultsWindow(QWidget):
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.layout = QVBoxLayout() #Defines the full window layout
         self.tabs = QTabWidget() #Creates a widget containing the tabs
-        self.FragSput = QWidget() #Creates a bunch of empty widgets used in each tab
-        self.Radial = QWidget()
-        self.ColumD = QWidget()
-        self.ColumD3 = QWidget()
-        self.ColumD3C = QWidget()
+        self.fragSput = QWidget() #Creates a bunch of empty widgets used in each tab
+        self.radial = QWidget()
+        self.columD = QWidget()
+        self.columD3 = QWidget()
+        self.columD3C = QWidget()
 
         #Plots and displays the fragment sputter graph
-        self.tabs.addTab(self.FragSput, "Fragment Sputter") #Creates the tab named "Fragment Sputter"
-        self.FragSput.layout = QVBoxLayout(self) #Defines the tab layout as "QVBoxLayout"
-        self.FragSputGraph = PlotGraphs(self.vmc, self.vmr, "frag sput", width=5, height=4, dpi=100) #Creates the graph
-        self.FragSputToolbar = NavigationToolbar2QT(self.FragSputGraph, self) #Creates the toolbar for the graph
-        self.FragSput.layout.addWidget(self.FragSputGraph) #Adds the graph to the QVBoxLayout
-        self.FragSput.layout.addWidget(self.FragSputToolbar) #Adds the toolbar to the QVBoxLayout
-        self.FragSput.setLayout(self.FragSput.layout) #Finalizes the tab layout
+        self.tabs.addTab(self.fragSput, "Fragment Sputter") #Creates the tab named "Fragment Sputter"
+        self.fragSput.layout = QVBoxLayout(self) #Defines the tab layout as "QVBoxLayout"
+        self.fragSputGraph = PlotGraphs(self.vmc, self.vmr, "frag sput", width=5, height=4, dpi=100) #Creates the graph
+        self.fragSputToolbar = NavigationToolbar2QT(self.fragSputGraph, self) #Creates the toolbar for the graph
+        self.fragSput.layout.addWidget(self.fragSputGraph) #Adds the graph to the QVBoxLayout
+        self.fragSput.layout.addWidget(self.fragSputToolbar) #Adds the toolbar to the QVBoxLayout
+        self.fragSput.setLayout(self.fragSput.layout) #Finalizes the tab layout
         
         #Plots and displays the radial plot graph
-        self.tabs.addTab(self.Radial, "Radial")
-        self.Radial.layout = QVBoxLayout(self)
-        self.RadialGraph = PlotGraphs(self.vmc, self.vmr, "radial", width=5, height=4, dpi=100)
-        self.RadialToolbar = NavigationToolbar2QT(self.RadialGraph, self)
-        self.Radial.layout.addWidget(self.RadialGraph)
-        self.Radial.layout.addWidget(self.RadialToolbar)
-        self.Radial.setLayout(self.Radial.layout)
+        self.tabs.addTab(self.radial, "Radial")
+        self.radial.layout = QVBoxLayout(self)
+        self.radialGraph = PlotGraphs(self.vmc, self.vmr, "radial", width=5, height=4, dpi=100)
+        self.radialToolbar = NavigationToolbar2QT(self.radialGraph, self)
+        self.radial.layout.addWidget(self.radialGraph)
+        self.radial.layout.addWidget(self.radialToolbar)
+        self.radial.setLayout(self.radial.layout)
         
         #Plots and displays the column density graph
-        self.tabs.addTab(self.ColumD, "Column Density")
-        self.ColumD.layout = QVBoxLayout(self)
-        self.ColumDGraph = PlotGraphs(self.vmc, self.vmr, "column dens", width=5, height=4, dpi=100)
-        self.ColumDToolbar = NavigationToolbar2QT(self.ColumDGraph, self)
-        self.ColumD.layout.addWidget(self.ColumDGraph)
-        self.ColumD.layout.addWidget(self.ColumDToolbar)
-        self.ColumD.setLayout(self.ColumD.layout)
+        self.tabs.addTab(self.columD, "Column Density")
+        self.columD.layout = QVBoxLayout(self)
+        self.columDGraph = PlotGraphs(self.vmc, self.vmr, "column dens", width=5, height=4, dpi=100)
+        self.columDToolbar = NavigationToolbar2QT(self.columDGraph, self)
+        self.columD.layout.addWidget(self.columDGraph)
+        self.columD.layout.addWidget(self.columDToolbar)
+        self.columD.setLayout(self.columD.layout)
         
         #Plots and displays the column density graph (off centered)
-        self.tabs.addTab(self.ColumD3, "Column Density (3D Off Centered)")
-        self.ColumD3.layout = QVBoxLayout(self)
-        self.ColumD3Graph = PlotGraphs(self.vmc, self.vmr, "3d column dens", width=5, height=4, dpi=100)
-        self.ColumD3Toolbar = NavigationToolbar2QT(self.ColumD3Graph, self)
-        self.ColumD3.layout.addWidget(self.ColumD3Graph)
-        self.ColumD3.layout.addWidget(self.ColumD3Toolbar)
-        self.ColumD3.setLayout(self.ColumD3.layout)
+        self.tabs.addTab(self.columD3, "Column Density (3D Off Centered)")
+        self.columD3.layout = QVBoxLayout(self)
+        self.columD3Graph = PlotGraphs(self.vmc, self.vmr, "3d column dens", width=5, height=4, dpi=100)
+        self.columD3Toolbar = NavigationToolbar2QT(self.columD3Graph, self)
+        self.columD3.layout.addWidget(self.columD3Graph)
+        self.columD3.layout.addWidget(self.columD3Toolbar)
+        self.columD3.setLayout(self.columD3.layout)
         
         #Plots and displays the column density graph (centered)
-        self.tabs.addTab(self.ColumD3C, "Column Density (3D Centered)")
-        self.ColumD3C.layout = QVBoxLayout(self)
-        self.ColumD3CGraph = PlotGraphs(self.vmc, self.vmr, "3d column dens cent", width=5, height=4, dpi=100)
-        self.ColumD3CToolbar = NavigationToolbar2QT(self.ColumD3CGraph, self)
-        self.ColumD3C.layout.addWidget(self.ColumD3CGraph)
-        self.ColumD3C.layout.addWidget(self.ColumD3CToolbar)
-        self.ColumD3C.setLayout(self.ColumD3C.layout)
+        self.tabs.addTab(self.columD3C, "Column Density (3D Centered)")
+        self.columD3C.layout = QVBoxLayout(self)
+        self.columD3CGraph = PlotGraphs(self.vmc, self.vmr, "3d column dens cent", width=5, height=4, dpi=100)
+        self.columD3CToolbar = NavigationToolbar2QT(self.columD3CGraph, self)
+        self.columD3C.layout.addWidget(self.columD3CGraph)
+        self.columD3C.layout.addWidget(self.columD3CToolbar)
+        self.columD3C.setLayout(self.columD3C.layout)
     
         self.tabs.addTab(ExtraResults(self.vmr), "Extra") #Creates the extra tab by referencing ExtraResults()
         self.layout.addWidget(self.tabs) #Adds all tabs to the Results window
@@ -170,109 +170,109 @@ class TimeVarWindow(QWidget):
         self.label3 = QLabel("Square", self)
         self.label3.setFont((QFont('Arial', 18)))
         self.label3.move(150,500)
-        self.TVSineBox = QCheckBox("*Select Sine Time Variation", self)
-        self.TVSineBox.setChecked(False)
-        self.TVSineBox.move(20,100)
-        self.TVSineBox.resize(500,40)
-        self.TVGausBox = QCheckBox("*Select Gaussian Time Variation", self)
-        self.TVGausBox.setChecked(False)
-        self.TVGausBox.move(800,100)
-        self.TVGausBox.resize(500,40)
-        self.TVSquareBox = QCheckBox("*Select Square Pulse Time Variation", self)
-        self.TVSquareBox.setChecked(False)
-        self.TVSquareBox.move(20,580)
-        self.TVSquareBox.resize(500,40)
-        self.NoTVBox = QCheckBox("*Select For No Time Variation", self)
-        self.NoTVBox.setChecked(True)
-        self.NoTVBox.move(800,580)
-        self.NoTVBox.resize(500,40)
+        self.tVSineBox = QCheckBox("*Select Sine Time Variation", self)
+        self.tVSineBox.setChecked(False)
+        self.tVSineBox.move(20,100)
+        self.tVSineBox.resize(500,40)
+        self.tVGausBox = QCheckBox("*Select Gaussian Time Variation", self)
+        self.tVGausBox.setChecked(False)
+        self.tVGausBox.move(800,100)
+        self.tVGausBox.resize(500,40)
+        self.tVSquareBox = QCheckBox("*Select Square Pulse Time Variation", self)
+        self.tVSquareBox.setChecked(False)
+        self.tVSquareBox.move(20,580)
+        self.tVSquareBox.resize(500,40)
+        self.noTVBox = QCheckBox("*Select For No Time Variation", self)
+        self.noTVBox.setChecked(True)
+        self.noTVBox.move(800,580)
+        self.noTVBox.resize(500,40)
 
         #Creates UI elements for sine input
-        self.SineAmpText = QLabel("Input Amplitude: ", self)
-        self.SineAmpText.move(20,180)
-        self.SineAmpText.resize(300,40)
-        self.SineAmpBox = QLineEdit(self)
-        self.SineAmpBox.move(240,180)
-        self.SineAmpBox.resize(180,40)
-        self.SineAmpUnits = QLabel("molecules/sec", self)
-        self.SineAmpUnits.move(430,180)
-        self.SineAmpUnits.resize(300,40)
-        self.SinePeriodText = QLabel("Input Period: ", self)
-        self.SinePeriodText.move(20,240)
-        self.SinePeriodText.resize(300,40)
-        self.SinePeriodBox = QLineEdit(self)
-        self.SinePeriodBox.move(200,240)
-        self.SinePeriodBox.resize(180,40)
-        self.SinePeriodUnits = QLabel("hours", self)
-        self.SinePeriodUnits.move(390,240)
-        self.SinePeriodUnits.resize(300,40)
-        self.SineDeltaText = QLabel("Input Delta: ", self)
-        self.SineDeltaText.move(20,300)
-        self.SineDeltaText.resize(300,40)
-        self.SineDeltaBox = QLineEdit(self)
-        self.SineDeltaBox.move(190,300)
-        self.SineDeltaBox.resize(180,40)
-        self.SineDeltaUnits = QLabel("angular offset in hours", self)
-        self.SineDeltaUnits.move(380,300)
-        self.SineDeltaUnits.resize(300,40)
+        self.sineAmpText = QLabel("Input Amplitude: ", self)
+        self.sineAmpText.move(20,180)
+        self.sineAmpText.resize(300,40)
+        self.sineAmpBox = QLineEdit(self)
+        self.sineAmpBox.move(240,180)
+        self.sineAmpBox.resize(180,40)
+        self.sineAmpUnits = QLabel("molecules/sec", self)
+        self.sineAmpUnits.move(430,180)
+        self.sineAmpUnits.resize(300,40)
+        self.sinePeriodText = QLabel("Input Period: ", self)
+        self.sinePeriodText.move(20,240)
+        self.sinePeriodText.resize(300,40)
+        self.sinePeriodBox = QLineEdit(self)
+        self.sinePeriodBox.move(200,240)
+        self.sinePeriodBox.resize(180,40)
+        self.sinePeriodUnits = QLabel("hours", self)
+        self.sinePeriodUnits.move(390,240)
+        self.sinePeriodUnits.resize(300,40)
+        self.sineDeltaText = QLabel("Input Delta: ", self)
+        self.sineDeltaText.move(20,300)
+        self.sineDeltaText.resize(300,40)
+        self.sineDeltaBox = QLineEdit(self)
+        self.sineDeltaBox.move(190,300)
+        self.sineDeltaBox.resize(180,40)
+        self.sineDeltaUnits = QLabel("angular offset in hours", self)
+        self.sineDeltaUnits.move(380,300)
+        self.sineDeltaUnits.resize(300,40)
 
         #Creates UI elements for gaussian input
-        self.GausAmpText = QLabel("Input Amplitude: ", self)
-        self.GausAmpText.move(800,180)
-        self.GausAmpText.resize(300,40)
-        self.GausAmpBox = QLineEdit(self)
-        self.GausAmpBox.move(1020,180)
-        self.GausAmpBox.resize(180,40)
-        self.GausAmpUnits = QLabel("molecules/sec", self)
-        self.GausAmpUnits.move(1210,180)
-        self.GausAmpUnits.resize(300,40)
-        self.GausStdText = QLabel("Input Standard Deviation: ", self)
-        self.GausStdText.move(800,240)
-        self.GausStdText.resize(350,40)
-        self.GausStdBox = QLineEdit(self)
-        self.GausStdBox.move(1120,240)
-        self.GausStdBox.resize(180,40)
-        self.GausStdUnits = QLabel("hours", self)
-        self.GausStdUnits.move(1310,240)
-        self.GausStdUnits.resize(300,40)
-        self.GausTPText = QLabel("Input Time at Peak: ", self)
-        self.GausTPText.move(800,300)
-        self.GausTPText.resize(350,40)
-        self.GausTPBox = QLineEdit(self)
-        self.GausTPBox.move(1045,300)
-        self.GausTPBox.resize(180,40)
-        self.GausTPUnits = QLabel("hours", self)
-        self.GausTPUnits.move(1235,300)
-        self.GausTPUnits.resize(300,40)
+        self.gausAmpText = QLabel("Input Amplitude: ", self)
+        self.gausAmpText.move(800,180)
+        self.gausAmpText.resize(300,40)
+        self.gausAmpBox = QLineEdit(self)
+        self.gausAmpBox.move(1020,180)
+        self.gausAmpBox.resize(180,40)
+        self.gausAmpUnits = QLabel("molecules/sec", self)
+        self.gausAmpUnits.move(1210,180)
+        self.gausAmpUnits.resize(300,40)
+        self.gausStdText = QLabel("Input Standard Deviation: ", self)
+        self.gausStdText.move(800,240)
+        self.gausStdText.resize(350,40)
+        self.gausStdBox = QLineEdit(self)
+        self.gausStdBox.move(1120,240)
+        self.gausStdBox.resize(180,40)
+        self.gausStdUnits = QLabel("hours", self)
+        self.gausStdUnits.move(1310,240)
+        self.gausStdUnits.resize(300,40)
+        self.gausTPText = QLabel("Input Time at Peak: ", self)
+        self.gausTPText.move(800,300)
+        self.gausTPText.resize(350,40)
+        self.gausTPBox = QLineEdit(self)
+        self.gausTPBox.move(1045,300)
+        self.gausTPBox.resize(180,40)
+        self.gausTPUnits = QLabel("hours", self)
+        self.gausTPUnits.move(1235,300)
+        self.gausTPUnits.resize(300,40)
 
         #Creates UI elements for square input
-        self.SquareAmpText = QLabel("Input Amplitude: ", self)
-        self.SquareAmpText.move(20,640)
-        self.SquareAmpText.resize(300,40)
-        self.SquareAmpBox = QLineEdit(self)
-        self.SquareAmpBox.move(240,640)
-        self.SquareAmpBox.resize(180,40)
-        self.SquareAmpUnits = QLabel("molecules/sec", self)
-        self.SquareAmpUnits.move(430,640)
-        self.SquareAmpUnits.resize(300,40)
-        self.SquareDurText = QLabel("Input Duration: ", self)
-        self.SquareDurText.move(20,700)
-        self.SquareDurText.resize(300,40)
-        self.SquareDurBox = QLineEdit(self)
-        self.SquareDurBox.move(230,700)
-        self.SquareDurBox.resize(180,40)
-        self.SquareDurUnits = QLabel("hours", self)
-        self.SquareDurUnits.move(420,700)
-        self.SquareDurUnits.resize(300,40)
-        self.SquareTSPText = QLabel("Input Start of Pulse: ", self)
-        self.SquareTSPText.move(20,760)
-        self.SquareTSPText.resize(300,40)
-        self.SquareTSPBox = QLineEdit(self)
-        self.SquareTSPBox.move(280,760)
-        self.SquareTSPBox.resize(180,40)
-        self.SquareTSPUnits = QLabel("hours", self)
-        self.SquareTSPUnits.move(470,760)
-        self.SquareTSPUnits.resize(300,40)
+        self.squareAmpText = QLabel("Input Amplitude: ", self)
+        self.squareAmpText.move(20,640)
+        self.squareAmpText.resize(300,40)
+        self.squareAmpBox = QLineEdit(self)
+        self.squareAmpBox.move(240,640)
+        self.squareAmpBox.resize(180,40)
+        self.squareAmpUnits = QLabel("molecules/sec", self)
+        self.squareAmpUnits.move(430,640)
+        self.squareAmpUnits.resize(300,40)
+        self.squareDurText = QLabel("Input Duration: ", self)
+        self.squareDurText.move(20,700)
+        self.squareDurText.resize(300,40)
+        self.squareDurBox = QLineEdit(self)
+        self.squareDurBox.move(230,700)
+        self.squareDurBox.resize(180,40)
+        self.squareDurUnits = QLabel("hours", self)
+        self.squareDurUnits.move(420,700)
+        self.squareDurUnits.resize(300,40)
+        self.squareTSPText = QLabel("Input Start of Pulse: ", self)
+        self.squareTSPText.move(20,760)
+        self.squareTSPText.resize(300,40)
+        self.squareTSPBox = QLineEdit(self)
+        self.squareTSPBox.move(280,760)
+        self.squareTSPBox.resize(180,40)
+        self.squareTSPUnits = QLabel("hours", self)
+        self.squareTSPUnits.move(470,760)
+        self.squareTSPUnits.resize(300,40)
 
         self.button = QPushButton('Set Time Variation Method', self)
         self.button.move(800,820)
@@ -314,31 +314,31 @@ class TimeVarWindow(QWidget):
         UIVariables.SquareT_Start = None
 
         #Throws an error if no time varaition types are selected
-        if((self.TVSineBox.isChecked() == False) and 
-            (self.TVGausBox.isChecked() == False) and
-            (self.TVSquareBox.isChecked() == False) and
-            (self.NoTVBox.isChecked() == False)):
+        if((self.tVSineBox.isChecked() == False) and 
+            (self.tVGausBox.isChecked() == False) and
+            (self.tVSquareBox.isChecked() == False) and
+            (self.noTVBox.isChecked() == False)):
             self.popUpWin('no input')
             return
         
         #Declarations if sine time variation is selected
-        if((self.TVSineBox.isChecked() == True) and 
-            (self.TVGausBox.isChecked() == False) and
-            (self.TVSquareBox.isChecked() == False) and
-            (self.NoTVBox.isChecked() == False)):
+        if((self.tVSineBox.isChecked() == True) and 
+            (self.tVGausBox.isChecked() == False) and
+            (self.tVSquareBox.isChecked() == False) and
+            (self.noTVBox.isChecked() == False)):
             UIVariables.TimeVariationType = 'sine wave'
-            if(FileRunner.valueTest(self.SineAmpBox.text(), 'float')):
-                UIVariables.SinAmp = float(self.SineAmpBox.text())
+            if(FileRunner.valueTest(self.sineAmpBox.text(), 'float')):
+                UIVariables.SinAmp = float(self.sineAmpBox.text())
             else:
                 self.popUpWin('incorrect data', 'Amplitude')
                 return
-            if(FileRunner.valueTest(self.SinePeriodBox.text(), 'float')):
-                UIVariables.SinPer = float(self.SinePeriodBox.text())
+            if(FileRunner.valueTest(self.sinePeriodBox.text(), 'float')):
+                UIVariables.SinPer = float(self.sinePeriodBox.text())
             else:
                 self.popUpWin('incorrect data', 'Period')
                 return
-            if(FileRunner.valueTest(self.SineDeltaBox.text(), 'float')):
-                UIVariables.SinDelta = float(self.SineDeltaBox.text())
+            if(FileRunner.valueTest(self.sineDeltaBox.text(), 'float')):
+                UIVariables.SinDelta = float(self.sineDeltaBox.text())
             else:
                 self.popUpWin('incorrect data', 'Delta')
                 return
@@ -346,23 +346,23 @@ class TimeVarWindow(QWidget):
             return
 
         #Declarations if gaussian time variation is selected
-        elif((self.TVSineBox.isChecked() == False) and 
-            (self.TVGausBox.isChecked() == True) and
-            (self.TVSquareBox.isChecked() == False) and
-            (self.NoTVBox.isChecked() == False)):
+        elif((self.tVSineBox.isChecked() == False) and 
+            (self.tVGausBox.isChecked() == True) and
+            (self.tVSquareBox.isChecked() == False) and
+            (self.noTVBox.isChecked() == False)):
             UIVariables.TimeVariationType = 'gaussian'
-            if(FileRunner.valueTest(self.GausAmpBox.text(), 'float')):
-                UIVariables.GausAmp = float(self.GausAmpBox.text())
+            if(FileRunner.valueTest(self.gausAmpBox.text(), 'float')):
+                UIVariables.GausAmp = float(self.gausAmpBox.text())
             else:
                 self.popUpWin('incorrect data', 'Amplitude')
                 return
-            if(FileRunner.valueTest(self.GausStdBox.text(), 'float')):
-                UIVariables.GausSTD = float(self.GausStdBox.text())
+            if(FileRunner.valueTest(self.gausStdBox.text(), 'float')):
+                UIVariables.GausSTD = float(self.gausStdBox.text())
             else:
                 self.popUpWin('incorrect data', 'Standard Deviation')
                 return
-            if(FileRunner.valueTest(self.GausTPBox.text(), 'float')):
-                UIVariables.GausT_Max = float(self.GausTPBox.text())
+            if(FileRunner.valueTest(self.gausTPBox.text(), 'float')):
+                UIVariables.GausT_Max = float(self.gausTPBox.text())
             else:
                 self.popUpWin('incorrect data', 'Time at Peak')
                 return
@@ -370,23 +370,23 @@ class TimeVarWindow(QWidget):
             return
 
         #Declarations if square time variation is selected
-        elif((self.TVSineBox.isChecked() == False) and 
-            (self.TVGausBox.isChecked() == False) and
-            (self.TVSquareBox.isChecked() == True) and
-            (self.NoTVBox.isChecked() == False)):
+        elif((self.tVSineBox.isChecked() == False) and 
+            (self.tVGausBox.isChecked() == False) and
+            (self.tVSquareBox.isChecked() == True) and
+            (self.noTVBox.isChecked() == False)):
             UIVariables.TimeVariationType = 'square pulse'
-            if(FileRunner.valueTest(self.SquareAmpBox.text(), 'float')):
-                UIVariables.SquareAmp = float(self.SquareAmpBox.text())
+            if(FileRunner.valueTest(self.squareAmpBox.text(), 'float')):
+                UIVariables.SquareAmp = float(self.squareAmpBox.text())
             else:
                 self.popUpWin('incorrect data', 'Amplitude')
                 return
-            if(FileRunner.valueTest(self.SquareDurBox.text(), 'float')):
-                UIVariables.SquareDur = float(self.SquareDurBox.text())
+            if(FileRunner.valueTest(self.squareDurBox.text(), 'float')):
+                UIVariables.SquareDur = float(self.squareDurBox.text())
             else:
                 self.popUpWin('incorrect data', 'Duration')
                 return
-            if(FileRunner.valueTest(self.SquareTSPBox.text(), 'float')):
-                UIVariables.SquareT_Start = float(self.SquareTSPBox.text())
+            if(FileRunner.valueTest(self.squareTSPBox.text(), 'float')):
+                UIVariables.SquareT_Start = float(self.squareTSPBox.text())
             else:
                 self.popUpWin('incorrect data', 'Start of Pulse')
                 return
@@ -394,10 +394,10 @@ class TimeVarWindow(QWidget):
             return
         
         #Declarations if no time variation is selected
-        elif((self.TVSineBox.isChecked() == False) and 
-            (self.TVGausBox.isChecked() == False) and
-            (self.TVSquareBox.isChecked() == False) and
-            (self.NoTVBox.isChecked() == True)):
+        elif((self.tVSineBox.isChecked() == False) and 
+            (self.tVGausBox.isChecked() == False) and
+            (self.tVSquareBox.isChecked() == False) and
+            (self.noTVBox.isChecked() == True)):
             self.popUpWin('success', 'None')
             return
         
@@ -508,187 +508,187 @@ class App(QMainWindow):
         self.textPro.setFont((QFont('Arial', 12)))
         self.textPro.move(50,160)
         self.textPro.resize(400,40)
-        self.BaseQText = QLabel("Input Base Q: ", self)
-        self.BaseQText.move(20,220)
-        self.BaseQText.resize(180,40)
-        self.BaseQBox = QLineEdit(self) #Creates a textbox for user to input data in
-        self.BaseQBox.move(200,220)
-        self.BaseQBox.resize(180,40)
-        self.BaseQUnits = QLabel("prod/sec", self)
-        self.BaseQUnits.move(400,220)
-        self.BaseQUnits.resize(180,40)
-        self.TimeVarBox = QPushButton("*Select Time Variation Method", self)
-        self.TimeVarBox.move(20,280)
-        self.TimeVarBox.resize(400,40)
-        self.TimeVarBox.clicked.connect(self.timeVarWin) #Defines the method call when the button is clicked
+        self.baseQText = QLabel("Input Base Q: ", self)
+        self.baseQText.move(20,220)
+        self.baseQText.resize(180,40)
+        self.baseQBox = QLineEdit(self) #Creates a textbox for user to input data in
+        self.baseQBox.move(200,220)
+        self.baseQBox.resize(180,40)
+        self.baseQUnits = QLabel("prod/sec", self)
+        self.baseQUnits.move(400,220)
+        self.baseQUnits.resize(180,40)
+        self.timeVarBox = QPushButton("*Select Time Variation Method", self)
+        self.timeVarBox.move(20,280)
+        self.timeVarBox.resize(400,40)
+        self.timeVarBox.clicked.connect(self.timeVarWin) #Defines the method call when the button is clicked
 
         #Creates manual input UI elements for the Parent section
         self.textPar = QLabel("Parent Variables", self)
         self.textPar.setFont((QFont('Arial', 12)))
         self.textPar.move(50,380)
         self.textPar.resize(400,40)
-        self.ParNameText = QLabel("*Input Parent Name: ", self)
-        self.ParNameText.move(20,440)
-        self.ParNameText.resize(300,40)
-        self.ParNameBox = QLineEdit(self)
-        self.ParNameBox.move(270,440)
-        self.ParNameBox.resize(180,40)
-        self.OutVText = QLabel("Input Outflow Velocity: ", self)
-        self.OutVText.move(20,500)
-        self.OutVText.resize(300,40)
-        self.OutVBox = QLineEdit(self)
-        self.OutVBox.move(300,500)
-        self.OutVBox.resize(180,40)
-        self.OutVUnits = QLabel("km/hour", self)
-        self.OutVUnits.move(500,500)
-        self.OutVUnits.resize(300,40)
-        self.TauDText = QLabel("Input Tau_D: ", self)
-        self.TauDText.move(20,560)
-        self.TauDText.resize(300,40)
-        self.TauDBox = QLineEdit(self)
-        self.TauDBox.move(185,560)
-        self.TauDBox.resize(180,40)
-        self.TauDUnits = QLabel("sec", self)
-        self.TauDUnits.move(385,560)
-        self.TauDUnits.resize(300,40)
-        self.TauTParText = QLabel("Input Tau_T: ", self)
-        self.TauTParText.move(20,620)
-        self.TauTParText.resize(300,40)
-        self.TauTParUnits = QLabel("sec", self)
-        self.TauTParUnits.move(385,620)
-        self.TauTParUnits.resize(300,40)
-        self.TauTParBox = QLineEdit(self)
-        self.TauTParBox.move(185,620)
-        self.TauTParBox.resize(180,40)
-        self.SigmaText = QLabel("Input Sigma: ", self)
-        self.SigmaText.move(20,680)
-        self.SigmaText.resize(300,40)
-        self.SigmaBox = QLineEdit(self)
-        self.SigmaBox.move(185,680)
-        self.SigmaBox.resize(180,40)
-        self.SigmaUnits = QLabel("cm^2", self)
-        self.SigmaUnits.move(385,680)
-        self.SigmaUnits.resize(300,40)
-        self.T_DText = QLabel("Input T to D Ratio: ", self)
-        self.T_DText.move(20,740)
-        self.T_DText.resize(300,40)
-        self.T_DBox = QLineEdit(self)
-        self.T_DBox.move(250,740)
-        self.T_DBox.resize(180,40) 
+        self.parNameText = QLabel("*Input Parent Name: ", self)
+        self.parNameText.move(20,440)
+        self.parNameText.resize(300,40)
+        self.parNameBox = QLineEdit(self)
+        self.parNameBox.move(270,440)
+        self.parNameBox.resize(180,40)
+        self.outVText = QLabel("Input Outflow Velocity: ", self)
+        self.outVText.move(20,500)
+        self.outVText.resize(300,40)
+        self.outVBox = QLineEdit(self)
+        self.outVBox.move(300,500)
+        self.outVBox.resize(180,40)
+        self.outVUnits = QLabel("km/hour", self)
+        self.outVUnits.move(500,500)
+        self.outVUnits.resize(300,40)
+        self.tauDText = QLabel("Input Tau_D: ", self)
+        self.tauDText.move(20,560)
+        self.tauDText.resize(300,40)
+        self.tauDBox = QLineEdit(self)
+        self.tauDBox.move(185,560)
+        self.tauDBox.resize(180,40)
+        self.tauDUnits = QLabel("sec", self)
+        self.tauDUnits.move(385,560)
+        self.tauDUnits.resize(300,40)
+        self.tauTParText = QLabel("Input Tau_T: ", self)
+        self.tauTParText.move(20,620)
+        self.tauTParText.resize(300,40)
+        self.tauTParUnits = QLabel("sec", self)
+        self.tauTParUnits.move(385,620)
+        self.tauTParUnits.resize(300,40)
+        self.tauTParBox = QLineEdit(self)
+        self.tauTParBox.move(185,620)
+        self.tauTParBox.resize(180,40)
+        self.sigmaText = QLabel("Input Sigma: ", self)
+        self.sigmaText.move(20,680)
+        self.sigmaText.resize(300,40)
+        self.sigmaBox = QLineEdit(self)
+        self.sigmaBox.move(185,680)
+        self.sigmaBox.resize(180,40)
+        self.sigmaUnits = QLabel("cm^2", self)
+        self.sigmaUnits.move(385,680)
+        self.sigmaUnits.resize(300,40)
+        self.t_DText = QLabel("Input T to D Ratio: ", self)
+        self.t_DText.move(20,740)
+        self.t_DText.resize(300,40)
+        self.t_DBox = QLineEdit(self)
+        self.t_DBox.move(250,740)
+        self.t_DBox.resize(180,40) 
 
         #Creates manual input UI elements for the Fragment section  
         self.textFrag = QLabel("Fragment Variables", self)
         self.textFrag.setFont((QFont('Arial', 12)))
         self.textFrag.move(50,840)
         self.textFrag.resize(400,40) 
-        self.FragNameText = QLabel("*Input Fragment Name: ", self)
-        self.FragNameText.move(20,900)
-        self.FragNameText.resize(300,40)
-        self.FragNameBox = QLineEdit(self)
-        self.FragNameBox.move(310,900)
-        self.FragNameBox.resize(180,40)  
-        self.VPhotoText = QLabel("Input VPhoto: ", self)
-        self.VPhotoText.move(20,960)
-        self.VPhotoText.resize(300,40)
-        self.VPhotoBox = QLineEdit(self)
-        self.VPhotoBox.move(190,960)
-        self.VPhotoBox.resize(180,40)
-        self.VPhotoUnits = QLabel("km/hour", self)
-        self.VPhotoUnits.move(390,960)
-        self.VPhotoUnits.resize(300,40)
-        self.TauTFragText = QLabel("Input Tau_T: ", self)
-        self.TauTFragText.move(20,1020)
-        self.TauTFragText.resize(300,40)
-        self.TauTFragBox = QLineEdit(self)
-        self.TauTFragBox.move(185,1020)
-        self.TauTFragBox.resize(180,40)    
-        self.TauTFragUnits = QLabel("sec", self)
-        self.TauTFragUnits.move(385,1020)
-        self.TauTFragUnits.resize(300,40)
+        self.fragNameText = QLabel("*Input Fragment Name: ", self)
+        self.fragNameText.move(20,900)
+        self.fragNameText.resize(300,40)
+        self.fragNameBox = QLineEdit(self)
+        self.fragNameBox.move(310,900)
+        self.fragNameBox.resize(180,40)  
+        self.vPhotoText = QLabel("Input VPhoto: ", self)
+        self.vPhotoText.move(20,960)
+        self.vPhotoText.resize(300,40)
+        self.vPhotoBox = QLineEdit(self)
+        self.vPhotoBox.move(190,960)
+        self.vPhotoBox.resize(180,40)
+        self.vPhotoUnits = QLabel("km/hour", self)
+        self.vPhotoUnits.move(390,960)
+        self.vPhotoUnits.resize(300,40)
+        self.tauTFragText = QLabel("Input Tau_T: ", self)
+        self.tauTFragText.move(20,1020)
+        self.tauTFragText.resize(300,40)
+        self.tauTFragBox = QLineEdit(self)
+        self.tauTFragBox.move(185,1020)
+        self.tauTFragBox.resize(180,40)    
+        self.tauTFragUnits = QLabel("sec", self)
+        self.tauTFragUnits.move(385,1020)
+        self.tauTFragUnits.resize(300,40)
 
         #Creates manual input UI elements for the Comet section
         self.textPar = QLabel("Comet Variables", self)
         self.textPar.setFont((QFont('Arial', 12)))
         self.textPar.move(880,160)
         self.textPar.resize(400,40)
-        self.CometNameText = QLabel("*Input Comet Name: ", self)
-        self.CometNameText.move(850,220)
-        self.CometNameText.resize(300,40)
-        self.CometNameBox = QLineEdit(self)
-        self.CometNameBox.move(1110,220)
-        self.CometNameBox.resize(180,40) 
-        self.RHText = QLabel("Input Rh: ", self)
-        self.RHText.move(850,280)
-        self.RHText.resize(300,40)
-        self.RHBox = QLineEdit(self)
-        self.RHBox.move(980,280)
-        self.RHBox.resize(180,40)
-        self.RHUnits = QLabel("AU", self)
-        self.RHUnits.move(1180,280)
-        self.RHUnits.resize(300,40)
-        self.DeltaComText = QLabel("*Input Delta: ", self)
-        self.DeltaComText.move(850,340)
-        self.DeltaComText.resize(300,40)
-        self.DeltaComBox = QLineEdit(self)
-        self.DeltaComBox.move(1020,340)
-        self.DeltaComBox.resize(180,40)
-        self.TFMethText = QLabel("*Transformation Method: ", self)
-        self.TFMethText.move(850,400)
-        self.TFMethText.resize(450,40)
-        self.TFApplied1 = QCheckBox("Cochran", self) #Set checkable box
-        self.TFApplied1.setChecked(False) #Set checked box to be unchecked when the window is created
-        self.TFApplied1.move(1170,400)
-        self.TFApplied1.resize(450,40)
-        self.TFApplied2 = QCheckBox("Fortran", self)
-        self.TFApplied2.setChecked(False)
-        self.TFApplied2.move(1330,400)
-        self.TFApplied2.resize(450,40)
-        self.TFApplied3 = QCheckBox("None", self)
-        self.TFApplied3.setChecked(True)
-        self.TFApplied3.move(1480,400)
-        self.TFApplied3.resize(450,40)        
+        self.cometNameText = QLabel("*Input Comet Name: ", self)
+        self.cometNameText.move(850,220)
+        self.cometNameText.resize(300,40)
+        self.cometNameBox = QLineEdit(self)
+        self.cometNameBox.move(1110,220)
+        self.cometNameBox.resize(180,40) 
+        self.rHText = QLabel("Input Rh: ", self)
+        self.rHText.move(850,280)
+        self.rHText.resize(300,40)
+        self.rHBox = QLineEdit(self)
+        self.rHBox.move(980,280)
+        self.rHBox.resize(180,40)
+        self.rHUnits = QLabel("AU", self)
+        self.rHUnits.move(1180,280)
+        self.rHUnits.resize(300,40)
+        self.deltaComText = QLabel("*Input Delta: ", self)
+        self.deltaComText.move(850,340)
+        self.deltaComText.resize(300,40)
+        self.deltaComBox = QLineEdit(self)
+        self.deltaComBox.move(1020,340)
+        self.deltaComBox.resize(180,40)
+        self.tFMethText = QLabel("*Transformation Method: ", self)
+        self.tFMethText.move(850,400)
+        self.tFMethText.resize(450,40)
+        self.tFApplied1 = QCheckBox("Cochran", self) #Set checkable box
+        self.tFApplied1.setChecked(False) #Set checked box to be unchecked when the window is created
+        self.tFApplied1.move(1170,400)
+        self.tFApplied1.resize(450,40)
+        self.tFApplied2 = QCheckBox("Fortran", self)
+        self.tFApplied2.setChecked(False)
+        self.tFApplied2.move(1330,400)
+        self.tFApplied2.resize(450,40)
+        self.tFApplied3 = QCheckBox("None", self)
+        self.tFApplied3.setChecked(True)
+        self.tFApplied3.move(1480,400)
+        self.tFApplied3.resize(450,40)        
 
         #Creates manual input UI elements for the Grid section
         self.textGrid = QLabel("Grid Variables", self)
         self.textGrid.setFont((QFont('Arial', 12)))
         self.textGrid.move(880,500)
         self.textGrid.resize(400,40)
-        self.APointsText = QLabel("Input Angular Points: ", self)
-        self.APointsText.move(850,560)
-        self.APointsText.resize(450,40)
-        self.APointsBox = QLineEdit(self)
-        self.APointsBox.move(1115,560)
-        self.APointsBox.resize(180,40)
-        self.RadPointsText = QLabel("Input Radial Points: ", self)
-        self.RadPointsText.move(850,620)
-        self.RadPointsText.resize(450,40)
-        self.RadPointsBox = QLineEdit(self)
-        self.RadPointsBox.move(1110,620)
-        self.RadPointsBox.resize(180,40)
-        self.RadSubText = QLabel("Input Radial Substeps: ", self)
-        self.RadSubText.move(850,680)
-        self.RadSubText.resize(450,40)
-        self.RadSubBox = QLineEdit(self)
-        self.RadSubBox.move(1130,680)
-        self.RadSubBox.resize(180,40)
+        self.aPointsText = QLabel("Input Angular Points: ", self)
+        self.aPointsText.move(850,560)
+        self.aPointsText.resize(450,40)
+        self.aPointsBox = QLineEdit(self)
+        self.aPointsBox.move(1115,560)
+        self.aPointsBox.resize(180,40)
+        self.radPointsText = QLabel("Input Radial Points: ", self)
+        self.radPointsText.move(850,620)
+        self.radPointsText.resize(450,40)
+        self.radPointsBox = QLineEdit(self)
+        self.radPointsBox.move(1110,620)
+        self.radPointsBox.resize(180,40)
+        self.radSubText = QLabel("Input Radial Substeps: ", self)
+        self.radSubText.move(850,680)
+        self.radSubText.resize(450,40)
+        self.radSubBox = QLineEdit(self)
+        self.radSubBox.move(1130,680)
+        self.radSubBox.resize(180,40)
 
         #Creates other UI elements such as certain check boxes/text and other UI stuff
-        self.KeepFile = QCheckBox("*Keep Created .yaml File", self)
-        self.KeepFile.setChecked(False)
-        self.KeepFile.move(850,780)
-        self.KeepFile.resize(500,40)
-        self.FileInputBox = QCheckBox("*Select for .yaml file input", self)
-        self.FileInputBox.setChecked(False)
-        self.FileInputBox.move(720,1040)
-        self.FileInputBox.resize(500,40)
-        self.PickleInputBox = QCheckBox("*Select for pickle file input", self)
-        self.PickleInputBox.setChecked(False)
-        self.PickleInputBox.move(1170,1040)
-        self.PickleInputBox.resize(500,40)
-        self.ManInputBox = QCheckBox("*Select for Manual Inputs", self)
-        self.ManInputBox.setChecked(False)
-        self.ManInputBox.move(540,100)
-        self.ManInputBox.resize(500,40)
+        self.keepFile = QCheckBox("*Keep Created .yaml File", self)
+        self.keepFile.setChecked(False)
+        self.keepFile.move(850,780)
+        self.keepFile.resize(500,40)
+        self.fileInputBox = QCheckBox("*Select for .yaml file input", self)
+        self.fileInputBox.setChecked(False)
+        self.fileInputBox.move(720,1040)
+        self.fileInputBox.resize(500,40)
+        self.pickleInputBox = QCheckBox("*Select for pickle file input", self)
+        self.pickleInputBox.setChecked(False)
+        self.pickleInputBox.move(1170,1040)
+        self.pickleInputBox.resize(500,40)
+        self.manInputBox = QCheckBox("*Select for Manual Inputs", self)
+        self.manInputBox.setChecked(False)
+        self.manInputBox.move(540,100)
+        self.manInputBox.resize(500,40)
         self.button = QPushButton('Run Program', self)
         self.button.move(1350,1320)
         self.button.resize(400,40)
@@ -704,10 +704,10 @@ class App(QMainWindow):
         self.fileOut = QListWidget(self) #Creates a widget to display the download path for yaml upload
         self.fileOut.setGeometry(60,400,400,60) #Sets the geometry for the QListWidget
         self.fileOut.move(720,1160)
-        self.PickleBox = QPushButton("Pyv Coma Pickle File Upload", self)
-        self.PickleBox.move(1170,1100)
-        self.PickleBox.resize(400,40)
-        self.PickleBox.clicked.connect(self.pickleInp)
+        self.pickleBox = QPushButton("Pyv Coma Pickle File Upload", self)
+        self.pickleBox.move(1170,1100)
+        self.pickleBox.resize(400,40)
+        self.pickleBox.clicked.connect(self.pickleInp)
         self.pickleOut = QListWidget(self)
         self.pickleOut.setGeometry(60,400,400,60)
         self.pickleOut.move(1170,1160)
@@ -729,7 +729,7 @@ class App(QMainWindow):
             elif(type == 'too many input'): #Too many inputs given
                 self.message.setText("Too many input method types selected (manual, yaml, pickle). Please try again.")
             elif(type == 'incorrect yaml'): #Yaml file has an incorrect data type, almost always string to float/int
-                self.message.setText("The .yaml file has an incorrect data entry. Please try again.")
+                self.message.setText(f"The .yaml file is either missing or has an incorrect data type assigned to: \"{message}\". Please try again.")
             elif(type == 'incorrect pickle'): #Pickle file can not be understood by pyvectorial
                 self.message.setText("The pickle file could not be understood. Please try again.")
             elif(type == 'no file'): #User selected yaml or pickle file input but never gave a file
@@ -787,93 +787,93 @@ class App(QMainWindow):
         UIVariables.FileName = None
 
         #Throws an exception if there is no input type selected
-        if((self.ManInputBox.isChecked() == False) and
-            (self.FileInputBox.isChecked() == False) and
-            (self.PickleInputBox.isChecked() == False)):
+        if((self.manInputBox.isChecked() == False) and
+            (self.fileInputBox.isChecked() == False) and
+            (self.pickleInputBox.isChecked() == False)):
             self.popUpWin('no input')
             return
 
         #Manual input runner
         #Test proper user input and assigns the results to global variables in UIVariables.py
         #Throws errors if user input is not correct
-        if(self.ManInputBox.isChecked()):
+        if(self.manInputBox.isChecked()):
             UIVariables.ManInputs = True
             UIVariables.FileName = 'pyvectorial.yaml'
 
             #Param Declarations
-            if(FileRunner.valueTest(self.BaseQBox.text(), 'float')): #Test to see if the manual input is a correct type for all data required
-                UIVariables.BaseQ = float(self.BaseQBox.text()) #Sets the variable converted from string to float to UIVariables.py
+            if(FileRunner.valueTest(self.baseQBox.text(), 'float')): #Test to see if the manual input is a correct type for all data required
+                UIVariables.BaseQ = float(self.baseQBox.text()) #Sets the variable converted from string to float to UIVariables.py
             else:
                 self.popUpWin('incorrect data', 'Base Q') #Throws an error if any data is an incorrect type and exits the program
                 return
 
             #Parent Declarations
-            UIVariables.ParentName = self.ParNameBox.text()
-            if(FileRunner.valueTest(self.OutVBox.text(), 'float')):
-                UIVariables.VOutflow = float(self.OutVBox.text())
+            UIVariables.ParentName = self.parNameBox.text()
+            if(FileRunner.valueTest(self.outVBox.text(), 'float')):
+                UIVariables.VOutflow = float(self.outVBox.text())
             else:
                 self.popUpWin('incorrect data', 'Outflow Velocity')
                 return
-            if(FileRunner.valueTest(self.TauDBox.text(), 'float')):
-                UIVariables.TauD = float(self.TauDBox.text())
+            if(FileRunner.valueTest(self.tauDBox.text(), 'float')):
+                UIVariables.TauD = float(self.tauDBox.text())
             else:
                 self.popUpWin('incorrect data', 'Tau_D')
                 return
-            if(FileRunner.valueTest(self.TauTParBox.text(), 'float')):
-                UIVariables.TauTParent = float(self.TauTParBox.text())
+            if(FileRunner.valueTest(self.tauTParBox.text(), 'float')):
+                UIVariables.TauTParent = float(self.tauTParBox.text())
             else:
                 self.popUpWin('incorrect data', 'Tau_T')
                 return
-            if(FileRunner.valueTest(self.SigmaBox.text(), 'float')):
-                UIVariables.Sigma = float(self.SigmaBox.text())
+            if(FileRunner.valueTest(self.sigmaBox.text(), 'float')):
+                UIVariables.Sigma = float(self.sigmaBox.text())
             else:
                 self.popUpWin('incorrect data', 'Sigma')
                 return
-            if(FileRunner.valueTest(self.T_DBox.text(), 'float')):
-                UIVariables.TtoDRatio = float(self.T_DBox.text())
+            if(FileRunner.valueTest(self.t_DBox.text(), 'float')):
+                UIVariables.TtoDRatio = float(self.t_DBox.text())
             else:
                 self.popUpWin('incorrect data', 'T to D Ratio')
                 return
 
             #Fragment Declarations
-            UIVariables.FragmentName = self.FragNameBox.text()
-            if(FileRunner.valueTest(self.VPhotoBox.text(), 'float')):
-                UIVariables.VPhoto = float(self.VPhotoBox.text())
+            UIVariables.FragmentName = self.fragNameBox.text()
+            if(FileRunner.valueTest(self.vPhotoBox.text(), 'float')):
+                UIVariables.VPhoto = float(self.vPhotoBox.text())
             else:
                 self.popUpWin('incorrect data', 'VPhoto')
                 return
-            if(FileRunner.valueTest(self.TauTFragBox.text(), 'float')):
-                UIVariables.TauTFragment = float(self.TauTFragBox.text())
+            if(FileRunner.valueTest(self.tauTFragBox.text(), 'float')):
+                UIVariables.TauTFragment = float(self.tauTFragBox.text())
             else:
                 self.popUpWin('incorrect data', 'Tau_T')
                 return
 
             #Comet Declarations
-            UIVariables.CometName = self.CometNameBox.text()
-            if(FileRunner.valueTest(self.RHBox.text(), 'float')):
-                UIVariables.Rh = float(self.RHBox.text())
+            UIVariables.CometName = self.cometNameBox.text()
+            if(FileRunner.valueTest(self.rHBox.text(), 'float')):
+                UIVariables.Rh = float(self.rHBox.text())
             else:
                 self.popUpWin('incorrect data', 'Rh')
                 return
-            UIVariables.CometDelta = self.DeltaComBox.text()
-            if((self.TFApplied1.isChecked() == False)
-                and (self.TFApplied2.isChecked() == False)
-                and (self.TFApplied3.isChecked() == False)):
+            UIVariables.CometDelta = self.deltaComBox.text()
+            if((self.tFApplied1.isChecked() == False)
+                and (self.tFApplied2.isChecked() == False)
+                and (self.tFApplied3.isChecked() == False)):
                 self.popUpWin('no boxes', 'Transformation Method') #Throws an error if there is no TFApplied box selected
                 return
-            elif((self.TFApplied1.isChecked() == True) #Checks all 3 TFApplied boxes to make sure only
-                and (self.TFApplied2.isChecked() == False) #1 was selected and assigns it to the correct value
-                and (self.TFApplied3.isChecked() == False)):
+            elif((self.tFApplied1.isChecked() == True) #Checks all 3 tFApplied boxes to make sure only
+                and (self.tFApplied2.isChecked() == False) #1 was selected and assigns it to the correct value
+                and (self.tFApplied3.isChecked() == False)):
                 UIVariables.TransformMethod = "cochran_schleicher_93"
                 UIVariables.ApplyTransforMethod = True
-            elif((self.TFApplied1.isChecked() == False)
-                and (self.TFApplied2.isChecked() == True)
-                and (self.TFApplied3.isChecked() == False)):
+            elif((self.tFApplied1.isChecked() == False)
+                and (self.tFApplied2.isChecked() == True)
+                and (self.tFApplied3.isChecked() == False)):
                 UIVariables.TransformMethod = "festou_fortran"
                 UIVariables.ApplyTransforMethod = True
-            elif((self.TFApplied1.isChecked() == False)
-                and (self.TFApplied2.isChecked() == False)
-                and (self.TFApplied3.isChecked() == True)):
+            elif((self.tFApplied1.isChecked() == False)
+                and (self.tFApplied2.isChecked() == False)
+                and (self.tFApplied3.isChecked() == True)):
                 UIVariables.TransformMethod = None
                 UIVariables.ApplyTransforMethod = False
             else:
@@ -881,18 +881,18 @@ class App(QMainWindow):
                 return
 
             #Grid Declarations
-            if(FileRunner.valueTest(self.APointsBox.text(), 'int')):
-                UIVariables.AngularPoints = int(self.APointsBox.text())
+            if(FileRunner.valueTest(self.aPointsBox.text(), 'int')):
+                UIVariables.AngularPoints = int(self.aPointsBox.text())
             else:
                 self.popUpWin('incorrect data', 'Angular Points')
                 return
-            if(FileRunner.valueTest(self.RadPointsBox.text(), 'int')):
-                UIVariables.RadialPoints = int(self.RadPointsBox.text())
+            if(FileRunner.valueTest(self.radPointsBox.text(), 'int')):
+                UIVariables.RadialPoints = int(self.radPointsBox.text())
             else:
                 self.popUpWin('incorrect data', 'Radial Points')
                 return
-            if(FileRunner.valueTest(self.RadSubBox.text(), 'int')):
-                UIVariables.RadialSubsteps = int(self.RadSubBox.text())
+            if(FileRunner.valueTest(self.radSubBox.text(), 'int')):
+                UIVariables.RadialSubsteps = int(self.radSubBox.text())
             else:
                 self.popUpWin('incorrect data', 'Radial Substeps')
                 return
@@ -907,36 +907,37 @@ class App(QMainWindow):
         #Yaml input runner
         #Test to see if the file is properly formatted and will compute the results if so
         #Throws an error if the test fails
-        elif(self.FileInputBox.isChecked()):
+        elif(self.fileInputBox.isChecked()):
             UIVariables.FileInputs = True
             UIVariables.FileName = UIVariables.DownFile
             if (os.path.exists(f"{UIVariables.FileName}") == False): #Test to see if the user uploaded a file
                 self.popUpWin('no file')
                 return      
-            if (FileRunner.fileTest()): #Reads the file to see if it is formatted properly  
+            testResult, message = FileRunner.fileTest(UIVariables.FileName) #Gets the bool test result and a message if testResult = False
+            if (testResult): #Reads the file to see if it is formatted properly  
                 #Runs the program
-                vmc, vmr = FileRunner.runFileYamlProgram() #Runs the yaml file, creating a vmc and vmr in FileRunner.py
+                vmc, vmr = FileRunner.runFileYamlProgram(UIVariables.FileName) #Runs the yaml file, creating a vmc and vmr in FileRunner.py
                 self.popUpWin('success')
                 self.Win = ResultsWindow(vmc, vmr)
                 self.Win.show()
             else:
-                self.popUpWin('incorrect yaml') #Throws an error meaning that the user's file dict was missing important info
+                self.popUpWin('incorrect yaml', message) #Throws an error meaning that the user's file dict was missing important info
             return
         
         #Pickle input runner
         #Test to see if the pickle file can be understood and runs the results from that.
         #Throws an error if the test fails.
-        elif(self.PickleInputBox.isChecked()):
+        elif(self.pickleInputBox.isChecked()):
             UIVariables.PickleInputs = True
             UIVariables.FileName = UIVariables.PyvComaPickle
             if (os.path.exists(f"{UIVariables.FileName}") == False): #Test to see if the user uploaded a file
                 self.popUpWin('no file')
                 return
-            if(FileRunner.pickleTest() == False): #Test to see if pyvectorial can read the pickle in FileRunner.py
+            if(FileRunner.pickleTest(UIVariables.FileName) == False): #Test to see if pyvectorial can read the pickle in FileRunner.py
                 self.popUpWin('incorrect pickle')
                 return
             #Runs the program
-            vmc, vmr = FileRunner.runFilePickleProgram() #Runs the pickle file, creating a default vmc and proper vmr in FileRunner.py
+            vmc, vmr = FileRunner.runFilePickleProgram(UIVariables.FileName) #Runs the pickle file, creating a default vmc and proper vmr in FileRunner.py
             self.popUpWin('success')
             self.Win = ResultsWindow(vmc, vmr) 
             self.Win.show() 
