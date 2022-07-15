@@ -163,13 +163,13 @@ class TimeVarWindow(QWidget):
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.label1 = QLabel("Sine", self)
         self.label1.setFont((QFont('Arial', 18)))
-        self.label1.move(100,20)
+        self.label1.move(150,20)
         self.label2 = QLabel("Gaussian", self)
         self.label2.setFont((QFont('Arial', 18)))
-        self.label2.move(850,20)
+        self.label2.move(900,20)
         self.label3 = QLabel("Square", self)
         self.label3.setFont((QFont('Arial', 18)))
-        self.label3.move(100,500)
+        self.label3.move(150,500)
         self.TVSineBox = QCheckBox("*Select Sine Time Variation", self)
         self.TVSineBox.setChecked(False)
         self.TVSineBox.move(20,100)
@@ -301,7 +301,17 @@ class TimeVarWindow(QWidget):
     
     #Sets the current user input to the global variables in UIVariables.py
     def setResults(self):
+        #Clears out any possible time variation type input that occured before
         UIVariables.TimeVariationType = None
+        UIVariables.SinAmp = None
+        UIVariables.SinDelta = None
+        UIVariables.SinPer = None
+        UIVariables.GausAmp = None
+        UIVariables.GausSTD = None
+        UIVariables.GausT_Max = None
+        UIVariables.SquareAmp = None
+        UIVariables.SquareDur = None
+        UIVariables.SquareT_Start = None
 
         #Throws an error if no time varaition types are selected
         if((self.TVSineBox.isChecked() == False) and 
@@ -388,15 +398,6 @@ class TimeVarWindow(QWidget):
             (self.TVGausBox.isChecked() == False) and
             (self.TVSquareBox.isChecked() == False) and
             (self.NoTVBox.isChecked() == True)):
-            UIVariables.SinAmp = None
-            UIVariables.SinDelta = None
-            UIVariables.SinPer = None
-            UIVariables.GausAmp = None
-            UIVariables.GausSTD = None
-            UIVariables.GausT_Max = None
-            UIVariables.SquareAmp = None
-            UIVariables.SquareDur = None
-            UIVariables.SquareT_Start = None
             self.popUpWin('success', 'None')
             return
         
@@ -725,6 +726,8 @@ class App(QMainWindow):
             self.message.setWindowTitle("Error")
             if(type == 'no input'): #No input given (manual, yaml, or pickle)
                 self.message.setText("No input type selected. Please try again.")
+            elif(type == 'too many input'): #Too many inputs given
+                self.message.setText("Too many input method types selected (manual, yaml, pickle). Please try again.")
             elif(type == 'incorrect yaml'): #Yaml file has an incorrect data type, almost always string to float/int
                 self.message.setText("The .yaml file has an incorrect data entry. Please try again.")
             elif(type == 'incorrect pickle'): #Pickle file can not be understood by pyvectorial
@@ -799,7 +802,7 @@ class App(QMainWindow):
 
             #Param Declarations
             if(FileRunner.valueTest(self.BaseQBox.text(), 'float')): #Test to see if the manual input is a correct type for all data required
-                UIVariables.BaseQ = float(self.BaseQBox.text())
+                UIVariables.BaseQ = float(self.BaseQBox.text()) #Sets the variable converted from string to float to UIVariables.py
             else:
                 self.popUpWin('incorrect data', 'Base Q') #Throws an error if any data is an incorrect type and exits the program
                 return
@@ -941,11 +944,12 @@ class App(QMainWindow):
 
         #Throws an error if too many input boxes were selected
         else:
-            self.popUpWin('too many boxes', 'Input Type')
+            self.popUpWin('too many input')
             return
-   
+
+#Defines the UI when initially running the program
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    Win = App()
+    Win = App() #Only shows App() on start up
     Win.show()
     sys.exit(app.exec_())
