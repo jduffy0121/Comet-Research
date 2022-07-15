@@ -11,10 +11,10 @@ import pyvectorial as pyv
 import yaml
 import io
 import astropy.units as u
+import pickle
 from datetime import datetime
 from astropy.visualization import quantity_support
 from contextlib import redirect_stdout
-
 
 #Run methods
 
@@ -47,7 +47,6 @@ def runFilePickleProgram(fileName):
     vmr = pyv.read_results(fileName) #Creates a vmr from the pickle
     return vmc, vmr
 
-
 #Plot methods from pyvectioral
 
 #Gets the radial plot
@@ -76,7 +75,6 @@ def get3DColumnDensityCentered(vmc, vmr):
             grid_step_x=1000, grid_step_y=1000, r_units=u.km,
             cd_units=1/u.cm**2, show_plots=False)[1]
 
-
 #Additional methods that reference pyvectioral
 
 #Gets the radial density from a given vmr
@@ -99,7 +97,6 @@ def getAgreementCheck(vmr):
         pyv.show_fragment_agreement(vmr)
         result = buf.getvalue()
     return result
-
 
 #Test methods
 
@@ -155,7 +152,7 @@ def pickleTest(filePath):
     try:
         pyv.read_results(filePath)
         return True
-    except ModuleNotFoundError:
+    except (ModuleNotFoundError, EOFError, pickle.UnpicklingError):
         return False
 
 #Method def for testing the input yaml file with the correct results
