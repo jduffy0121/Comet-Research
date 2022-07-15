@@ -1,5 +1,6 @@
-#Program to run a single .yaml file or an array of .yaml files
-#to get results for the vectorial model.
+#Program to run a single .yaml file or pickle file to get results for the vectorial model.
+#Sends the created vmc and vmr to UICreator.py to display the results.
+#This is the only program related to the UI that references pyvectorial directly.
 #
 #Author: Jacob Duffy
 #Version: 7/14/2022
@@ -52,7 +53,28 @@ def pickleTest():
     except ModuleNotFoundError:
         return False
 
-#Method def for testing a 2 level deep dict value for it being either float/int/bool any tpye.
+#Method def for testing if a data value is a float or int and if val >= 0
+def valueTest(input, type):
+    if (type == 'float'): #Test if val is a float
+        try:
+            val = float(input)
+            if (val >= 0):
+                return True
+            else:
+                return False
+        except ValueError:
+            return False
+    if (type == 'int'): #Test if val is an int
+        try:
+            val = int(input)
+            if (val >= 0):
+                return True
+            else:
+                return False
+        except ValueError:
+            return False
+
+#Method def for testing a 2 level deep dict value for it being either float/int/bool
 def dictTest2Var(dict, parent, child, type):
     try:
         testing = dict[f'{parent}'][f'{child}']
@@ -78,10 +100,10 @@ def dictTest2Var(dict, parent, child, type):
             try:
                 if((testing) == True or (testing == False)):
                     return True
+                else:
+                    return False
             except ValueError:
                 return False
-        if (type == 'none'): #Test if the dict value exist as any type
-            return True
     except KeyError:
         return False
 
