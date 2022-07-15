@@ -1,4 +1,5 @@
-#Driver program to create a UI to read in vectorial model data for comet analysis.
+#Driver program to create a UI to read in vectorial model data for comet analysis
+#and create multiple results graphs using MatPlotLib.
 #Uses PyQt5 as the interface to create the UI.
 #This work is based on a pvvectorial repository created by sjoset.
 #
@@ -76,7 +77,7 @@ class ResultsWindow(QWidget):
         self.title = 'Results'
         self.left = 10
         self.top = 10
-        self.width = 1800
+        self.width = 2500
         self.height = 1400
         self.vmc = vmc
         self.vmr = vmr
@@ -280,48 +281,22 @@ class TimeVarWindow(QWidget):
 
         self.show()
     
-    #Test user input to see if it is a float
-    def testFloat(self, input):
-        try:
-            float(input)
-            if(float(input) >= 0):
-                return True
-            else:
-                return False
-        except ValueError:
-            return False
-
-    #Selected too many boxes for an input that only allowed for one
-    def tooManyBoxes(self, input):
+    #Creates pop up windows for successfully setting time variation or error throws
+    def popUpWin(self, type, message=None):
         self.message = QMessageBox()
-        self.message.setIcon(QMessageBox.Critical)
-        self.message.setWindowTitle("Error")
-        self.message.setText(f"Too many input boxes selected for: \"{input}\". Please try again.")
-        self.message.show()
-    
-    #Gave an incorrect data type for the manual data entry (almost always string could not
-    #be converted to a float/int)
-    def incorrectDataType(self, input):
-        self.message = QMessageBox()
-        self.message.setIcon(QMessageBox.Critical)
-        self.message.setWindowTitle("Error")
-        self.message.setText(f"Incorrect manual data entry for: \"{input}\". Please try again.")
-        self.message.show()
-    
-    #No input type is selected by the user
-    def noInput(self):
-        self.message = QMessageBox()
-        self.message.setIcon(QMessageBox.Critical)
-        self.message.setWindowTitle("Error")
-        self.message.setText("No time variation type selected. Please try again.")
-        self.message.show()
-    
-    #Successfully sets the time variation
-    def setSuccess(self, input):
-        self.message = QMessageBox()
-        self.message.setIcon(QMessageBox.Information)
-        self.message.setWindowTitle("Success")
-        self.message.setText(f"Time variation successfully set to: \"{input}\".")
+        if(type == 'success'):
+            self.message.setIcon(QMessageBox.Information)
+            self.message.setWindowTitle("Success")
+            self.message.setText(f"Time variation successfully set to: \"{message}\".")
+        else:
+            self.message.setIcon(QMessageBox.Critical)
+            self.message.setWindowTitle("Error")
+            if(type == 'no input'): #User did not select any of the 4 time variation type boxes
+                self.message.setText("No time variation type selected. Please try again.")
+            elif(type == 'incorrect data'):
+                 self.message.setText(f"Incorrect manual data entry for: \"{message}\". Please try again.")
+            elif(type == 'too many boxes'): #User selected too many of the time variation type boxes
+                self.message.setText(f"Too many time variation boxes selected. Please try again.")
         self.message.show()
     
     #Sets the current user input to the global variables in UIVariables.py
@@ -333,7 +308,7 @@ class TimeVarWindow(QWidget):
             (self.TVGausBox.isChecked() == False) and
             (self.TVSquareBox.isChecked() == False) and
             (self.NoTVBox.isChecked() == False)):
-            self.noInput()
+            self.popUpWin('no input')
             return
         
         #Declarations if sine time variation is selected
@@ -342,22 +317,22 @@ class TimeVarWindow(QWidget):
             (self.TVSquareBox.isChecked() == False) and
             (self.NoTVBox.isChecked() == False)):
             UIVariables.TimeVariationType = 'sine wave'
-            if(self.testFloat(self.SineAmpBox.text())):
+            if(FileRunner.valueTest(self.SineAmpBox.text(), 'float')):
                 UIVariables.SinAmp = float(self.SineAmpBox.text())
             else:
-                self.incorrectDataType("Amplitude")
+                self.popUpWin('incorrect data', 'Amplitude')
                 return
-            if(self.testFloat(self.SinePeriodBox.text())):
+            if(FileRunner.valueTest(self.SinePeriodBox.text(), 'float')):
                 UIVariables.SinPer = float(self.SinePeriodBox.text())
             else:
-                self.incorrectDataType("Period")
+                self.popUpWin('incorrect data', 'Period')
                 return
-            if(self.testFloat(self.SineDeltaBox.text())):
+            if(FileRunner.valueTest(self.SineDeltaBox.text(), 'float')):
                 UIVariables.SinDelta = float(self.SineDeltaBox.text())
             else:
-                self.incorrectDataType("Delta")
+                self.popUpWin('incorrect data', 'Delta')
                 return
-            self.setSuccess("Sine")
+            self.popUpWin('success', 'Sine')
             return
 
         #Declarations if gaussian time variation is selected
@@ -366,22 +341,22 @@ class TimeVarWindow(QWidget):
             (self.TVSquareBox.isChecked() == False) and
             (self.NoTVBox.isChecked() == False)):
             UIVariables.TimeVariationType = 'gaussian'
-            if(self.testFloat(self.GausAmpBox.text())):
+            if(FileRunner.valueTest(self.GausAmpBox.text(), 'float')):
                 UIVariables.GausAmp = float(self.GausAmpBox.text())
             else:
-                self.incorrectDataType("Amplitude")
+                self.popUpWin('incorrect data', 'Amplitude')
                 return
-            if(self.testFloat(self.GausStdBox.text())):
+            if(FileRunner.valueTest(self.GausStdBox.text(), 'float')):
                 UIVariables.GausSTD = float(self.GausStdBox.text())
             else:
-                self.incorrectDataType("Standard Deviation")
+                self.popUpWin('incorrect data', 'Standard Deviation')
                 return
-            if(self.testFloat(self.GausTPBox.text())):
+            if(FileRunner.valueTest(self.GausTPBox.text(), 'float')):
                 UIVariables.GausT_Max = float(self.GausTPBox.text())
             else:
-                self.incorrectDataType("Time at Peak")
+                self.popUpWin('incorrect data', 'Time at Peak')
                 return
-            self.setSuccess("Gaussian")
+            self.popUpWin('success', 'Gaussian')
             return
 
         #Declarations if square time variation is selected
@@ -390,22 +365,22 @@ class TimeVarWindow(QWidget):
             (self.TVSquareBox.isChecked() == True) and
             (self.NoTVBox.isChecked() == False)):
             UIVariables.TimeVariationType = 'square pulse'
-            if(self.testFloat(self.SquareAmpBox.text())):
+            if(FileRunner.valueTest(self.SquareAmpBox.text(), 'float')):
                 UIVariables.SquareAmp = float(self.SquareAmpBox.text())
             else:
-                self.incorrectDataType("Amplitude")
+                self.popUpWin('incorrect data', 'Amplitude')
                 return
-            if(self.testFloat(self.SquareDurBox.text())):
+            if(FileRunner.valueTest(self.SquareDurBox.text(), 'float')):
                 UIVariables.SquareDur = float(self.SquareDurBox.text())
             else:
-                self.incorrectDataType("Duration")
+                self.popUpWin('incorrect data', 'Duration')
                 return
-            if(self.testFloat(self.SquareTSPBox.text())):
+            if(FileRunner.valueTest(self.SquareTSPBox.text(), 'float')):
                 UIVariables.SquareT_Start = float(self.SquareTSPBox.text())
             else:
-                self.incorrectDataType("Start of Pulse")
+                self.popUpWin('incorrect data', 'Start of Pulse')
                 return
-            self.setSuccess("Square")
+            self.popUpWin('success', 'Square')
             return
         
         #Declarations if no time variation is selected
@@ -422,13 +397,13 @@ class TimeVarWindow(QWidget):
             UIVariables.SquareAmp = None
             UIVariables.SquareDur = None
             UIVariables.SquareT_Start = None
-            self.setSuccess("None")
+            self.popUpWin('success', 'None')
             return
         
-        #Throws an error if no time varaition types are selected
+        #Throws an error if are too many time varaition types are selected
         else:
-            self.tooManyBoxes('Time Variation Type')
-        return
+            self.popUpWin('too many boxes')
+            return
 
 #Class to give a new pop up window to the user more info about proper usage of the Main UI.
 class MoreWindow(QWidget):
@@ -438,14 +413,16 @@ class MoreWindow(QWidget):
         self.title = 'More Information'
         self.left = 10
         self.top = 10
-        self.width = 1000
-        self.height = 1000
+        self.width = 1050
+        self.height = 1050
         self.initUI()
 
     #Defines the UI Interface
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
+
+        #Input text
         self.label = QLabel("Inputs", self)
         self.label.setFont((QFont('Arial', 18)))
         self.label.move(450,20)
@@ -463,22 +440,35 @@ class MoreWindow(QWidget):
         self.inputText5.move(20,310)
         self.inputText6 = QLabel("---All other manual inputs can only be floats (grid variables must be int).", self)
         self.inputText6.move(20,360)
-        self.inputText7 = QLabel("---File inputs will only be able to be .yaml files formatted the proper way.", self)
+        self.inputText7 = QLabel("---A .yaml file will only be understood if it is formatted the proper way.", self)
         self.inputText7.move(20,410)
         self.inputText8 = QLabel("(look at a manually created .yaml file for this format).", self)
         self.inputText8.move(20,440)
-        self.label1 = QLabel("Other Information", self)
+        self.inputText9 = QLabel("---The \"Pvy coma pickle\" is a special file that will not create a vmc", self)
+        self.inputText9.move(20,490)
+        self.inputText10 = QLabel("when running the program.", self)
+        self.inputText10.move(20,520)
+
+        #Output text
+        self.label1 = QLabel("Outputs", self)
         self.label1.setFont((QFont('Arial', 18)))
-        self.label1.move(350,540)
-        self.otherText1 = QLabel("---In the running of the program, a .vmr file is created", self)
-        self.otherText1.move(20,640)
-        self.otherText2 = QLabel("and can be downloaded using the \"File Download\" selection box.", self)
-        self.otherText2.move(20,670)
-        self.otherText3 = QLabel("---The \"Pvy coma pickle\" is", self)
-        self.otherText3.move(20,720)
-        self.label2 = QLabel("*This program was created by Jacob Duffy at Auburn University Physics Department", self)
-        self.label2.setFont((QFont('Arial', 5)))
-        self.label2.move(500,880)
+        self.label1.move(450,600)
+        self.outputText1 = QLabel ("---When finished the program will give the user:", self)
+        self.outputText1.move(20,680)
+        self.outputText2 = QLabel ("Fragment Sputter Graph", self)
+        self.outputText2.move(150,720)
+        self.outputText3 = QLabel ("Radial Density Graph", self)
+        self.outputText3.move(150,760)
+        self.outputText4 = QLabel ("Column Density Graphs (2D, 3D centered, 3D off centered)", self)
+        self.outputText4.move(150,800)
+        self.outputText5 = QLabel ("Radius vs. Fragment Densitiy Table", self)
+        self.outputText5.move(150,840)
+        self.outputText6 = QLabel ("Radius vs. Column Densitiy Table", self)
+        self.outputText6.move(150,880)
+        self.outputText7 = QLabel ("Fragment Agreement Check", self)
+        self.outputText7.move(150,920)
+        self.outputText8 = QLabel ("Fragment Aperture Check (not given for pickle file input)", self)
+        self.outputText8.move(150,960)
         self.show()
 
 #Main UI Window, Driver Class. 
@@ -723,87 +713,31 @@ class App(QMainWindow):
 
         self.show() #Shows the window
 
-    #Error Throws
-
-    #No input type is selected by the user (either manual or file)
-    def noInput(self):
-        self.message = QMessageBox() #Creates a pop up window object
-        self.message.setIcon(QMessageBox.Critical) #Sets the icon to "critical"
-        self.message.setWindowTitle("Error")
-        self.message.setText("No input type selected. Please try again.")
-        self.message.show()
-    
-    #A .yaml file input has a data type that throws an exception
-    def incorrectFileYaml(self):
-        self.message = QMessageBox()
-        self.message.setIcon(QMessageBox.Critical)
-        self.message.setWindowTitle("Error")
-        self.message.setText("The .yaml file has an incorrect data entry. Please try again.")
-        self.message.show()
-
-    #A pickle file input can not be read
-    def incorrectFilePickle(self):
-        self.message = QMessageBox()
-        self.message.setIcon(QMessageBox.Critical)
-        self.message.setWindowTitle("Error")
-        self.message.setText("The pickle file could not be understood. Please try again.")
-        self.message.show()
-    
-    #No file has been uploaded (either .yaml or pickle)
-    def noFileUploaded(self):
-        self.message = QMessageBox()
-        self.message.setIcon(QMessageBox.Critical)
-        self.message.setWindowTitle("Error")
-        self.message.setText("A file has not been selected. Please try again.")
-        self.message.show()
-    
-    #Gave an incorrect data type for the manual data entry (almost always string could not
-    #be converted to a float/int)
-    def incorrectDataType(self, input):
-        self.message = QMessageBox()
-        self.message.setIcon(QMessageBox.Critical)
-        self.message.setWindowTitle("Error")
-        self.message.setText(f"Incorrect manual data entry for: \"{input}\". Please try again.")
-        self.message.show()
-    
-    #Selected too many boxes for an input that only allowed for one
-    def tooManyBoxes(self, input):
-        self.message = QMessageBox()
-        self.message.setIcon(QMessageBox.Critical)
-        self.message.setWindowTitle("Error")
-        self.message.setText(f"Too many input boxes selected for: \"{input}\". Please try again.")
-        self.message.show()
-    
-    #Program ran successfully, there should not be any errors
-    def successRun(self):
-        self.message = QMessageBox()
-        self.message.setIcon(QMessageBox.Information)
-        self.message.setWindowTitle("Success")
-        self.message.setText("Program run successful!")
-        self.message.show()
-    
-    #Test user input to see if it is a float
-    def testFloat(self, input):
-        try:
-            float(input)
-            if(float(input) >= 0):
-                return True
-            else:
-                return False
-        except ValueError:
-            return False
-    
-    #Test user input ot see if it is an int
-    def testInt(self, input):
-        try:
-            int(input)
-            if(int(input) >= 0):
-                return True
-            else:
-                return True
-        except ValueError:
-            return False
-
+    #Creates pop up windows for successful run or error throws
+    def popUpWin(self, type, message=None):
+        self.message = QMessageBox() #Creates the QMessageBox() object
+        if(type == 'success'): #Successful run pop up
+            self.message.setIcon(QMessageBox.Information) #Sets icon for the window
+            self.message.setWindowTitle("Success")
+            self.message.setText("Program run successful!")
+        else:
+            self.message.setIcon(QMessageBox.Critical)
+            self.message.setWindowTitle("Error")
+            if(type == 'no input'): #No input given (manual, yaml, or pickle)
+                self.message.setText("No input type selected. Please try again.")
+            elif(type == 'incorrect yaml'): #Yaml file has an incorrect data type, almost always string to float/int
+                self.message.setText("The .yaml file has an incorrect data entry. Please try again.")
+            elif(type == 'incorrect pickle'): #Pickle file can not be understood by pyvectorial
+                self.message.setText("The pickle file could not be understood. Please try again.")
+            elif(type == 'no file'): #User selected yaml or pickle file input but never gave a file
+                self.message.setText("A file has not been selected. Please try again.")
+            elif(type == 'incorrect data'): #User input an incorrect data type, almost always string to float/int
+                 self.message.setText(f"Incorrect manual data entry for: \"{message}\". Please try again.")
+            elif(type == 'too many boxes'): #User selected too many boxes for a input that only accepts 1 selected
+                self.message.setText(f"Too many input boxes selected for: \"{message}\". Please try again.")
+            elif(type == 'no boxes'): #User selected no boxes for a input that only accepts 1 selected
+                self.message.setText(f"No input boxes selected for: \"{message}\". Please try again.")
+        self.message.show() #Shows the pop up window
 
     #File Path References
 
@@ -853,7 +787,7 @@ class App(QMainWindow):
         if((self.ManInputBox.isChecked() == False) and
             (self.FileInputBox.isChecked() == False) and
             (self.PickleInputBox.isChecked() == False)):
-            self.noInput()
+            self.popUpWin('no input')
             return
 
         #Manual input runner
@@ -864,62 +798,67 @@ class App(QMainWindow):
             UIVariables.FileName = 'pyvectorial.yaml'
 
             #Param Declarations
-            if(self.testFloat(self.BaseQBox.text())): #Test to see if the manual input is a correct type for all data required
+            if(FileRunner.valueTest(self.BaseQBox.text(), 'float')): #Test to see if the manual input is a correct type for all data required
                 UIVariables.BaseQ = float(self.BaseQBox.text())
             else:
-                self.incorrectDataType("Base Q") #Throws an error if any data is an incorrect type and exits the program
+                self.popUpWin('incorrect data', 'Base Q') #Throws an error if any data is an incorrect type and exits the program
                 return
 
             #Parent Declarations
             UIVariables.ParentName = self.ParNameBox.text()
-            if(self.testFloat(self.OutVBox.text())):
+            if(FileRunner.valueTest(self.OutVBox.text(), 'float')):
                 UIVariables.VOutflow = float(self.OutVBox.text())
             else:
-                self.incorrectDataType("Outflow Velocity")
+                self.popUpWin('incorrect data', 'Outflow Velocity')
                 return
-            if(self.testFloat(self.TauDBox.text())):
+            if(FileRunner.valueTest(self.TauDBox.text(), 'float')):
                 UIVariables.TauD = float(self.TauDBox.text())
             else:
-                self.incorrectDataType("Tau_D")
+                self.popUpWin('incorrect data', 'Tau_D')
                 return
-            if(self.testFloat(self.TauTParBox.text())):
+            if(FileRunner.valueTest(self.TauTParBox.text(), 'float')):
                 UIVariables.TauTParent = float(self.TauTParBox.text())
             else:
-                self.incorrectDataType("Tau_T")
+                self.popUpWin('incorrect data', 'Tau_T')
                 return
-            if(self.testFloat(self.SigmaBox.text())):
+            if(FileRunner.valueTest(self.SigmaBox.text(), 'float')):
                 UIVariables.Sigma = float(self.SigmaBox.text())
             else:
-                self.incorrectDataType("Sigma")
+                self.popUpWin('incorrect data', 'Sigma')
                 return
-            if(self.testFloat(self.T_DBox.text())):
+            if(FileRunner.valueTest(self.T_DBox.text(), 'float')):
                 UIVariables.TtoDRatio = float(self.T_DBox.text())
             else:
-                self.incorrectDataType("T to D Ratio")
+                self.popUpWin('incorrect data', 'T to D Ratio')
                 return
 
             #Fragment Declarations
             UIVariables.FragmentName = self.FragNameBox.text()
-            if(self.testFloat(self.VPhotoBox.text())):
+            if(FileRunner.valueTest(self.VPhotoBox.text(), 'float')):
                 UIVariables.VPhoto = float(self.VPhotoBox.text())
             else:
-                self.incorrectDataType("VPhoto")
+                self.popUpWin('incorrect data', 'VPhoto')
                 return
-            if(self.testFloat(self.TauTFragBox.text())):
+            if(FileRunner.valueTest(self.TauTFragBox.text(), 'float')):
                 UIVariables.TauTFragment = float(self.TauTFragBox.text())
             else:
-                self.incorrectDataType("Tau_T")
+                self.popUpWin('incorrect data', 'Tau_T')
                 return
 
             #Comet Declarations
             UIVariables.CometName = self.CometNameBox.text()
-            if(self.testFloat(self.RHBox.text())):
+            if(FileRunner.valueTest(self.RHBox.text(), 'float')):
                 UIVariables.Rh = float(self.RHBox.text())
             else:
-                self.incorrectDataType("Rh")
+                self.popUpWin('incorrect data', 'Rh')
                 return
             UIVariables.CometDelta = self.DeltaComBox.text()
-            if((self.TFApplied1.isChecked() == True) #Checks all 3 TFApplied boxes to make sure only
+            if((self.TFApplied1.isChecked() == False)
+                and (self.TFApplied2.isChecked() == False)
+                and (self.TFApplied3.isChecked() == False)):
+                self.popUpWin('no boxes', 'Transformation Method') #Throws an error if there is no TFApplied box selected
+                return
+            elif((self.TFApplied1.isChecked() == True) #Checks all 3 TFApplied boxes to make sure only
                 and (self.TFApplied2.isChecked() == False) #1 was selected and assigns it to the correct value
                 and (self.TFApplied3.isChecked() == False)):
                 UIVariables.TransformMethod = "cochran_schleicher_93"
@@ -935,29 +874,29 @@ class App(QMainWindow):
                 UIVariables.TransformMethod = None
                 UIVariables.ApplyTransforMethod = False
             else:
-                self.tooManyBoxes("Transformation Method") #Throws an error if there are more than 1 TFApplied box selected
+                self.popUpWin('too many boxes', 'Transformation Method') #Throws an error if there are more than 1 TFApplied box selected
                 return
 
             #Grid Declarations
-            if(self.testInt(self.APointsBox.text())):
+            if(FileRunner.valueTest(self.APointsBox.text(), 'int')):
                 UIVariables.AngularPoints = int(self.APointsBox.text())
             else:
-                self.incorrectDataType("Angular Points")
+                self.popUpWin('incorrect data', 'Angular Points')
                 return
-            if(self.testInt(self.RadPointsBox.text())):
+            if(FileRunner.valueTest(self.RadPointsBox.text(), 'int')):
                 UIVariables.RadialPoints = int(self.RadPointsBox.text())
             else:
-                self.incorrectDataType("Radial Points")
+                self.popUpWin('incorrect data', 'Radial Points')
                 return
-            if(self.testInt(self.RadSubBox.text())):
+            if(FileRunner.valueTest(self.RadSubBox.text(), 'int')):
                 UIVariables.RadialSubsteps = int(self.RadSubBox.text())
             else:
-                self.incorrectDataType("Radial Substeps")
+                self.popUpWin('incorrect data', 'Radial Substeps')
                 return
             
             #Runs the program
             vmc, vmr = FileRunner.runManualProgram() #Runs the manuel program, creating a yaml file, vmc and vmr in FileCreator.py and FileRunner.py
-            self.successRun() #Opens the successful run pop up window
+            self.popUpWin('success') #Opens the successful run pop up window
             self.Win = ResultsWindow(vmc, vmr) #Creates the results with the vmc and vmr
             self.Win.show() #Shows the results window
             return
@@ -969,16 +908,16 @@ class App(QMainWindow):
             UIVariables.FileInputs = True
             UIVariables.FileName = UIVariables.DownFile
             if (os.path.exists(f"{UIVariables.FileName}") == False): #Test to see if the user uploaded a file
-                self.noFileUploaded()
+                self.popUpWin('no file')
                 return      
             if (FileRunner.fileTest()): #Reads the file to see if it is formatted properly  
                 #Runs the program
                 vmc, vmr = FileRunner.runFileYamlProgram() #Runs the yaml file, creating a vmc and vmr in FileRunner.py
-                self.successRun()
+                self.popUpWin('success')
                 self.Win = ResultsWindow(vmc, vmr)
                 self.Win.show()
             else:
-                self.incorrectFileYaml() #Throws an error meaning that the user's file dict was missing important info
+                self.popUpWin('incorrect yaml') #Throws an error meaning that the user's file dict was missing important info
             return
         
         #Pickle input runner
@@ -988,21 +927,21 @@ class App(QMainWindow):
             UIVariables.PickleInputs = True
             UIVariables.FileName = UIVariables.PyvComaPickle
             if (os.path.exists(f"{UIVariables.FileName}") == False): #Test to see if the user uploaded a file
-                self.noFileUploaded()
+                self.popUpWin('no file')
                 return
             if(FileRunner.pickleTest() == False): #Test to see if pyvectorial can read the pickle in FileRunner()
-                self.incorrectFilePickle()
+                self.popUpWin('incorrect pickle')
                 return
             #Runs the program
             vmc, vmr = FileRunner.runFilePickleProgram() #Runs the pickle file, creating a default vmc and proper vmr in FileRunner.py
-            self.successRun()
+            self.popUpWin('success')
             self.Win = ResultsWindow(vmc, vmr) 
             self.Win.show() 
             return
 
         #Throws an error if too many input boxes were selected
         else:
-            self.tooManyBoxes("Input Type")
+            self.popUpWin('too many boxes', 'Input Type')
             return
    
 if __name__ == '__main__':
