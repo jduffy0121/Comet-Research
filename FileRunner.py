@@ -3,7 +3,7 @@
 #This is the only program related to the UI that references pyvectorial directly.
 #
 #Author: Jacob Duffy
-#Version: 7/14/2022
+#Version: 7/15/2022
 
 import UIVariables
 import FileCreator
@@ -53,7 +53,7 @@ def pickleTest():
     except ModuleNotFoundError:
         return False
 
-#Method def for testing if a data value is a float or int and if val >= 0
+#Method def for testing if a data value is a float or int and if val >= 0 or if a val is a bool
 def valueTest(input, type):
     if (type == 'float'): #Test if val is a float
         try:
@@ -73,37 +73,30 @@ def valueTest(input, type):
                 return False
         except ValueError:
             return False
+    if (type == 'bool'): #Test if val is a bool
+        try:
+            val = bool(input)
+            return True
+        except ValueError:
+            return False
 
 #Method def for testing a 2 level deep dict value for it being either float/int/bool
-def dictTest2Var(dict, parent, child, type):
+def dictTest(dict, parent, child, type, grandchild=None):
     try:
-        testing = dict[f'{parent}'][f'{child}']
-        if (type == 'float'): #Test if the dict value is a float
-            try:
-                float(testing)
-                if(float(testing) >= 0):
-                    return True
-                else:
-                    return False
-            except ValueError:
-                return False
-        if (type == 'int'): #Test if the dict value is an int
-            try:
-                int(testing)
-                if (int(testing) >= 0):
-                    return True
-                else:
-                    return False
-            except ValueError:
-                return False
-        if (type == 'bool'): #Test if the dict value is a bool
-            try:
-                if((testing) == True or (testing == False)):
-                    return True
-                else:
-                    return False
-            except ValueError:
-                return False
+        if(grandchild == None): #Creates a "2 deep level" dict test 
+            testing = dict[f'{parent}'][f'{child}']
+        else: #Creates a "3 deep level" dict test
+            testing = dict[f'{parent}'][f'{child}'][f'{grandchild}']
+        if (type == 'float' and valueTest(testing, 'float')): #Test if the dict value is a float
+            return True
+        elif (type == 'int' and valueTest(testing, 'int')): #Test if the dict value is an int
+            return True
+        elif (type == 'bool' and valueTest(testing, 'bool')): #Test if the dict value is a bool
+            return True
+        elif(type == 'any'): #Test if the dict value exist, regardless of its data type
+            return True
+        else:
+            return False
     except KeyError:
         return False
 
@@ -111,27 +104,58 @@ def dictTest2Var(dict, parent, child, type):
 def fileTest():
     with open(f"{UIVariables.FileName}", 'r') as file: #Opens the user yaml file
         dict = yaml.safe_load(file)
-        if(dictTest2Var(dict, 'comet', 'rh', 'float') == False): #Test and sees if the dict value is a correct data type
+        if(dictTest(dict, 'comet', 'rh', 'float') == False): #Test and sees if the dict value is a correct data type
             return False
-        if(dictTest2Var(dict, 'comet', 'transform_applied', 'bool') == False):
+        if(dictTest(dict, 'comet', 'transform_method', 'any') == False):
             return False
-        if(dictTest2Var(dict, 'fragment', 'v_photo', 'float') == False):
+        if((dict['comet']['transform_method'] != 'cochran_schleicher_93') and #Sees if the transform_method is assigned properly
+            (dict['comet']['transform_method'] != 'festou_fortran') and
+            (dict['comet']['transform_method'] != None)):
             return False
-        if(dictTest2Var(dict, 'grid', 'angular_points', 'int') == False):
+        if(dictTest(dict, 'comet', 'transform_applied', 'bool') == False):
             return False
-        if(dictTest2Var(dict, 'grid', 'radial_points', 'int') == False):
+        if(dictTest(dict, 'fragment', 'v_photo', 'float') == False):
             return False
-        if(dictTest2Var(dict, 'grid', 'radial_substeps', 'int') == False):
+        if(dictTest(dict, 'grid', 'angular_points', 'int') == False):
             return False
-        if(dictTest2Var(dict, 'parent', 'T_to_d_ratio', 'float') == False):
+        if(dictTest(dict, 'grid', 'radial_points', 'int') == False):
             return False
-        if(dictTest2Var(dict, 'parent', 'sigma', 'float') == False):
+        if(dictTest(dict, 'grid', 'radial_substeps', 'int') == False):
             return False
-        if(dictTest2Var(dict, 'parent', 'tau_d', 'float') == False):
+        if(dictTest(dict, 'parent', 'T_to_d_ratio', 'float') == False):
+            return False
+        if(dictTest(dict, 'parent', 'sigma', 'float') == False):
+            return False
+        if(dictTest(dict, 'parent', 'tau_d', 'float') == False):
            return False
-        if(dictTest2Var(dict, 'parent', 'v_outflow', 'float') == False):
+        if(dictTest(dict, 'parent', 'v_outflow', 'float') == False):
             return False
-        if(dictTest2Var(dict, 'production', 'base_q', 'float') == False):
+        if(dictTest(dict, 'production', 'base_q', 'float') == False):
+            return False
+        if(dictTest(dict, 'production', 'time_variation_type', 'any') == False): #Sees if dict['production']['time_variation_type'] is real
+            return False
+        if(dict['production']['time_variation_type'] == 'sine wave'): #Sees if the time variation is a sine and checks all the params
+            if(dictTest(dict, 'production', 'params', 'float', 'amplitude') == False):
+                return False
+            if(dictTest(dict, 'production', 'params', 'float', 'delta') == False):
+                return False
+            if(dictTest(dict, 'production', 'params', 'float', 'period') == False):
+                return False
+        elif(dict['production']['time_variation_type'] == 'gaussian'): #Sees if the time variation is a gaussian and checks all the params
+            if(dictTest(dict, 'production', 'params', 'float', 'amplitude') == False):
+                return False
+            if(dictTest(dict, 'production', 'params', 'float', 'std_dev') == False):
+                return False
+            if(dictTest(dict, 'production', 'params', 'float', 't_max') == False):
+                return False
+        elif(dict['production']['time_variation_type'] == 'square pulse'): #Sees if the time variation is a square and checks all the params
+            if(dictTest(dict, 'production', 'params', 'float', 'amplitude') == False):
+                return False
+            if(dictTest(dict, 'production', 'params', 'float', 'duration') == False):
+                return False
+            if(dictTest(dict, 'production', 'params', 'float', 't_start') == False):
+                return False
+        elif(dict['production']['time_variation_type'] != None): #Sees if the time variation is not null, which means it is a different string/object then what is allowed for pyvectorial
             return False
         dict['etc'] = {} #Creates the etc section for the dict
         dict['etc']['print_binned_times'] = True
