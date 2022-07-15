@@ -932,7 +932,7 @@ class App(QMainWindow):
             if (os.path.exists(f"{UIVariables.FileName}") == False): #Test to see if the user uploaded a file
                 self.popUpWin('no file')
                 return
-            if(FileRunner.pickleTest() == False): #Test to see if pyvectorial can read the pickle in FileRunner()
+            if(FileRunner.pickleTest() == False): #Test to see if pyvectorial can read the pickle in FileRunner.py
                 self.popUpWin('incorrect pickle')
                 return
             #Runs the program
