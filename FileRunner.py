@@ -3,7 +3,7 @@
 #This is the only program related to the UI that references pyvectorial directly.
 #
 #Author: Jacob Duffy
-#Version: 7/15/2022
+#Version: 7/16/2022
 
 import UIVariables
 import FileCreator
@@ -113,8 +113,8 @@ def valueTest(input, type):
             return False
     if (type == 'int'): #Test if val is an int
         try:
-            val = int(input)
-            if (val >= 0):
+            val = float(input)
+            if ((val >= 0) and (val.is_integer())):
                 return True
             else:
                 return False
@@ -122,8 +122,10 @@ def valueTest(input, type):
             return False
     if (type == 'bool'): #Test if val is a bool
         try:
-            val = bool(input)
-            return True
+            if((input == True) or (input == False)):
+                return True
+            else:
+                return False
         except ValueError:
             return False
 
