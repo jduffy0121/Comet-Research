@@ -1,7 +1,7 @@
 #Program that contains global variables used in the UI.
 #
 #Author: Jacob Duffy
-#Version: 7/14/2022
+#Version: 7/16/2022
 
 #UI manager variables
 FileName = None
@@ -9,7 +9,6 @@ DownFile = None
 ManInputs = False
 FileInputs = False
 PickleInputs = False
-KeepFile = False
 
 #Production variable
 BaseQ = None
@@ -53,5 +52,4 @@ RadialSubsteps = None
 
 #Etc variables
 PyvComaPickle = None
-PyvDateOfRun = None
 ApertureChecks = None
