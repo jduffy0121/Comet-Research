@@ -6,8 +6,6 @@
 #UI manager variables
 FileName = None
 DownFile = None
-ManInputs = False
-FileInputs = False
 PickleInputs = False
 
 #Production variable
