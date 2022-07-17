@@ -216,43 +216,39 @@ class TimeVarWindow(QWidget):
             background: None
         }  """)
 
+        #Creates a bunch of UI Boxes (for aesthetic purposes only)
         self.uiBox1 = QListWidget(self)
         self.uiBox1.setGeometry(75,120,120,75)
         self.uiBox1.move(290,10)
-
         self.uiBox2 = QListWidget(self)
         self.uiBox2.setGeometry(185,675,675,185)
         self.uiBox2.move(10,110)
-
         self.uiBox3 = QListWidget(self)
         self.uiBox3.setGeometry(75,175,175,75)
         self.uiBox3.move(230,370)
-
         self.uiBox4 = QListWidget(self)
         self.uiBox4.setGeometry(185,675,675,185)
         self.uiBox4.move(10,470)
-
         self.uiBox5 = QListWidget(self)
         self.uiBox5.setGeometry(75,230,230,75)
         self.uiBox5.move(990,10)
-
         self.uiBox6 = QListWidget(self)
         self.uiBox6.setGeometry(185,650,650,185)
         self.uiBox6.move(790,110)
-
         self.uiBox7 = QListWidget(self)
-        self.uiBox7.setGeometry(210,475,475,210)
-        self.uiBox7.move(790,370)
+        self.uiBox7.setGeometry(210,480,480,210)
+        self.uiBox7.move(835,370)
 
-        self.label1 = QLabel("Sine", self)
-        self.label1.setFont((QFont('Arial', 18)))
-        self.label1.move(300,20)
-        self.label2 = QLabel("Gaussian", self)
-        self.label2.setFont((QFont('Arial', 18)))
-        self.label2.move(1000,20)
-        self.label3 = QLabel("Square", self)
-        self.label3.setFont((QFont('Arial', 18)))
-        self.label3.move(240,380)
+        #Creates title headers for the UI
+        self.headingLabel1 = QLabel("Sine", self)
+        self.headingLabel1.setFont((QFont('Arial', 18)))
+        self.headingLabel1.move(300,20)
+        self.headingLabel2 = QLabel("Gaussian", self)
+        self.headingLabel2.setFont((QFont('Arial', 18)))
+        self.headingLabel2.move(1000,20)
+        self.headingLabel3 = QLabel("Square", self)
+        self.headingLabel3.setFont((QFont('Arial', 18)))
+        self.headingLabel3.move(240,380)
 
         #Creates UI elements for sine input
         self.sineAmpText = QLabel("Input Amplitude: ", self)
@@ -340,26 +336,29 @@ class TimeVarWindow(QWidget):
         self.squareTSPUnits = QLabel("hours", self)
         self.squareTSPUnits.move(470,600)
         self.squareTSPUnits.resize(150,40)
-        self.runButton = QPushButton('Set Time Variation Method', self)
-        self.runButton.move(820,630)
-        self.runButton.resize(400,40)
-        self.runButton.clicked.connect(self.setResults)
+
+        #Other UI elements
+        self.setButton = QPushButton('Set Time Variation Method', self)
+        self.setButton.move(860,630)
+        self.setButton.resize(400,40)
+        self.setButton.clicked.connect(self.setResults)
         self.sineButton = QRadioButton("", self)
-        self.sineButton.move(800,380)
+        self.sineButton.move(850,380)
         self.sineButtonText = QLabel("Select for sine time variation", self)
-        self.sineButtonText.move(835,380)
+        self.sineButtonText.move(885,380)
         self.gausButton = QRadioButton("", self)
-        self.gausButton.move(800,430)
+        self.gausButton.move(850,430)
         self.gausButtonText = QLabel("Select for gaussian time variation", self)
-        self.gausButtonText.move(835,430)
+        self.gausButtonText.move(885,430)
         self.squareButton = QRadioButton("", self)
-        self.squareButton.move(800,480)
+        self.squareButton.move(850,480)
         self.gausButtonText = QLabel("Select for square time variation", self)
-        self.gausButtonText.move(835,480)
+        self.gausButtonText.move(885,480)
         self.noneButton = QRadioButton("", self)
-        self.noneButton.move(800,530)
-        self.gausButtonText = QLabel("Select for no time variation", self)
-        self.gausButtonText.move(835,530)
+        self.noneButton.move(850,530)
+        self.noneButton.setChecked(True)
+        self.noneButtonText = QLabel("Select for no time variation", self)
+        self.noneButtonText.move(885,530)
         self.show()
     
     #Creates pop up windows for successfully setting time variation or error throws
@@ -372,9 +371,7 @@ class TimeVarWindow(QWidget):
         else:
             self.message.setIcon(QMessageBox.Critical)
             self.message.setWindowTitle("Error")
-            if(type == 'no input'): #User did not select any of the 4 time variation type buttons
-                self.message.setText("No time variation type selected. Please try again.")
-            elif(type == 'incorrect data'):
+            if(type == 'incorrect data'):
                  self.message.setText(f"Incorrect manual data entry for: \"{message}\". Please try again.")
         self.message.show()
     
@@ -391,15 +388,7 @@ class TimeVarWindow(QWidget):
         UIVariables.SquareAmp = None
         UIVariables.SquareDur = None
         UIVariables.SquareT_Start = None
-
-        #Throws an error if no time varaition types are selected
-        if((self.sineButton.isChecked() == False) and 
-            (self.gausButton.isChecked() == False) and
-            (self.squareButton.isChecked() == False) and
-            (self.noneButton.isChecked() == False)):
-            self.popUpWin('no input')
-            return
-        
+       
         #Declarations if sine time variation is selected
         if(self.sineButton.isChecked()):
             UIVariables.TimeVariationType = 'sine wave'
@@ -515,11 +504,15 @@ class MoreWindow(QWidget):
         self.uiBox4.setGeometry(340,1000,1000,340)
         self.uiBox4.move(25,745)
 
+        #Creates title headers for the UI
+        self.headingLabel1 = QLabel("Inputs", self)
+        self.headingLabel1.setFont((QFont('Arial', 18)))
+        self.headingLabel1.move(450,20)
+        self.headingLabel2 = QLabel("Outputs", self)
+        self.headingLabel2.setFont((QFont('Arial', 18)))
+        self.headingLabel2.move(450,650)
 
         #Input text
-        self.label = QLabel("Inputs", self)
-        self.label.setFont((QFont('Arial', 18)))
-        self.label.move(450,20)
         self.inputText1 = QLabel("---All name inputs (parent, fragment, and comet) are optional inputs.", self)
         self.inputText1.move(40,130)
         self.inputText2 = QLabel("---Delta under \"comet variables\" is optional as it does not influence the results.", self)
@@ -540,13 +533,10 @@ class MoreWindow(QWidget):
         self.inputText8.move(40,470)
         self.inputText9 = QLabel("---The \"Pvy coma pickle\" is a special file that will not create a vmc", self)
         self.inputText9.move(40,520)
-        self.inputText10 = QLabel("when running the program.", self)
+        self.inputText10 = QLabel("when running the program as it already holds all important info from the vmc.", self)
         self.inputText10.move(40,550)
 
         #Output text
-        self.label1 = QLabel("Outputs", self)
-        self.label1.setFont((QFont('Arial', 18)))
-        self.label1.move(450,650)
         self.outputText1 = QLabel ("---When finished the program will give the user:", self)
         self.outputText1.move(40,760)
         self.outputText2 = QLabel ("Fragment Sputter Graph", self)
@@ -609,14 +599,14 @@ class App(QMainWindow):
         self.uiBox6.setStyleSheet("border: 1px solid #fff; padding: 10px; border-style: solid; color: #EEEADE; border-radius: 10px; background: #616161;") 
 
         #Creates title headers for the UI
-        self.box1 = QLabel("Manual Input", self) #Creates a text box with the input string
-        self.box1.move(450,20)
-        self.box1.setFont((QFont('Arial', 18))) #Sets font to the input string and font size
-        self.box1.resize(280,60) #Resize the text to fill up to the (x,y)
-        self.box2 = QLabel("File Inputs", self)
-        self.box2.move(1450,20)
-        self.box2.setFont((QFont('Arial', 18)))
-        self.box2.resize(225,60)
+        self.headingLabel1 = QLabel("Manual Input", self) #Creates a text box with the input string
+        self.headingLabel1.move(450,20)
+        self.headingLabel1.setFont((QFont('Arial', 18))) #Sets font to the input string and font size
+        self.headingLabel1.resize(280,60) #Resize the text to fill up to the (x,y)
+        self.headingLabel2 = QLabel("File Inputs", self)
+        self.headingLabel2.move(1450,20)
+        self.headingLabel2.setFont((QFont('Arial', 18)))
+        self.headingLabel2.resize(225,60)
         
         #Creates manual input UI elements for the Production section
         self.textPro = QLabel("Production Variables", self)
@@ -808,7 +798,7 @@ class App(QMainWindow):
         self.runProgramButton.move(1350,1020)
         self.runProgramButton.resize(400,40)
         self.runProgramButton.clicked.connect(self.runProg)
-        self.file = QPushButton('.Yaml File Upload', self)
+        self.file = QPushButton('*.yaml File Upload', self)
         self.file.move(1350,160)
         self.file.resize(400,40)
         self.file.clicked.connect(self.fileInp)
@@ -820,7 +810,7 @@ class App(QMainWindow):
         self.fileOut.setGeometry(100,400,400,100)
         self.fileOut.setStyleSheet("border: 1px solid #fff; padding: 10px; border-style: solid; color: #EEEADE; border-radius: 10px; background: #616161;")
         self.fileOut.move(1350,220)
-        self.pickleBox = QPushButton("Pyv Coma Pickle File Upload", self)
+        self.pickleBox = QPushButton("*Pyv Coma Pickle File Upload", self)
         self.pickleBox.move(1350,380)
         self.pickleBox.resize(400,40)
         self.pickleBox.clicked.connect(self.pickleInp)
@@ -835,6 +825,7 @@ class App(QMainWindow):
         self.manProgramButton = QRadioButton('', self)
         self.manProgramButton.move(1400,680)
         self.manProgramButton.resize(400,40)
+        self.manProgramButton.setChecked(True)
         self.manProgramButtonText = QLabel('Manual Input', self)
         self.manProgramButtonText.move(1435,682)
         self.manProgramButtonText.resize(200,40)
@@ -866,9 +857,7 @@ class App(QMainWindow):
         else:
             self.message.setIcon(QMessageBox.Critical)
             self.message.setWindowTitle("Error")
-            if(type == 'no input'): #No input given (manual, yaml, or pickle)
-                self.message.setText("No input type selected. Please try again.")
-            elif(type == 'incorrect yaml'): #Yaml file has an incorrect data type, almost always string to float/int
+            if(type == 'incorrect yaml'): #Yaml file has an incorrect data type, almost always string to float/int
                 self.message.setText(f"The .yaml file is either missing or has an incorrect data type assigned to: \"{message}\". Please try again.")
             elif(type == 'incorrect pickle'): #Pickle file can not be understood by pyvectorial
                 self.message.setText("The pickle file could not be understood. Please try again.")
@@ -876,9 +865,9 @@ class App(QMainWindow):
                 self.message.setText("A file has not been selected. Please try again.")
             elif(type == 'incorrect data'): #User input an incorrect data type, almost always string to float/int
                  self.message.setText(f"Incorrect manual data entry for: \"{message}\". Please try again.")
-            elif(type == 'too many boxes'): #User selected too many boxes for a input that only accepts 1 selected
+            elif(type == 'too many boxes'): #User selected too many boxes for an input that only accepts 1 selected
                 self.message.setText(f"Too many input boxes selected for: \"{message}\". Please try again.")
-            elif(type == 'no boxes'): #User selected no boxes for a input that only accepts 1 selected
+            elif(type == 'no boxes'): #User selected no boxes for an input that only accepts 1 selected
                 self.message.setText(f"No input boxes selected for: \"{message}\". Please try again.")
         self.message.show() #Shows the pop up window
 
@@ -921,23 +910,13 @@ class App(QMainWindow):
         
     #Run Program button
     def runProg(self):
-        UIVariables.ManInputs = False
-        UIVariables.FileInputs = False
         UIVariables.PickleInputs = False
         UIVariables.FileName = None
-
-        #Throws an exception if there is no input type selected
-        if((self.manProgramButton.isChecked() == False) and
-            (self.yamlProgramButton.isChecked() == False) and
-            (self.pickleProgramButton.isChecked() == False)):
-            self.popUpWin('no input')
-            return
 
         #Manual input runner
         #Test proper user input and assigns the results to global variables in UIVariables.py
         #Throws errors if user input is not correct
         if(self.manProgramButton.isChecked()):
-            UIVariables.ManInputs = True
             UIVariables.FileName = 'pyvectorial.yaml'
 
             #Param Declarations
@@ -1050,7 +1029,6 @@ class App(QMainWindow):
         #Test to see if the file is properly formatted and will compute the results if so
         #Throws an error if the test fails
         elif(self.yamlProgramButton.isChecked()):
-            UIVariables.FileInputs = True
             UIVariables.FileName = UIVariables.DownFile
             if (os.path.exists(f"{UIVariables.FileName}") == False): #Test to see if the user uploaded a file
                 self.popUpWin('no file')
