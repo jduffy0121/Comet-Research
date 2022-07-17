@@ -4,9 +4,10 @@
 #This work is based on a pvvectorial repository created by sjoset.
 #
 #Author: Jacob Duffy
-#Version: 7/15/2022
+#Version: 7/16/2022
 
 import UIVariables
+import FileCreator
 import FileRunner
 import sys
 import os
@@ -87,6 +88,7 @@ class ResultsWindow(QWidget):
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
+        #Defines a special style format for Results() (for aesthetic purposes only)
         self.setStyleSheet("""
         QWidget{
             background: None
@@ -96,9 +98,12 @@ class ResultsWindow(QWidget):
             background: None;
         }
         """)
+
         self.layout = QVBoxLayout() #Defines the full window layout
         self.tabs = QTabWidget() #Creates a widget containing the tabs
-        self.fragSput = QWidget() #Creates a bunch of empty widgets used in each tab
+
+        #Creates a bunch of empty widgets used in each tab
+        self.fragSput = QWidget() 
         self.radial = QWidget()
         self.columD = QWidget()
         self.columD3 = QWidget()
@@ -163,13 +168,14 @@ class TimeVarWindow(QWidget):
         self.left = 10
         self.top = 10
         self.width = 1450
-        self.height = 900
+        self.height = 710
         self.initUI()
     
     #Defines the UI Interface
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
+        #Defines a special style format for TimeVarWindow() (for aesthetic purposes only)
         self.setStyleSheet("""
         QWidget {
             background: #1F2022;
@@ -210,136 +216,150 @@ class TimeVarWindow(QWidget):
             background: None
         }  """)
 
+        self.uiBox1 = QListWidget(self)
+        self.uiBox1.setGeometry(75,120,120,75)
+        self.uiBox1.move(290,10)
+
         self.uiBox2 = QListWidget(self)
         self.uiBox2.setGeometry(185,675,675,185)
-        self.uiBox2.move(10,170)
+        self.uiBox2.move(10,110)
+
+        self.uiBox3 = QListWidget(self)
+        self.uiBox3.setGeometry(75,175,175,75)
+        self.uiBox3.move(230,370)
 
         self.uiBox4 = QListWidget(self)
         self.uiBox4.setGeometry(185,675,675,185)
-        self.uiBox4.move(10,630)
+        self.uiBox4.move(10,470)
+
+        self.uiBox5 = QListWidget(self)
+        self.uiBox5.setGeometry(75,230,230,75)
+        self.uiBox5.move(990,10)
 
         self.uiBox6 = QListWidget(self)
         self.uiBox6.setGeometry(185,650,650,185)
-        self.uiBox6.move(790,170)
+        self.uiBox6.move(790,110)
+
+        self.uiBox7 = QListWidget(self)
+        self.uiBox7.setGeometry(210,475,475,210)
+        self.uiBox7.move(790,370)
 
         self.label1 = QLabel("Sine", self)
         self.label1.setFont((QFont('Arial', 18)))
-        self.label1.move(150,20)
+        self.label1.move(300,20)
         self.label2 = QLabel("Gaussian", self)
         self.label2.setFont((QFont('Arial', 18)))
-        self.label2.move(900,20)
+        self.label2.move(1000,20)
         self.label3 = QLabel("Square", self)
         self.label3.setFont((QFont('Arial', 18)))
-        self.label3.move(150,500)
-        self.tVSineBox = QCheckBox("*Select Sine Time Variation", self)
-        self.tVSineBox.setChecked(False)
-        self.tVSineBox.move(20,100)
-        self.tVSineBox.resize(500,40)
-        self.tVGausBox = QCheckBox("*Select Gaussian Time Variation", self)
-        self.tVGausBox.setChecked(False)
-        self.tVGausBox.move(800,100)
-        self.tVGausBox.resize(500,40)
-        self.tVSquareBox = QCheckBox("*Select Square Pulse Time Variation", self)
-        self.tVSquareBox.setChecked(False)
-        self.tVSquareBox.move(20,580)
-        self.tVSquareBox.resize(500,40)
-        self.noTVBox = QCheckBox("*Select For No Time Variation", self)
-        self.noTVBox.setChecked(True)
-        self.noTVBox.move(800,580)
-        self.noTVBox.resize(500,40)
+        self.label3.move(240,380)
 
         #Creates UI elements for sine input
         self.sineAmpText = QLabel("Input Amplitude: ", self)
-        self.sineAmpText.move(20,180)
+        self.sineAmpText.move(20,120)
         self.sineAmpText.resize(300,40)
         self.sineAmpBox = QLineEdit(self)
-        self.sineAmpBox.move(240,180)
+        self.sineAmpBox.move(240,120)
         self.sineAmpBox.resize(180,40)
         self.sineAmpUnits = QLabel("molecules/sec", self)
-        self.sineAmpUnits.move(430,180)
+        self.sineAmpUnits.move(430,120)
         self.sineAmpUnits.resize(200,40)
         self.sinePeriodText = QLabel("Input Period: ", self)
-        self.sinePeriodText.move(20,240)
+        self.sinePeriodText.move(20,180)
         self.sinePeriodText.resize(300,40)
         self.sinePeriodBox = QLineEdit(self)
-        self.sinePeriodBox.move(200,240)
+        self.sinePeriodBox.move(200,180)
         self.sinePeriodBox.resize(180,40)
         self.sinePeriodUnits = QLabel("hours", self)
-        self.sinePeriodUnits.move(390,240)
+        self.sinePeriodUnits.move(390,180)
         self.sinePeriodUnits.resize(150,40)
         self.sineDeltaText = QLabel("Input Delta: ", self)
-        self.sineDeltaText.move(20,300)
+        self.sineDeltaText.move(20,240)
         self.sineDeltaText.resize(300,40)
         self.sineDeltaBox = QLineEdit(self)
-        self.sineDeltaBox.move(190,300)
+        self.sineDeltaBox.move(190,240)
         self.sineDeltaBox.resize(180,40)
         self.sineDeltaUnits = QLabel("angular offset in hours", self)
-        self.sineDeltaUnits.move(380,300)
+        self.sineDeltaUnits.move(380,240)
         self.sineDeltaUnits.resize(300,40)
 
         #Creates UI elements for gaussian input
         self.gausAmpText = QLabel("Input Amplitude: ", self)
-        self.gausAmpText.move(800,180)
+        self.gausAmpText.move(800,120)
         self.gausAmpText.resize(300,40)
         self.gausAmpBox = QLineEdit(self)
-        self.gausAmpBox.move(1020,180)
+        self.gausAmpBox.move(1020,120)
         self.gausAmpBox.resize(180,40)
         self.gausAmpUnits = QLabel("molecules/sec", self)
-        self.gausAmpUnits.move(1210,180)
+        self.gausAmpUnits.move(1210,120)
         self.gausAmpUnits.resize(200,40)
         self.gausStdText = QLabel("Input Standard Deviation: ", self)
-        self.gausStdText.move(800,240)
+        self.gausStdText.move(800,180)
         self.gausStdText.resize(350,40)
         self.gausStdBox = QLineEdit(self)
-        self.gausStdBox.move(1120,240)
+        self.gausStdBox.move(1120,180)
         self.gausStdBox.resize(180,40)
         self.gausStdUnits = QLabel("hours", self)
-        self.gausStdUnits.move(1310,240)
+        self.gausStdUnits.move(1310,180)
         self.gausStdUnits.resize(100,40)
         self.gausTPText = QLabel("Input Time at Peak: ", self)
-        self.gausTPText.move(800,300)
+        self.gausTPText.move(800,240)
         self.gausTPText.resize(350,40)
         self.gausTPBox = QLineEdit(self)
-        self.gausTPBox.move(1045,300)
+        self.gausTPBox.move(1045,240)
         self.gausTPBox.resize(180,40)
         self.gausTPUnits = QLabel("hours", self)
-        self.gausTPUnits.move(1235,300)
+        self.gausTPUnits.move(1235,240)
         self.gausTPUnits.resize(150,40)
 
         #Creates UI elements for square input
         self.squareAmpText = QLabel("Input Amplitude: ", self)
-        self.squareAmpText.move(20,640)
+        self.squareAmpText.move(20,480)
         self.squareAmpText.resize(300,40)
         self.squareAmpBox = QLineEdit(self)
-        self.squareAmpBox.move(240,640)
+        self.squareAmpBox.move(240,480)
         self.squareAmpBox.resize(180,40)
         self.squareAmpUnits = QLabel("molecules/sec", self)
-        self.squareAmpUnits.move(430,640)
+        self.squareAmpUnits.move(430,480)
         self.squareAmpUnits.resize(200,40)
         self.squareDurText = QLabel("Input Duration: ", self)
-        self.squareDurText.move(20,700)
+        self.squareDurText.move(20,540)
         self.squareDurText.resize(300,40)
         self.squareDurBox = QLineEdit(self)
-        self.squareDurBox.move(230,700)
+        self.squareDurBox.move(230,540)
         self.squareDurBox.resize(180,40)
         self.squareDurUnits = QLabel("hours", self)
-        self.squareDurUnits.move(420,700)
+        self.squareDurUnits.move(420,540)
         self.squareDurUnits.resize(150,40)
         self.squareTSPText = QLabel("Input Start of Pulse: ", self)
-        self.squareTSPText.move(20,760)
+        self.squareTSPText.move(20,600)
         self.squareTSPText.resize(300,40)
         self.squareTSPBox = QLineEdit(self)
-        self.squareTSPBox.move(280,760)
+        self.squareTSPBox.move(280,600)
         self.squareTSPBox.resize(180,40)
         self.squareTSPUnits = QLabel("hours", self)
-        self.squareTSPUnits.move(470,760)
+        self.squareTSPUnits.move(470,600)
         self.squareTSPUnits.resize(150,40)
-
-        self.button = QPushButton('Set Time Variation Method', self)
-        self.button.move(800,820)
-        self.button.resize(400,40)
-        self.button.clicked.connect(self.setResults)
-
+        self.runButton = QPushButton('Set Time Variation Method', self)
+        self.runButton.move(820,630)
+        self.runButton.resize(400,40)
+        self.runButton.clicked.connect(self.setResults)
+        self.sineButton = QRadioButton("", self)
+        self.sineButton.move(800,380)
+        self.sineButtonText = QLabel("Select for sine time variation", self)
+        self.sineButtonText.move(835,380)
+        self.gausButton = QRadioButton("", self)
+        self.gausButton.move(800,430)
+        self.gausButtonText = QLabel("Select for gaussian time variation", self)
+        self.gausButtonText.move(835,430)
+        self.squareButton = QRadioButton("", self)
+        self.squareButton.move(800,480)
+        self.gausButtonText = QLabel("Select for square time variation", self)
+        self.gausButtonText.move(835,480)
+        self.noneButton = QRadioButton("", self)
+        self.noneButton.move(800,530)
+        self.gausButtonText = QLabel("Select for no time variation", self)
+        self.gausButtonText.move(835,530)
         self.show()
     
     #Creates pop up windows for successfully setting time variation or error throws
@@ -352,12 +372,10 @@ class TimeVarWindow(QWidget):
         else:
             self.message.setIcon(QMessageBox.Critical)
             self.message.setWindowTitle("Error")
-            if(type == 'no input'): #User did not select any of the 4 time variation type boxes
+            if(type == 'no input'): #User did not select any of the 4 time variation type buttons
                 self.message.setText("No time variation type selected. Please try again.")
             elif(type == 'incorrect data'):
                  self.message.setText(f"Incorrect manual data entry for: \"{message}\". Please try again.")
-            elif(type == 'too many boxes'): #User selected too many of the time variation type boxes
-                self.message.setText(f"Too many time variation boxes selected. Please try again.")
         self.message.show()
     
     #Sets the current user input to the global variables in UIVariables.py
@@ -375,18 +393,15 @@ class TimeVarWindow(QWidget):
         UIVariables.SquareT_Start = None
 
         #Throws an error if no time varaition types are selected
-        if((self.tVSineBox.isChecked() == False) and 
-            (self.tVGausBox.isChecked() == False) and
-            (self.tVSquareBox.isChecked() == False) and
-            (self.noTVBox.isChecked() == False)):
+        if((self.sineButton.isChecked() == False) and 
+            (self.gausButton.isChecked() == False) and
+            (self.squareButton.isChecked() == False) and
+            (self.noneButton.isChecked() == False)):
             self.popUpWin('no input')
             return
         
         #Declarations if sine time variation is selected
-        if((self.tVSineBox.isChecked() == True) and 
-            (self.tVGausBox.isChecked() == False) and
-            (self.tVSquareBox.isChecked() == False) and
-            (self.noTVBox.isChecked() == False)):
+        if(self.sineButton.isChecked()):
             UIVariables.TimeVariationType = 'sine wave'
             if(FileRunner.valueTest(self.sineAmpBox.text(), 'float')):
                 UIVariables.SinAmp = float(self.sineAmpBox.text())
@@ -407,10 +422,7 @@ class TimeVarWindow(QWidget):
             return
 
         #Declarations if gaussian time variation is selected
-        elif((self.tVSineBox.isChecked() == False) and 
-            (self.tVGausBox.isChecked() == True) and
-            (self.tVSquareBox.isChecked() == False) and
-            (self.noTVBox.isChecked() == False)):
+        elif(self.gausButton.isChecked()):
             UIVariables.TimeVariationType = 'gaussian'
             if(FileRunner.valueTest(self.gausAmpBox.text(), 'float')):
                 UIVariables.GausAmp = float(self.gausAmpBox.text())
@@ -431,10 +443,7 @@ class TimeVarWindow(QWidget):
             return
 
         #Declarations if square time variation is selected
-        elif((self.tVSineBox.isChecked() == False) and 
-            (self.tVGausBox.isChecked() == False) and
-            (self.tVSquareBox.isChecked() == True) and
-            (self.noTVBox.isChecked() == False)):
+        elif(self.squareButton.isChecked()):
             UIVariables.TimeVariationType = 'square pulse'
             if(FileRunner.valueTest(self.squareAmpBox.text(), 'float')):
                 UIVariables.SquareAmp = float(self.squareAmpBox.text())
@@ -455,16 +464,8 @@ class TimeVarWindow(QWidget):
             return
         
         #Declarations if no time variation is selected
-        elif((self.tVSineBox.isChecked() == False) and 
-            (self.tVGausBox.isChecked() == False) and
-            (self.tVSquareBox.isChecked() == False) and
-            (self.noTVBox.isChecked() == True)):
+        elif(self.noneButton.isChecked()):
             self.popUpWin('success', 'None')
-            return
-        
-        #Throws an error if are too many time varaition types are selected
-        else:
-            self.popUpWin('too many boxes')
             return
 
 #Class to give a new pop up window to the user more info about proper usage of the Main UI.
@@ -483,6 +484,7 @@ class MoreWindow(QWidget):
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
+        #Defines a special style format for More() (for aesthetic purposes only)
         self.setStyleSheet("""
         QWidget {
             background: #1F2022;
@@ -498,6 +500,8 @@ class MoreWindow(QWidget):
             color: #EEEADE;
             background: #3D3D3D;
         } """)
+
+        #Creates a bunch of UI Boxes (for aesthetic purposes only)
         self.uiBox1 = QListWidget(self)
         self.uiBox1.setGeometry(75,165,165,75)
         self.uiBox1.move(435,10)
@@ -531,7 +535,7 @@ class MoreWindow(QWidget):
         self.inputText6 = QLabel("---All other manual inputs can only be floats (grid variables must be int).", self)
         self.inputText6.move(40,390)
         self.inputText7 = QLabel("---A .yaml file will only be understood if it is formatted the proper way.", self)
-        self.inputText7.move(40,420)
+        self.inputText7.move(40,440)
         self.inputText8 = QLabel("(look at a manually created .yaml file for this format).", self)
         self.inputText8.move(40,470)
         self.inputText9 = QLabel("---The \"Pvy coma pickle\" is a special file that will not create a vmc", self)
@@ -582,35 +586,31 @@ class App(QMainWindow):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
-        self.uiBox1 = QListWidget(self)
-        self.uiBox1.setGeometry(925,1200,1200,925)
-        self.uiBox1.move(15,145)
-
+        #Creates a bunch of UI Boxes (for aesthetic purposes only)
+        self.uiBox1 = QListWidget(self) #Creates a QListWidget() object
+        self.uiBox1.setGeometry(925,1200,1200,925) #Defines the dimensions of the box
+        self.uiBox1.move(15,145) #Moves the box to (x,y)
         self.uiBox2 = QListWidget(self)
         self.uiBox2.setGeometry(410,430,430,410)
         self.uiBox2.move(1335,145)
-
         self.uiBox3 = QListWidget(self)
         self.uiBox3.setGeometry(100,315,315,100)
         self.uiBox3.move(435,5)
-
         self.uiBox4 = QListWidget(self)
         self.uiBox4.setGeometry(100,250,250,100)
         self.uiBox4.move(1435,5)
-
         self.uiBox5 = QListWidget(self)
         self.uiBox5.setGeometry(270,430,430,270)
         self.uiBox5.move(1335,600)
-        
-        self.test4 = QListWidget(self)
-        self.test4.setGeometry(160,325,325,160)
-        self.test4.move(1385,665)
-        self.test4.setStyleSheet("border: 1px solid #fff; padding: 10px; border-style: solid; color: #EEEADE; border-radius: 10px; background: #616161;")
-        #self.uiBox1.setStyleSheet("background-color: yellow")
+        self.uiBox6 = QListWidget(self)
+        self.uiBox6.setGeometry(160,325,325,160)
+        self.uiBox6.move(1385,665)
+        #Defines a special style format for uiBox6
+        self.uiBox6.setStyleSheet("border: 1px solid #fff; padding: 10px; border-style: solid; color: #EEEADE; border-radius: 10px; background: #616161;") 
 
         #Creates title headers for the UI
         self.box1 = QLabel("Manual Input", self) #Creates a text box with the input string
-        self.box1.move(450,20) #Moves variable text to the (x,y) on the UI window
+        self.box1.move(450,20)
         self.box1.setFont((QFont('Arial', 18))) #Sets font to the input string and font size
         self.box1.resize(280,60) #Resize the text to fill up to the (x,y)
         self.box2 = QLabel("File Inputs", self)
@@ -817,7 +817,7 @@ class App(QMainWindow):
         self.more.resize(400,40)
         self.more.clicked.connect(self.moreInfo)
         self.fileOut = QListWidget(self) #Creates a widget to display the download path for yaml upload
-        self.fileOut.setGeometry(100,400,400,100) #Sets the geometry for the QListWidget
+        self.fileOut.setGeometry(100,400,400,100)
         self.fileOut.setStyleSheet("border: 1px solid #fff; padding: 10px; border-style: solid; color: #EEEADE; border-radius: 10px; background: #616161;")
         self.fileOut.move(1350,220)
         self.pickleBox = QPushButton("Pyv Coma Pickle File Upload", self)
@@ -828,7 +828,6 @@ class App(QMainWindow):
         self.pickleOut.setGeometry(100,400,400,100)
         self.pickleOut.move(1350,440)
         self.pickleOut.setStyleSheet("border: 1px solid #fff; padding: 10px; border-style: solid; color: #EEEADE; border-radius: 10px; background: #616161;")
-
         self.typeProgram = QLabel('Type of Program Input', self)
         self.typeProgram.setFont((QFont('Arial', 12)))
         self.typeProgram.move(1380,615)
@@ -884,22 +883,6 @@ class App(QMainWindow):
         self.message.show() #Shows the pop up window
 
     #File Path References
-
-    def getFilePath(self, type):
-        if(type == 'yaml'):
-            self.fileOut.clear()
-            UIVariables.DownFile = None
-            file = QFileDialog.getOpenFileNames(self, 'Open file', '', 'Yaml files (*.yaml)')[0]
-            self.fileOut.addItem(file[0])
-            UIVariables.DownFile = file[0]
-            return
-        if(type == 'pickle'):
-            self.pickleOut.clear()
-            UIVariables.PyvComaPickle = None
-            file = QFileDialog.getOpenFileNames(self, 'Open file')[0]
-            self.pickleOut.addItem(file[0])
-            UIVariables.PyvComaPickle = file[0]
-            return
 
     #Gets the name/file path of the pickle file.
     def pickleInp(self):
@@ -1056,6 +1039,8 @@ class App(QMainWindow):
             
             #Runs the program
             vmc, vmr = FileRunner.runManualProgram() #Runs the manuel program, creating a yaml file, vmc and vmr in FileCreator.py and FileRunner.py
+            if(self.keepFile.isChecked() == False): #Removes the file if the keepFile == False
+                FileCreator.removeFile('pyvectorial.yaml')
             self.popUpWin('success') #Opens the successful run pop up window
             self.Win = ResultsWindow(vmc, vmr) #Creates the results with the vmc and vmr
             self.Win.show() #Shows the results window
@@ -1103,11 +1088,12 @@ class App(QMainWindow):
 #Defines the UI when initially running the program
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    #Defines the style format for the whole app/main window (for aesthetic purposes only)
+    #Other windows or Q objects can override this style by declaring a new setStyleSheet()
     app.setStyleSheet("""
     QMainWindow{ 
         background-color: #1F2022; 
     }
-    
     QListWidget {
         border: 2px solid #fff;
         padding: 10px;
@@ -1141,10 +1127,12 @@ if __name__ == '__main__':
         background: #0892D0;
     }
     QFileDialog {
-        background: None;
-        color: None;
+        background: #616161;
+        color: #3D3D3D;
     }
-    """)
+    QMessageBox {
+        background: #3D3D3D
+    }    """)
     Win = App() #Only shows App() on start up
     Win.show()
     sys.exit(app.exec_())
