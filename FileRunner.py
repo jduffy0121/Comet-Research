@@ -19,7 +19,7 @@ from contextlib import redirect_stdout
 #Run methods
 
 #Method def for getting the output results for the vectorial model
-def singleFileRun(fileName):
+def fileRun(fileName):
     quantity_support()
     vmc = pyv._vm_config_from_yaml(fileName) #Creates the vmc object
     coma = pyv.run_vmodel(vmc) #Creates the coma object
@@ -32,12 +32,12 @@ def singleFileRun(fileName):
 #Method def for running the program manually
 def runManualProgram():
     FileCreator.createDictionary() #Creates a new dict for the user inputs
-    FileCreator.newFile() #Creates a new yaml file
-    return singleFileRun('pyvectorial.yaml') #Runs the program, returning a vmc and vmr
+    FileCreator.newFileManual() #Creates a new yaml file
+    return fileRun('pyvectorial.yaml') #Runs the program, returning a vmc and vmr
 
 #Method def for running the program with file input (yaml)
 def runFileYamlProgram(fileName):
-    return singleFileRun(fileName)
+    return fileRun(fileName)
     
 #Method def for running the program with file input (pickle)
 def runFilePickleProgram(fileName):
@@ -111,36 +111,38 @@ def valueTest(input, type):
                 return False
         except ValueError:
             return False
-    if (type == 'int'): #Test if val is an int
+    elif (type == 'int'): #Test if val is an int
         try:
             val = float(input)
-            if ((val >= 0) and (val.is_integer())):
+            if (val >= 0 and val.is_integer()):
                 return True
             else:
                 return False
         except ValueError:
             return False
-    if (type == 'bool'): #Test if val is a bool
+    elif (type == 'bool'): #Test if val is a bool
         try:
-            if((input == True) or (input == False)):
+            if(input == True or input == False):
                 return True
             else:
                 return False
         except ValueError:
             return False
+    else:
+        return False
 
 #Method def for testing a 2/3 level deep dict value for it being either float/int/bool/any data type
 def dictTest(dict, parent, child, type, grandchild=None):
     try:
         if(grandchild == None): #Creates a "2 deep level" dict test 
-            testing = dict[f'{parent}'][f'{child}']
+            test = dict[f'{parent}'][f'{child}']
         else: #Creates a "3 deep level" dict test
-            testing = dict[f'{parent}'][f'{child}'][f'{grandchild}']
-        if (type == 'float' and valueTest(testing, 'float')): #Test if the dict value is a float
+            test = dict[f'{parent}'][f'{child}'][f'{grandchild}']
+        if (type == 'float' and valueTest(test, 'float')): #Test if the dict value is a float
             return True
-        elif (type == 'int' and valueTest(testing, 'int')): #Test if the dict value is an int
+        elif (type == 'int' and valueTest(test, 'int')): #Test if the dict value is an int
             return True
-        elif (type == 'bool' and valueTest(testing, 'bool')): #Test if the dict value is a bool
+        elif (type == 'bool' and valueTest(test, 'bool')): #Test if the dict value is a bool
             return True
         elif(type == 'any'): #Test if the dict value exist, regardless of its data type
             return True
@@ -243,7 +245,5 @@ def fileTest(filePath):
         dict['etc']['show_fragment_sputter'] = True
         dict['etc']['show_radial_plots'] = True
 
-        #Creates a new yaml file with the new etc section, replacing the old one
-        with open(f'{filePath}', 'w') as newerFile: #Opens a new file
-            documents = yaml.dump(dict, newerFile) #Keeps the same path when dumping
+        FileCreator.newFileInputs(filePath, dict)
     return True, None #Returns no messgae as the test passed, no dict value caused an error throw
