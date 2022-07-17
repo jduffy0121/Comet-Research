@@ -31,7 +31,6 @@ def fileRun(fileName):
 
 #Method def for running the program manually
 def runManualProgram():
-    FileCreator.createDictionary() #Creates a new dict for the user inputs
     FileCreator.newFileManual() #Creates a new yaml file
     return fileRun('pyvectorial.yaml') #Runs the program, returning a vmc and vmr
 
