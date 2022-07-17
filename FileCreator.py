@@ -2,7 +2,7 @@
 #Uses a nested dict data type to write the file.
 #
 #Author: Jacob Duffy
-#Version: 7/15/2022
+#Version: 7/16/2022
 
 import UIVariables
 import yaml
@@ -65,15 +65,20 @@ def createDictionary():
     'show_fragment_sputter' : True, 'show_radial_plots' : True}
 
     #Creates the final dictionary and returns it
-    VectorialModelConfig = {'production' : production, 'parent' : parent, 'comet' : comet,
+    dict = {'production' : production, 'parent' : parent, 'comet' : comet,
     'fragment' : fragment, 'grid' : grid, 'etc' : etc}
 
-    return VectorialModelConfig
+    return dict
 
-#Creates a new .yaml file called data.yaml based on the return val of createDictionary()
-def newFile():
+#Creates a new .yaml file called pyvectorial.yaml based on the return val of createDictionary()
+def newFileManual():
     with open(r'pyvectorial.yaml', 'w') as file:
         documents = yaml.dump(createDictionary(), file)
+
+#Creates a new .yaml file saved to a filePath (including file name) with a given dict imput
+def newFileInputs(filePath, dict):
+    with open(f'{filePath}', 'w') as file:
+        documents = yaml.dump(dict, file)
 
 #Deletes a file named fileName
 def removeFile(fileName):
