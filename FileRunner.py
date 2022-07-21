@@ -3,7 +3,7 @@
 #This is the only program related to the UI that references pyvectorial directly.
 #
 #Author: Jacob Duffy
-#Version: 7/16/2022
+#Version: 7/21/2022
 
 import UIVariables
 import FileCreator
@@ -40,6 +40,7 @@ def runFileYamlProgram(fileName):
     
 #Method def for running the program with file input (pickle)
 def runFilePickleProgram(fileName):
+    quantity_support()
     vmc = pyv.VectorialModelConfig(production=None, parent=None, #Creates a default vmc
             fragment=pyv.Fragment(name='unknown', v_photo=None, tau_T=None), 
             comet=None, grid=None, etc=None) 
@@ -161,7 +162,7 @@ def pickleTest(filePath):
 #Method def for testing the input yaml file with the correct results
 def fileTest(filePath):
     with open(f"{filePath}", 'r') as file: #Opens the user yaml file
-        dict = yaml.safe_load(file)
+        dict = yaml.safe_load(file) #Loads the file
 
         #Checks all comet variables
         if(dictTest(dict, 'comet', 'rh', 'float') == False): #Test and sees if the dict value is a correct data type
@@ -244,5 +245,5 @@ def fileTest(filePath):
         dict['etc']['show_fragment_sputter'] = True
         dict['etc']['show_radial_plots'] = True
 
-        FileCreator.newFileInputs(filePath, dict)
+        FileCreator.newFileInputs(filePath, dict) #Creates a new yaml file with the new dict with the etc section
     return True, None #Returns no messgae as the test passed, no dict value caused an error throw
