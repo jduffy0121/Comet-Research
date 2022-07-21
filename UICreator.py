@@ -4,14 +4,14 @@
 #This work is based on a pvvectorial repository created by sjoset.
 #
 #Author: Jacob Duffy
-#Version: 7/16/2022
+#Version: 7/21/2022
 
 import UIVariables
 import FileCreator
 import FileRunner
 import sys
 import os
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QListWidget, QTabWidget
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QListWidget, QTabWidget, QScrollArea
 from PyQt5.QtWidgets import QLineEdit, QMessageBox, QLabel, QCheckBox, QFileDialog, QVBoxLayout, QRadioButton
 from PyQt5.QtGui import QFont
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
@@ -897,7 +897,6 @@ class App(QMainWindow):
             i += 1
         return
 
-    
     #References the MoreWindow() above when the more infomation button is pressed.
     def moreInfo(self, checked):
         self.Win = MoreWindow()
@@ -1032,7 +1031,7 @@ class App(QMainWindow):
             UIVariables.FileName = UIVariables.DownFile
             if (os.path.exists(f"{UIVariables.FileName}") == False): #Test to see if the user uploaded a file
                 self.popUpWin('no file')
-                return      
+                return
             testResult, message = FileRunner.fileTest(UIVariables.FileName) #Gets the bool test result and a message if testResult = False
             if (testResult): #Reads the file to see if it is formatted properly  
                 #Runs the program
