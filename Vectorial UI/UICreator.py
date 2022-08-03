@@ -69,7 +69,7 @@ class ExtraResults(QWidget):
             self.agreementCheckResults = QLabel(f"{UIVariables.ApertureChecks}", self)
             self.agreementCheckResults.move(1200,200)
 
-#Results window.
+#Results window
 #Class to give a pop up window with the results from FileRunner.py using PlotGraphs().
 class ResultsWindow(QWidget):
     #Intial UI Config
