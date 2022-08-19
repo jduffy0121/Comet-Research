@@ -6,14 +6,14 @@
 #This version is formatted for Mac
 #
 #Author: Jacob Duffy
-#Version: 8/8/2022
+#Version: 8/18/2022
 
 import UIVariables
 import FileCreator
 import FileRunner
 import sys
 import os
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QListWidget, QTabWidget, QScrollArea
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QListWidget, QTabWidget
 from PyQt5.QtWidgets import QLineEdit, QMessageBox, QLabel, QCheckBox, QFileDialog, QVBoxLayout, QRadioButton
 from PyQt5.QtGui import QFont
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
@@ -61,15 +61,15 @@ class ExtraResults(QWidget):
         self.radDensityResults = QLabel(f"{FileRunner.getPrintRadialDensity(self.vmr)}", self)
         self.radDensityResults.move(0,0)
         self.columnDensityResults = QLabel(f"{FileRunner.getPrintColumnDensity(self.vmr)}", self)
-        self.columnDensityResults.move(600,30)
+        self.columnDensityResults.move(300,20)
         self.agreementCheckResults = QLabel(f"{FileRunner.getAgreementCheck(self.vmr)}", self)
-        self.agreementCheckResults.move(1200,30)
+        self.agreementCheckResults.move(650,20)
 
         #Test to see if pickle input was used as UIVariables.ApertureChecks == None if it was as
         #no coma object was created
         if (UIVariables.PickleInputs == False):
             self.agreementCheckResults = QLabel(f"{UIVariables.ApertureChecks}", self)
-            self.agreementCheckResults.move(1200,200)
+            self.agreementCheckResults.move(650,175)
 
 #Results window
 #Class to give a pop up window with the results from FileRunner.py using PlotGraphs().
@@ -374,7 +374,7 @@ class TimeVarWindow(QWidget):
             self.message.setIcon(QMessageBox.Critical)
             self.message.setWindowTitle("Error")
             if(type == 'incorrect data'):
-                 self.message.setText(f"Incorrect manual data entry for: \"{message}\". Please try again.")
+                 self.message.setText(f"Incorrect manual data entry for: \"{message}\". \nPlease try again.")
         self.message.show()
     
     #Sets the current user input to the global variables in UIVariables.py
@@ -468,7 +468,7 @@ class MoreWindow(QWidget):
         self.left = 10
         self.top = 10
         self.width = 1050
-        self.height = 1110
+        self.height = 650
         self.initUI()
 
     #Defines the UI Interface
@@ -494,67 +494,59 @@ class MoreWindow(QWidget):
 
         #Creates a bunch of UI Boxes (for aesthetic purposes only)
         self.uiBox1 = QListWidget(self)
-        self.uiBox1.setGeometry(75,165,165,75)
-        self.uiBox1.move(435,10)
+        self.uiBox1.setGeometry(60,100,100,60)
+        self.uiBox1.move(485,10)
         self.uiBox2 = QListWidget(self)
-        self.uiBox2.setGeometry(480,1000,1000,480)
-        self.uiBox2.move(25,115)
+        self.uiBox2.setGeometry(270,1000,1000,270)
+        self.uiBox2.move(25,100)
         self.uiBox3 = QListWidget(self)
-        self.uiBox3.setGeometry(75,195,195,75)
-        self.uiBox3.move(435,640)
+        self.uiBox3.setGeometry(60,115,115,60)
+        self.uiBox3.move(485,415)
         self.uiBox4 = QListWidget(self)
-        self.uiBox4.setGeometry(340,1000,1000,340)
-        self.uiBox4.move(25,745)
+        self.uiBox4.setGeometry(125,1000,1000,125)
+        self.uiBox4.move(25,505)
 
         #Creates title headers for the UI
         self.headingLabel1 = QLabel("Inputs", self)
-        self.headingLabel1.setFont((QFont('Arial', 18)))
-        self.headingLabel1.move(450,20)
+        self.headingLabel1.setFont((QFont('Arial', 25)))
+        self.headingLabel1.move(500,20)
         self.headingLabel2 = QLabel("Outputs", self)
-        self.headingLabel2.setFont((QFont('Arial', 18)))
-        self.headingLabel2.move(450,650)
+        self.headingLabel2.setFont((QFont('Arial', 25)))
+        self.headingLabel2.move(500,425)
 
         #Input text
         self.inputText1 = QLabel("---All name inputs (parent, fragment, and comet) are optional inputs.", self)
-        self.inputText1.move(40,130)
+        self.inputText1.move(40,120)
         self.inputText2 = QLabel("---Delta under \"comet variables\" is optional as it does not influence the results.", self)
-        self.inputText2.move(40,180)
-        self.inputText2 = QLabel("---In using a manual input, a .yaml file is created, \"keeping the .yaml file\" will", self)
-        self.inputText2.move(40,230)
-        self.inputText3 = QLabel("save to your current directory named \"pyvectorial.yaml\".", self)
-        self.inputText3.move(40,260)
-        self.inputText4 = QLabel("---\"Transformation method\" and \"time variation type\"", self)
-        self.inputText4.move(40,310)
-        self.inputText5 = QLabel("can only have 1 applied max.", self)
-        self.inputText5.move(40,340)
-        self.inputText6 = QLabel("---All other manual inputs can only be floats (grid variables must be int).", self)
-        self.inputText6.move(40,390)
-        self.inputText7 = QLabel("---A .yaml file will only be understood if it is formatted the proper way.", self)
-        self.inputText7.move(40,440)
-        self.inputText8 = QLabel("(look at a manually created .yaml file for this format).", self)
-        self.inputText8.move(40,470)
-        self.inputText9 = QLabel("---The \"Pvy coma pickle\" is a special file that will not create a vmc", self)
-        self.inputText9.move(40,520)
-        self.inputText10 = QLabel("when running the program as it already holds all important info from the vmc.", self)
-        self.inputText10.move(40,550)
+        self.inputText2.move(40,155)
+        self.inputText2 = QLabel("---In using a manual input, a .yaml file is created, \"keeping the .yaml file\" will save to your current directory named \"pyvectorial.yaml\".", self)
+        self.inputText2.move(40,190)
+        self.inputText3 = QLabel("---\"Transformation method\" and \"time variation type\" can only have 1 applied max.", self)
+        self.inputText3.move(40,225)
+        self.inputText4 = QLabel("---All other manual inputs can only be floats (grid variables must be int).", self)
+        self.inputText4.move(40,260)
+        self.inputText5 = QLabel("---A .yaml file will only be understood if it is formatted the proper way (look at a manually created .yaml file for this format).", self)
+        self.inputText5.move(40,295)
+        self.inputText6 = QLabel("---The \"Pvy coma pickle\" is a special file that will not create a vmc when running the program as it already holds all important info from the vmc.", self)
+        self.inputText6.move(40,330)
 
         #Output text
         self.outputText1 = QLabel ("---When finished the program will give the user:", self)
-        self.outputText1.move(40,760)
+        self.outputText1.move(40,525)
         self.outputText2 = QLabel ("Fragment Sputter Graph", self)
-        self.outputText2.move(180,800)
+        self.outputText2.move(150,550)
         self.outputText3 = QLabel ("Radial Density Graph", self)
-        self.outputText3.move(180,840)
+        self.outputText3.move(400,550)
         self.outputText4 = QLabel ("Column Density Graphs (2D, 3D centered, 3D off centered)", self)
-        self.outputText4.move(180,880)
+        self.outputText4.move(650,550)
         self.outputText5 = QLabel ("Radius vs. Fragment Densitiy Table", self)
-        self.outputText5.move(180,920)
+        self.outputText5.move(150,570)
         self.outputText6 = QLabel ("Radius vs. Column Densitiy Table", self)
-        self.outputText6.move(180,960)
+        self.outputText6.move(400,570)
         self.outputText7 = QLabel ("Fragment Agreement Check", self)
-        self.outputText7.move(180,1000)
+        self.outputText7.move(650,570)
         self.outputText8 = QLabel ("Fragment Aperture Check (not given for pickle file input)", self)
-        self.outputText8.move(180,1040)
+        self.outputText8.move(400,590)
         self.show()
 
 #Main UI Window, Driver Class. 
@@ -567,8 +559,8 @@ class App(QMainWindow):
         self.title = 'Vectorial Model Input UI' #Titles the UI window
         self.left = 10
         self.top = 10
-        self.width = 1800 #Defines the size of the UI window
-        self.height = 1100 #Defines the size of the UI window
+        self.width = 1250 #Defines the size of the UI window
+        self.height = 780 #Defines the size of the UI window
         self.initUI()
     
     #Defines the UI Interface
@@ -580,271 +572,272 @@ class App(QMainWindow):
 
         #Creates a bunch of UI Boxes (for aesthetic purposes only)
         self.uiBox1 = QListWidget(self) #Creates a QListWidget() object
-        self.uiBox1.setGeometry(925,1200,1200,925) #Defines the dimensions of the box
-        self.uiBox1.move(15,145) #Moves the box to (x,y)
+        self.uiBox1.setGeometry(665,720,720,665) #Defines the dimensions of the box
+        self.uiBox1.move(15,95) #Moves the box to (x,y)
         self.uiBox2 = QListWidget(self)
-        self.uiBox2.setGeometry(410,430,430,410)
-        self.uiBox2.move(1335,145)
+        self.uiBox2.setGeometry(260,430,430,260)
+        self.uiBox2.move(800,95)
         self.uiBox3 = QListWidget(self)
-        self.uiBox3.setGeometry(100,315,315,100)
-        self.uiBox3.move(435,5)
+        self.uiBox3.setGeometry(65,175,175,65)
+        self.uiBox3.move(250,7)
         self.uiBox4 = QListWidget(self)
-        self.uiBox4.setGeometry(100,250,250,100)
-        self.uiBox4.move(1435,5)
+        self.uiBox4.setGeometry(65,150,150,65)
+        self.uiBox4.move(935,7)
         self.uiBox5 = QListWidget(self)
         self.uiBox5.setGeometry(270,430,430,270)
-        self.uiBox5.move(1335,600)
+        self.uiBox5.move(800,385)
         self.uiBox6 = QListWidget(self)
         self.uiBox6.setGeometry(160,325,325,160)
-        self.uiBox6.move(1385,665)
+        self.uiBox6.move(850,440)
         #Defines a special style format for uiBox6
         self.uiBox6.setStyleSheet("border: 1px solid #fff; padding: 10px; border-style: solid; color: #EEEADE; border-radius: 10px; background: #616161;") 
 
         #Creates title headers for the UI
         self.headingLabel1 = QLabel("Manual Input", self) #Creates a text box with the input string
-        self.headingLabel1.move(450,20)
-        self.headingLabel1.setFont((QFont('Arial', 18))) #Sets font to the input string and font size
-        self.headingLabel1.resize(280,60) #Resize the text to fill up to the (x,y)
+        self.headingLabel1.move(260,10)
+        self.headingLabel1.setFont((QFont('Arial', 25))) #Sets font to the input string and font size
+        self.headingLabel1.resize(150,60) #Resize the text to fill up to the (x,y)
         self.headingLabel2 = QLabel("File Inputs", self)
-        self.headingLabel2.move(1450,20)
-        self.headingLabel2.setFont((QFont('Arial', 18)))
-        self.headingLabel2.resize(225,60)
+        self.headingLabel2.move(950,10)
+        self.headingLabel2.setFont((QFont('Arial', 25)))
+        self.headingLabel2.resize(130,60)
         
         #Creates manual input UI elements for the Production section
         self.textPro = QLabel("Production Variables", self)
-        self.textPro.setFont((QFont('Arial', 12)))
-        self.textPro.move(80,160)
+        self.textPro.setFont((QFont('Arial', 20)))
+        self.textPro.move(80,110)
         self.textPro.resize(400,40)
         self.baseQText = QLabel("Input Base Q: ", self)
-        self.baseQText.move(50,220)
+        self.baseQText.move(30,160)
         self.baseQText.resize(180,40)
         self.baseQBox = QLineEdit(self) #Creates a textbox for user to input data in
-        self.baseQBox.move(230,220)
-        self.baseQBox.resize(180,40)
+        self.baseQBox.move(120,170)
+        self.baseQBox.resize(100,25)
         self.baseQUnits = QLabel("prod/sec", self)
-        self.baseQUnits.move(430,220)
+        self.baseQUnits.move(230,160)
         self.baseQUnits.resize(180,40)
         self.timeVarBox = QPushButton("*Select Time Variation Method", self)
-        self.timeVarBox.move(50,280)
-        self.timeVarBox.resize(400,40)
+        self.timeVarBox.move(30,210)
+        self.timeVarBox.resize(200,25)
         self.timeVarBox.clicked.connect(self.timeVarWin) #Defines the method call when the button is clicked
 
         #Creates manual input UI elements for the Parent section
         self.textPar = QLabel("Parent Variables", self)
-        self.textPar.setFont((QFont('Arial', 12)))
-        self.textPar.move(80,380)
+        self.textPar.setFont((QFont('Arial', 20)))
+        self.textPar.move(80,270)
         self.textPar.resize(400,40)
         self.parNameText = QLabel("*Input Parent Name: ", self)
-        self.parNameText.move(50,440)
+        self.parNameText.move(30,320)
         self.parNameText.resize(300,40)
         self.parNameBox = QLineEdit(self)
-        self.parNameBox.move(300,440)
-        self.parNameBox.resize(180,40)
+        self.parNameBox.move(165,330)
+        self.parNameBox.resize(100,25)
         self.outVText = QLabel("Input Outflow Velocity: ", self)
-        self.outVText.move(50,500)
+        self.outVText.move(30,360)
         self.outVText.resize(300,40)
         self.outVBox = QLineEdit(self)
-        self.outVBox.move(330,500)
-        self.outVBox.resize(180,40)
+        self.outVBox.move(175,370)
+        self.outVBox.resize(100,25)
         self.outVUnits = QLabel("km/hour", self)
-        self.outVUnits.move(530,500)
+        self.outVUnits.move(285,360)
         self.outVUnits.resize(300,40)
         self.tauDText = QLabel("Input Tau_D: ", self)
-        self.tauDText.move(50,560)
+        self.tauDText.move(30,400)
         self.tauDText.resize(300,40)
         self.tauDBox = QLineEdit(self)
-        self.tauDBox.move(215,560)
-        self.tauDBox.resize(180,40)
+        self.tauDBox.move(120,410)
+        self.tauDBox.resize(100,25)
         self.tauDUnits = QLabel("sec", self)
-        self.tauDUnits.move(415,560)
+        self.tauDUnits.move(230,400)
         self.tauDUnits.resize(300,40)
         self.tauTParText = QLabel("Input Tau_T: ", self)
-        self.tauTParText.move(50,620)
+        self.tauTParText.move(30,440)
         self.tauTParText.resize(300,40)
-        self.tauTParUnits = QLabel("sec", self)
-        self.tauTParUnits.move(415,620)
-        self.tauTParUnits.resize(300,40)
         self.tauTParBox = QLineEdit(self)
-        self.tauTParBox.move(215,620)
-        self.tauTParBox.resize(180,40)
+        self.tauTParBox.move(120,450)
+        self.tauTParBox.resize(100,25)
+        self.tauTParUnits = QLabel("sec", self)
+        self.tauTParUnits.move(230,440)
+        self.tauTParUnits.resize(300,40)
         self.sigmaText = QLabel("Input Sigma: ", self)
-        self.sigmaText.move(50,680)
+        self.sigmaText.move(30,480)
         self.sigmaText.resize(300,40)
         self.sigmaBox = QLineEdit(self)
-        self.sigmaBox.move(215,680)
-        self.sigmaBox.resize(180,40)
+        self.sigmaBox.move(120,490)
+        self.sigmaBox.resize(100,25)
         self.sigmaUnits = QLabel("cm^2", self)
-        self.sigmaUnits.move(415,680)
+        self.sigmaUnits.move(230,480)
         self.sigmaUnits.resize(300,40)
         self.t_DText = QLabel("Input T to D Ratio: ", self)
-        self.t_DText.move(50,740)
-        self.t_DText.resize(300,40)
+        self.t_DText.move(30,520)
+        self.t_DText.resize(160,40)
         self.t_DBox = QLineEdit(self)
-        self.t_DBox.move(280,740)
-        self.t_DBox.resize(180,40) 
+        self.t_DBox.move(150,530)
+        self.t_DBox.resize(100,25)
 
         #Creates manual input UI elements for the Fragment section  
         self.textFrag = QLabel("Fragment Variables", self)
-        self.textFrag.setFont((QFont('Arial', 12)))
-        self.textFrag.move(80,840)
+        self.textFrag.setFont((QFont('Arial', 20)))
+        self.textFrag.move(80,590)
         self.textFrag.resize(400,40) 
         self.fragNameText = QLabel("*Input Fragment Name: ", self)
-        self.fragNameText.move(50,900)
+        self.fragNameText.move(30,630)
         self.fragNameText.resize(300,40)
         self.fragNameBox = QLineEdit(self)
-        self.fragNameBox.move(340,900)
-        self.fragNameBox.resize(180,40)  
+        self.fragNameBox.move(185,640)
+        self.fragNameBox.resize(100,25) 
         self.vPhotoText = QLabel("Input VPhoto: ", self)
-        self.vPhotoText.move(50,960)
-        self.vPhotoText.resize(300,40)
+        self.vPhotoText.move(30,670)
+        self.vPhotoText.resize(180,40)
         self.vPhotoBox = QLineEdit(self)
-        self.vPhotoBox.move(220,960)
-        self.vPhotoBox.resize(180,40)
+        self.vPhotoBox.move(130,680)
+        self.vPhotoBox.resize(100,25)
         self.vPhotoUnits = QLabel("km/hour", self)
-        self.vPhotoUnits.move(420,960)
+        self.vPhotoUnits.move(240,670)
         self.vPhotoUnits.resize(300,40)
         self.tauTFragText = QLabel("Input Tau_T: ", self)
-        self.tauTFragText.move(50,1020)
+        self.tauTFragText.move(30,710)
         self.tauTFragText.resize(300,40)
         self.tauTFragBox = QLineEdit(self)
-        self.tauTFragBox.move(215,1020)
-        self.tauTFragBox.resize(180,40)    
+        self.tauTFragBox.move(120,720)
+        self.tauTFragBox.resize(100,25)   
         self.tauTFragUnits = QLabel("sec", self)
-        self.tauTFragUnits.move(415,1020)
+        self.tauTFragUnits.move(230,710)
         self.tauTFragUnits.resize(300,40)
 
         #Creates manual input UI elements for the Comet section
         self.textPar = QLabel("Comet Variables", self)
-        self.textPar.setFont((QFont('Arial', 12)))
-        self.textPar.move(730,160)
-        self.textPar.resize(400,40)
+        self.textPar.setFont((QFont('Arial', 20)))
+        self.textPar.move(500,110)
+        self.textPar.resize(200,40)
         self.cometNameText = QLabel("*Input Comet Name: ", self)
-        self.cometNameText.move(700,220)
-        self.cometNameText.resize(300,40)
+        self.cometNameText.move(450,160)
+        self.cometNameText.resize(200,40)
         self.cometNameBox = QLineEdit(self)
-        self.cometNameBox.move(960,220)
-        self.cometNameBox.resize(180,40) 
+        self.cometNameBox.move(590,170)
+        self.cometNameBox.resize(100,25) 
         self.rHText = QLabel("Input Rh: ", self)
-        self.rHText.move(700,280)
-        self.rHText.resize(300,40)
+        self.rHText.move(450,200)
+        self.rHText.resize(100,40)
         self.rHBox = QLineEdit(self)
-        self.rHBox.move(830,280)
-        self.rHBox.resize(180,40)
+        self.rHBox.move(520,210)
+        self.rHBox.resize(100,25)
         self.rHUnits = QLabel("AU", self)
-        self.rHUnits.move(1030,280)
-        self.rHUnits.resize(150,40)
+        self.rHUnits.move(630,200)
+        self.rHUnits.resize(80,40)
         self.deltaComText = QLabel("*Input Delta: ", self)
-        self.deltaComText.move(700,340)
-        self.deltaComText.resize(300,40)
+        self.deltaComText.move(450,240)
+        self.deltaComText.resize(150,40)
         self.deltaComBox = QLineEdit(self)
-        self.deltaComBox.move(870,340)
-        self.deltaComBox.resize(180,40)
+        self.deltaComBox.move(540,250)
+        self.deltaComBox.resize(100,25)
         self.tFMethText = QLabel("*Transformation Method: ", self)
-        self.tFMethText.move(700,440)
-        self.tFMethText.resize(450,40)
+        self.tFMethText.move(450,330)
+        self.tFMethText.resize(150,40)
         self.tFApplied1 = QCheckBox("", self) #Set checkable box
         self.tFApplied1.setChecked(False) #Set checked box to be unchecked when the window is created
-        self.tFApplied1.move(1020,400)
-        self.tFApplied1.resize(150,40)
+        self.tFApplied1.move(620,290)
+        self.tFApplied1.resize(50,40)
         self.tFApplied1Text = QLabel("Cochran", self)
-        self.tFApplied1Text.resize(150,40)
-        self.tFApplied1Text.move(1058,400)
+        self.tFApplied1Text.resize(65,40)
+        self.tFApplied1Text.move(648,290)
         self.tFApplied2 = QCheckBox("", self)
         self.tFApplied2.setChecked(False)
-        self.tFApplied2.move(1020,440)
-        self.tFApplied2.resize(150,40)
+        self.tFApplied2.move(620,330)
+        self.tFApplied2.resize(50,40)
         self.tFApplied2Text = QLabel("Fortran", self)
-        self.tFApplied2Text.resize(150,40)
-        self.tFApplied2Text.move(1058,440)
+        self.tFApplied2Text.resize(65,40)
+        self.tFApplied2Text.move(648,330)
         self.tFApplied3 = QCheckBox("", self)
-        self.tFApplied3.setChecked(True)
-        self.tFApplied3.move(1020,480)
-        self.tFApplied3.resize(150,40)   
+        self.tFApplied3.move(620,370)
+        self.tFApplied3.resize(50,40)   
         self.tFApplied3Text = QLabel("None", self)
-        self.tFApplied3Text.resize(150,40)
-        self.tFApplied3Text.move(1058,480)     
+        self.tFApplied3Text.resize(65,40)
+        self.tFApplied3Text.move(648,370)     
 
         #Creates manual input UI elements for the Grid section
         self.textGrid = QLabel("Grid Variables", self)
-        self.textGrid.setFont((QFont('Arial', 12)))
-        self.textGrid.move(730,580)
-        self.textGrid.resize(400,40)
+        self.textGrid.setFont((QFont('Arial', 20)))
+        self.textGrid.move(500,430)
+        self.textGrid.resize(200,40)
         self.aPointsText = QLabel("Input Angular Points: ", self)
-        self.aPointsText.move(700,640)
-        self.aPointsText.resize(450,40)
+        self.aPointsText.move(450,480)
+        self.aPointsText.resize(200,40)
         self.aPointsBox = QLineEdit(self)
-        self.aPointsBox.move(965,640)
-        self.aPointsBox.resize(180,40)
+        self.aPointsBox.move(590,490)
+        self.aPointsBox.resize(100,25)
         self.radPointsText = QLabel("Input Radial Points: ", self)
-        self.radPointsText.move(700,700)
-        self.radPointsText.resize(450,40)
+        self.radPointsText.move(450,530)
+        self.radPointsText.resize(200,40)
         self.radPointsBox = QLineEdit(self)
-        self.radPointsBox.move(960,700)
-        self.radPointsBox.resize(180,40)
+        self.radPointsBox.move(580,540)
+        self.radPointsBox.resize(100,25)
         self.radSubText = QLabel("Input Radial Substeps: ", self)
-        self.radSubText.move(700,760)
-        self.radSubText.resize(450,40)
+        self.radSubText.move(450,580)
+        self.radSubText.resize(200,40)
         self.radSubBox = QLineEdit(self)
-        self.radSubBox.move(980,760)
-        self.radSubBox.resize(180,40)
+        self.radSubBox.move(600,590)
+        self.radSubBox.resize(100,25)
 
         #Creates other UI elements such as certain check boxes/text and other UI stuff
         self.keepFile = QCheckBox("", self)
         self.keepFile.setChecked(False)
-        self.keepFile.move(800,960)
+        self.keepFile.move(450,680)
         self.keepFile.resize(400,40)
         self.keepFileBox = QLabel("*Keep Created .yaml File", self)
-        self.keepFileBox.move(838,960)
-        self.keepFileBox.resize(300,40)
+        self.keepFileBox.move(478,680)
+        self.keepFileBox.resize(150,40)
         self.runProgramButton = QPushButton('Run Program', self)
-        self.runProgramButton.move(1350,1020)
-        self.runProgramButton.resize(400,40)
+        self.runProgramButton.move(815,730)
+        self.runProgramButton.resize(400,30)
         self.runProgramButton.clicked.connect(self.runProg)
         self.file = QPushButton('*.yaml File Upload', self)
-        self.file.move(1350,160)
-        self.file.resize(400,40)
+        self.file.move(815,110)
+        self.file.resize(400,30)
         self.file.clicked.connect(self.fileInp)
         self.more = QPushButton('*More Information', self)
-        self.more.move(1350,960)
-        self.more.resize(400,40)
+        self.more.move(815,680)
+        self.more.resize(400,30)
         self.more.clicked.connect(self.moreInfo)
         self.fileOut = QListWidget(self) #Creates a widget to display the download path for yaml upload
-        self.fileOut.setGeometry(100,400,400,100)
+        self.fileOut.setGeometry(50,400,400,50)
         self.fileOut.setStyleSheet("border: 1px solid #fff; padding: 10px; border-style: solid; color: #EEEADE; border-radius: 10px; background: #616161;")
-        self.fileOut.move(1350,220)
+        self.fileOut.move(815,160)
         self.pickleBox = QPushButton("*Pyv Coma Pickle File Upload", self)
-        self.pickleBox.move(1350,380)
-        self.pickleBox.resize(400,40)
+        self.pickleBox.move(815,240)
+        self.pickleBox.resize(400,30)
         self.pickleBox.clicked.connect(self.pickleInp)
         self.pickleOut = QListWidget(self)
-        self.pickleOut.setGeometry(100,400,400,100)
-        self.pickleOut.move(1350,440)
+        self.pickleOut.setGeometry(50,400,400,50)
+        self.pickleOut.move(815,290)
         self.pickleOut.setStyleSheet("border: 1px solid #fff; padding: 10px; border-style: solid; color: #EEEADE; border-radius: 10px; background: #616161;")
         self.typeProgram = QLabel('Type of Program Input', self)
-        self.typeProgram.setFont((QFont('Arial', 12)))
-        self.typeProgram.move(1380,615)
-        self.typeProgram.resize(350,40)
+        self.typeProgram.setFont((QFont('Arial', 25)))
+        self.typeProgram.move(880,395)
+        self.typeProgram.resize(250,40)
         self.manProgramButton = QRadioButton('', self)
-        self.manProgramButton.move(1400,680)
+        self.manProgramButton.move(865,455)
         self.manProgramButton.resize(400,40)
-        self.manProgramButton.setChecked(True)
         self.manProgramButtonText = QLabel('Manual Input', self)
-        self.manProgramButtonText.move(1435,682)
+        self.manProgramButtonText.move(900,455)
         self.manProgramButtonText.resize(200,40)
+        self.manProgramButtonText.setFont((QFont('Arial', 18)))
         self.manProgramButtonText.setStyleSheet("color: #EEEADE; background: #616161")
         self.yamlProgramButton = QRadioButton('', self)
-        self.yamlProgramButton.move(1400,730)
+        self.yamlProgramButton.move(865,505)
         self.yamlProgramButton.resize(400,40)
         self.yamlProgramButtonText = QLabel('File Input (.yaml)', self)
-        self.yamlProgramButtonText.move(1435,732)
+        self.yamlProgramButtonText.move(900,505)
         self.yamlProgramButtonText.resize(250,40)
+        self.yamlProgramButtonText.setFont((QFont('Arial', 18)))
         self.yamlProgramButtonText.setStyleSheet("color: #EEEADE; background: #616161")
         self.pickleProgramButton = QRadioButton('', self)
-        self.pickleProgramButton.move(1400,780)
+        self.pickleProgramButton.move(865,555)
         self.pickleProgramButton.resize(400,40)
         self.pickleProgramButtonText = QLabel('File Input (Pickle)', self)
         self.pickleProgramButtonText.resize(250,40)
-        self.pickleProgramButtonText.move(1435,782)
+        self.pickleProgramButtonText.move(900,555)
+        self.pickleProgramButtonText.setFont((QFont('Arial', 18)))
         self.pickleProgramButtonText.setStyleSheet("color: #EEEADE; background: #616161")
 
         self.show() #Shows the window
@@ -860,17 +853,23 @@ class App(QMainWindow):
             self.message.setIcon(QMessageBox.Critical)
             self.message.setWindowTitle("Error")
             if(type == 'incorrect yaml'): #Yaml file has an incorrect data type, almost always string to float/int
-                self.message.setText(f"The .yaml file is either missing or has an incorrect data type assigned to: \"{message}\". Please try again.")
+                self.message.setText(f"The .yaml file is either missing or has an incorrect data type assigned to: \"{message}\". \nPlease try again.")
             elif(type == 'incorrect pickle'): #Pickle file can not be understood by pyvectorial
-                self.message.setText("The pickle file could not be understood. Please try again.")
+                self.message.setText("The pickle file could not be understood. \nPlease try again.")
             elif(type == 'no file'): #User selected yaml or pickle file input but never gave a file
-                self.message.setText("A file has not been selected. Please try again.")
+                self.message.setText("A file has not been selected. \nPlease try again.")
             elif(type == 'incorrect data'): #User input an incorrect data type, almost always string to float/int
-                 self.message.setText(f"Incorrect manual data entry for: \"{message}\". Please try again.")
+                 self.message.setText(f"Incorrect manual data entry for: \"{message}\". \nPlease try again.")
             elif(type == 'too many boxes'): #User selected too many boxes for an input that only accepts 1 selected
-                self.message.setText(f"Too many input boxes selected for: \"{message}\". Please try again.")
+                self.message.setText(f"Too many input boxes selected for: \"{message}\". \nPlease try again.")
             elif(type == 'no boxes'): #User selected no boxes for an input that only accepts 1 selected
-                self.message.setText(f"No input boxes selected for: \"{message}\". Please try again.")
+                self.message.setText(f"No input boxes selected for: \"{message}\". \nPlease try again.")
+            elif(type == 'no input'): #User does not select an input type.
+                self.message.setText("No input type was selected. \nPlease try again.")
+            elif(type == 'incorrect file run'): #User's manual/file input was unable to be calculated properly
+                self.message.setText("The data in the input was unable to converted to results. \nPlease try again.")
+            else:
+                return
         self.message.show() #Shows the pop up window
 
     #File Path References
@@ -1021,6 +1020,9 @@ class App(QMainWindow):
             vmc, vmr = FileRunner.runManualProgram() #Runs the manuel program, creating a yaml file, vmc and vmr in FileCreator.py and FileRunner.py
             if(self.keepFile.isChecked() == False): #Removes the file if the keepFile == False
                 FileCreator.removeFile('pyvectorial.yaml')
+            if(vmc == False): #Test to see if the program was able to run properly
+                self.popUpWin('incorrect file run')
+                return
             self.popUpWin('success') #Opens the successful run pop up window
             self.Win = ResultsWindow(vmc, vmr) #Creates the results with the vmc and vmr
             self.Win.show() #Shows the results window
@@ -1031,13 +1033,17 @@ class App(QMainWindow):
         #Throws an error if the test fails
         elif(self.yamlProgramButton.isChecked()):
             UIVariables.FileName = UIVariables.DownFile
-            if (os.path.exists(f"{UIVariables.FileName}") == False): #Test to see if the user uploaded a file
+            print(UIVariables.DownFile)
+            if (os.path.isfile(f"{UIVariables.FileName}") == False): #Test to see if the user uploaded a file
                 self.popUpWin('no file')
                 return
             testResult, message = FileRunner.fileTest(UIVariables.FileName) #Gets the bool test result and a message if testResult = False
             if (testResult): #Reads the file to see if it is formatted properly  
                 #Runs the program
                 vmc, vmr = FileRunner.runFileYamlProgram(UIVariables.FileName) #Runs the yaml file, creating a vmc and vmr in FileRunner.py
+                if(vmc == False):
+                    self.popUpWin('incorrect file run')
+                    return
                 self.popUpWin('success')
                 self.Win = ResultsWindow(vmc, vmr)
                 self.Win.show()
@@ -1062,6 +1068,9 @@ class App(QMainWindow):
             self.popUpWin('success')
             self.Win = ResultsWindow(vmc, vmr) 
             self.Win.show() 
+            return
+        else:
+            self.popUpWin('no input')
             return
 
 #Defines the UI when initially running the program
