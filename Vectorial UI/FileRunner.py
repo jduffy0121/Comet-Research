@@ -3,7 +3,7 @@
 #This is the only program related to the UI that references pyvectorial directly.
 #
 #Author: Jacob Duffy
-#Version: 7/21/2022
+#Version: 8/18/2022
 
 import UIVariables
 import FileCreator
@@ -20,14 +20,17 @@ from contextlib import redirect_stdout
 
 #Method def for getting the output results for the vectorial model
 def fileRun(fileName):
-    quantity_support()
-    vmc = pyv._vm_config_from_yaml(fileName) #Creates the vmc object
-    coma = pyv.run_vmodel(vmc) #Creates the coma object
-    vmr = pyv.get_result_from_coma(coma) #Creates the vmr object
-    with io.StringIO() as buf, redirect_stdout(buf): #Gets all the print() from show_aperture_checks() and saves it to UIVariables,py
-        pyv.show_aperture_checks(coma)
-        UIVariables.ApertureChecks = buf.getvalue()
-    return vmc, vmr
+    try:
+        quantity_support()
+        vmc = pyv.vmconfigread._vm_config_from_yaml(fileName) #Creates the vmc object
+        coma = pyv.run_vmodel(vmc) #Creates the coma object
+        vmr = pyv.get_result_from_coma(coma) #Creates the vmr object
+        with io.StringIO() as buf, redirect_stdout(buf): #Gets all the print() from show_aperture_checks() and saves it to UIVariables,py
+            pyv.show_aperture_checks(coma)
+            UIVariables.ApertureChecks = buf.getvalue()
+        return vmc, vmr
+    except(ZeroDivisionError):
+        return False, False
 
 #Method def for running the program manually
 def runManualProgram():
