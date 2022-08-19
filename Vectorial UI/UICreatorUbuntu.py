@@ -6,7 +6,7 @@
 #This version is formatted for Ubuntu.
 #
 #Author: Jacob Duffy
-#Version: 8/8/2022
+#Version: 8/18/2022
 
 import UIVariables
 import FileCreator
@@ -871,6 +871,10 @@ class App(QMainWindow):
                 self.message.setText(f"Too many input boxes selected for: \"{message}\". Please try again.")
             elif(type == 'no boxes'): #User selected no boxes for an input that only accepts 1 selected
                 self.message.setText(f"No input boxes selected for: \"{message}\". Please try again.")
+            elif(type == 'incorrect file run'): #User's manual/file input was unable to be calculated properly
+                self.message.setText("The data in the input was unable to converted to results. \nPlease try again.")
+            else:
+                return
         self.message.show() #Shows the pop up window
 
     #File Path References
@@ -1021,6 +1025,9 @@ class App(QMainWindow):
             vmc, vmr = FileRunner.runManualProgram() #Runs the manuel program, creating a yaml file, vmc and vmr in FileCreator.py and FileRunner.py
             if(self.keepFile.isChecked() == False): #Removes the file if the keepFile == False
                 FileCreator.removeFile('pyvectorial.yaml')
+            if(vmc == False): #Test to see if the program was able to run properly
+                self.popUpWin('incorrect file run')
+                return
             self.popUpWin('success') #Opens the successful run pop up window
             self.Win = ResultsWindow(vmc, vmr) #Creates the results with the vmc and vmr
             self.Win.show() #Shows the results window
@@ -1038,6 +1045,9 @@ class App(QMainWindow):
             if (testResult): #Reads the file to see if it is formatted properly  
                 #Runs the program
                 vmc, vmr = FileRunner.runFileYamlProgram(UIVariables.FileName) #Runs the yaml file, creating a vmc and vmr in FileRunner.py
+                if(vmc == False):
+                    self.popUpWin('incorrect file run')
+                    return
                 self.popUpWin('success')
                 self.Win = ResultsWindow(vmc, vmr)
                 self.Win.show()
