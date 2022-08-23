@@ -3,15 +3,14 @@
 #This is the only program related to the UI that references pyvectorial directly.
 #
 #Author: Jacob Duffy
-#Version: 8/18/2022
+#Version: 8/23/2022
 
-import UIVariables
 import FileCreator
-import pyvectorial as pyv
-import yaml
 import io
-import astropy.units as u
+import yaml
 import pickle
+import astropy.units as u
+import pyvectorial as pyv
 from datetime import datetime
 from astropy.visualization import quantity_support
 from contextlib import redirect_stdout
@@ -19,27 +18,27 @@ from contextlib import redirect_stdout
 #Run methods
 
 #Method def for getting the output results for the vectorial model
-def fileRun(fileName):
+def fileRun(fileName, CurrentUIRun):
     try:
         quantity_support()
-        vmc = pyv.vmconfigread._vm_config_from_yaml(fileName) #Creates the vmc object
+        vmc = pyv.vm_configs_from_yaml(fileName)[0] #Creates the vmc object
         coma = pyv.run_vmodel(vmc) #Creates the coma object
         vmr = pyv.get_result_from_coma(coma) #Creates the vmr object
         with io.StringIO() as buf, redirect_stdout(buf): #Gets all the print() from show_aperture_checks() and saves it to UIVariables,py
             pyv.show_aperture_checks(coma)
-            UIVariables.ApertureChecks = buf.getvalue()
+            CurrentUIRun.ApertureChecks = buf.getvalue()
         return vmc, vmr
-    except(ZeroDivisionError):
+    except(ZeroDivisionError, ValueError):
         return False, False
 
 #Method def for running the program manually
-def runManualProgram():
-    FileCreator.newFileManual() #Creates a new yaml file
-    return fileRun('pyvectorial.yaml') #Runs the program, returning a vmc and vmr
+def runManualProgram(CurrentUIRun):
+    FileCreator.newFileManual(CurrentUIRun) #Creates a new yaml file
+    return fileRun('pyvectorial.yaml', CurrentUIRun) #Runs the program, returning a vmc and vmr
 
 #Method def for running the program with file input (yaml)
-def runFileYamlProgram(fileName):
-    return fileRun(fileName)
+def runFileYamlProgram(fileName, CurrentUIRun):
+    return fileRun(fileName, CurrentUIRun)
     
 #Method def for running the program with file input (pickle)
 def runFilePickleProgram(fileName):
@@ -83,23 +82,41 @@ def get3DColumnDensityCentered(vmc, vmr):
 #Gets the radial density from a given vmr
 def getPrintRadialDensity(vmr):
     with io.StringIO() as buf, redirect_stdout(buf):
-        pyv.print_radial_density(vmr)
+        PrintRadialDensity(vmr)
         result = buf.getvalue()
     return result
+
+def PrintRadialDensity(vmr):
+    print("\nRadius (km) vs Fragment density (1/cm3)\n---------------------------------------")
+    rgrid = vmr.volume_density_grid
+    dens = vmr.volume_density
+    for r, n_r in zip(rgrid, dens):
+        print(f"{r.to(u.km):10.1f} : {n_r.to(1/(u.cm**3)):8.4f}")
     
 #Gets the column density from a given vmr
 def getPrintColumnDensity(vmr):
     with io.StringIO() as buf, redirect_stdout(buf):
-        pyv.print_column_density(vmr)
+        PrintColumnDensity(vmr)
         result = buf.getvalue()
     return result
+
+def PrintColumnDensity(vmr):
+    print("\nRadius (km) vs Column density (1/cm2)\n-------------------------------------")
+    cds = list(zip(vmr.column_density_grid, vmr.column_density))
+    for pair in cds:
+        print(f'{pair[0].to(u.km):7.0f} :\t{pair[1].to(1/(u.cm*u.cm)):5.3e}')
 
 #Gets the agreement check from a given vmr
 def getAgreementCheck(vmr):
     with io.StringIO() as buf, redirect_stdout(buf):
-        pyv.show_fragment_agreement(vmr)
+        AgreementCheck(vmr)
         result = buf.getvalue()
     return result
+
+def AgreementCheck(vmr):
+    print("\nFragment agreement check:")
+    print(f"\tTheoretical total number of fragments in coma:\t {vmr.num_fragments_theory:.7e}")
+    print(f"\tTotal number of fragments from density grid integration:\t {vmr.num_fragments_grid:.7e}")
 
 #Test methods
 
@@ -163,7 +180,7 @@ def pickleTest(filePath):
         return False
 
 #Method def for testing the input yaml file with the correct results
-def fileTest(filePath):
+def fileTest(filePath, CurrentUIRun):
     with open(f"{filePath}", 'r') as file: #Opens the user yaml file
         dict = yaml.safe_load(file) #Loads the file
 
@@ -238,7 +255,7 @@ def fileTest(filePath):
         dict['etc']['print_column_density'] = True
         dict['etc']['print_progress'] = True
         dict['etc']['print_radial_density'] = True
-        dict['etc']['pyv_coma_pickle'] = UIVariables.PyvComaPickle
+        dict['etc']['pyv_coma_pickle'] = CurrentUIRun.PyvComaPickle
         dict['etc']['pyv_date_of_run'] = datetime.now()
         dict['etc']['show_3d_column_density_centered'] = True
         dict['etc']['show_3d_column_density_off_center'] = True
