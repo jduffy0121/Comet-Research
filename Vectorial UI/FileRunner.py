@@ -85,13 +85,6 @@ def getPrintRadialDensity(vmr):
         PrintRadialDensity(vmr)
         result = buf.getvalue()
     return result
-
-def PrintRadialDensity(vmr):
-    print("\nRadius (km) vs Fragment density (1/cm3)\n---------------------------------------")
-    rgrid = vmr.volume_density_grid
-    dens = vmr.volume_density
-    for r, n_r in zip(rgrid, dens):
-        print(f"{r.to(u.km):10.1f} : {n_r.to(1/(u.cm**3)):8.4f}")
     
 #Gets the column density from a given vmr
 def getPrintColumnDensity(vmr):
@@ -100,12 +93,6 @@ def getPrintColumnDensity(vmr):
         result = buf.getvalue()
     return result
 
-def PrintColumnDensity(vmr):
-    print("\nRadius (km) vs Column density (1/cm2)\n-------------------------------------")
-    cds = list(zip(vmr.column_density_grid, vmr.column_density))
-    for pair in cds:
-        print(f'{pair[0].to(u.km):7.0f} :\t{pair[1].to(1/(u.cm*u.cm)):5.3e}')
-
 #Gets the agreement check from a given vmr
 def getAgreementCheck(vmr):
     with io.StringIO() as buf, redirect_stdout(buf):
@@ -113,6 +100,22 @@ def getAgreementCheck(vmr):
         result = buf.getvalue()
     return result
 
+#Copy of a method in pyvectorial, fixed a formatting issue
+def PrintRadialDensity(vmr):
+    print("\nRadius (km) vs Fragment density (1/cm3)\n---------------------------------------")
+    rgrid = vmr.volume_density_grid
+    dens = vmr.volume_density
+    for r, n_r in zip(rgrid, dens):
+        print(f"{r.to(u.km):10.1f} : {n_r.to(1/(u.cm**3)):8.4f}")
+
+#Copy of a method in pyvectorial, fixed a formatting issue
+def PrintColumnDensity(vmr):
+    print("\nRadius (km) vs Column density (1/cm2)\n-------------------------------------")
+    cds = list(zip(vmr.column_density_grid, vmr.column_density))
+    for pair in cds:
+        print(f'{pair[0].to(u.km):7.0f} :\t{pair[1].to(1/(u.cm*u.cm)):5.3e}')
+
+#Copy of a method in pyvectorial, fixed a formatting issue
 def AgreementCheck(vmr):
     print("\nFragment agreement check:")
     print(f"\tTheoretical total number of fragments in coma:\t {vmr.num_fragments_theory:.7e}")

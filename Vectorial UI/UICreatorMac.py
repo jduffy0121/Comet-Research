@@ -433,7 +433,7 @@ class TimeVarWindow(QWidget):
                 return
         self.message.show()
     
-    #Sets the current user input to the global variables in UIVariables.py
+    #Sets the current user input to the global variables
     def setResults(self):
         global CurrentUIRun
         #Clears out any possible time variation type input that occured before
@@ -607,7 +607,7 @@ class MoreWindow(QWidget):
         self.show()
 
 #Main UI Window, Driver Class. 
-#Used to create/format the UI, read/test in all user data into UIVariables.py,
+#Used to create/format the UI, read/test in all user data
 #reference other child UI windows, run the program and create a new window with the results.
 class App(QMainWindow): 
     #Intial UI Config
@@ -931,7 +931,7 @@ class App(QMainWindow):
         i = 0
         while i < len(file):
             self.pickleOut.addItem(file[i]) #Adds the path of the pickle file to the pickleOut widget
-            CurrentUIRun.PyvComaPickle = file[i] #Sets the file path to UIVariables
+            CurrentUIRun.PyvComaPickle = file[i] #Stores the file path
             i += 1
         return
     
@@ -964,7 +964,7 @@ class App(QMainWindow):
         CurrentUIRun.PickleInputs = False
 
         #Manual input runner
-        #Test proper user input and assigns the results to global variables in UIVariables.py
+        #Test proper user input and assigns the results to global variables
         #Throws errors if user input is not correct
         if(self.manProgramButton.isChecked()):
 

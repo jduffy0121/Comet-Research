@@ -1,4 +1,4 @@
-#Program to create a .yaml file from the results from UIVariables.py.
+#Program to create a .yaml file from the data structure CurrentUIRun.
 #Uses a nested dict data type to write the file.
 #
 #Author: Jacob Duffy
@@ -8,7 +8,7 @@ import os
 import yaml
 from datetime import datetime
 
-#Method to create a dictionary based on the variables in UIVariables.py
+#Method to create a dictionary
 #Returns the completed dictionary
 def createDictionary(CurrentUIRun):
     #Creates the production dictionary
