@@ -2,7 +2,7 @@
 #Uses a nested dict data type to write the file.
 #
 #Author: Jacob Duffy
-#Version: 8/23/2022
+#Version: 8/25/2022
 
 import os
 import yaml

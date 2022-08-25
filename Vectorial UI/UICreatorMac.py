@@ -6,7 +6,7 @@
 #This version is formatted for MacOS
 #
 #Author: Jacob Duffy
-#Version: 8/23/2022
+#Version: 8/25/2022
 
 import FileCreator
 import FileRunner

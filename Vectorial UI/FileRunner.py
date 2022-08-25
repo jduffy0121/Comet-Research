@@ -3,7 +3,7 @@
 #This is the only program related to the UI that references pyvectorial directly.
 #
 #Author: Jacob Duffy
-#Version: 8/23/2022
+#Version: 8/25/2022
 
 import FileCreator
 import io
